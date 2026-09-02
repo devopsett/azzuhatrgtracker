@@ -6,29 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>e-AzzuhaTRG Tracker</title>
   
-  <!-- Tetapan PWA & Standalone Mode -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="e-Azzuha">
-  <meta name="theme-color" content="#047857">
+  <meta name="theme-color" content="#064e3b">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Pustaka Pengimbas Kamera Barcode & QR -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
   <style>
     :root {
-      /* Tona Warna Segar & Bersemangat */
       --primary: #047857;
-      --primary-gradient: linear-gradient(135deg, #059669, #047857);
-      --accent-blue: #2563eb;
-      --accent-purple: #7c3aed;
-      --accent-amber: #d97706;
-      --accent-rose: #e11d48;
+      --primary-hover: #065f46;
+      --primary-dark: #064e3b;
+      --primary-soft: #ecfdf5;
       
       --bg: #f8fafc;
       --surface: #ffffff;
@@ -36,11 +31,11 @@
       --text-muted: #64748b;
       --border: #e2e8f0;
       --border-light: #f1f5f9;
-      --radius: 14px;
+      --radius: 12px;
       
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --shadow-lg: 0 12px 24px -4px rgba(0,0,0,0.12);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 24px -4px rgba(0,0,0,0.1);
     }
 
     * { 
@@ -66,9 +61,9 @@
       min-height: 100vh;
     }
 
-    /* Sidebar Desktop Berwarna */
+    /* Sidebar Desktop Elegan */
     .sidebar {
-      background: linear-gradient(180deg, #064e3b, #022c22);
+      background: #064e3b;
       color: white;
       padding: 24px 16px;
       display: flex;
@@ -84,22 +79,31 @@
       align-items: center;
       gap: 12px;
       padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
       margin-bottom: 24px;
     }
 
-    .brand-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #10b981, #047857);
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: #000000;
       display: grid;
       place-items: center;
-      box-shadow: 0 4px 10px rgba(16,185,129,0.3);
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.15);
+      overflow: hidden;
+      padding: 4px;
     }
 
-    .brand-title { font-size: 15px; font-weight: 800; line-height: 1.2; }
-    .brand-sub { font-size: 11px; opacity: 0.8; color: #a7f3d0; }
+    .brand-logo img, .brand-logo svg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-title { font-size: 15px; font-weight: 800; line-height: 1.2; letter-spacing: -0.2px; }
+    .brand-sub { font-size: 11px; opacity: 0.75; color: #cbd5e1; }
 
     .nav-list { display: grid; gap: 6px; list-style: none; }
     .nav-btn {
@@ -107,8 +111,8 @@
       border: none;
       background: transparent;
       color: rgba(255,255,255,0.85);
-      padding: 12px 14px;
-      border-radius: 10px;
+      padding: 11px 14px;
+      border-radius: 8px;
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
@@ -117,50 +121,30 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      transition: all 0.2s;
+      transition: all 0.15s ease;
     }
 
-    .nav-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; }
-    .nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .nav-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+    .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
     .nav-btn.active {
       background: #ffffff;
       color: var(--primary-dark);
-      font-weight: 800;
+      font-weight: 700;
       box-shadow: var(--shadow-sm);
     }
 
     .sidebar-footer {
       margin-top: auto;
       font-size: 11px;
-      opacity: 0.75;
+      opacity: 0.65;
       line-height: 1.4;
-      border-top: 1px solid rgba(255,255,255,0.12);
+      border-top: 1px solid rgba(255,255,255,0.1);
       padding-top: 16px;
     }
 
-    /* Main Container */
+    /* Main Content */
     main { padding: 24px; overflow-y: auto; }
     
-    /* Bar Pemasangan PWA (Install Banner) */
-    .pwa-banner {
-      background: linear-gradient(90deg, #1e293b, #0f172a);
-      color: white;
-      padding: 12px 16px;
-      border-radius: var(--radius);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow-md);
-      animation: bannerSlide 0.3s ease-out;
-    }
-
-    @keyframes bannerSlide { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-    .pwa-banner-text { display: flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 600; }
-    .pwa-badge { width: 30px; height: 30px; background: var(--primary); border-radius: 8px; display: grid; place-items: center; }
-
-    /* Topbar */
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -175,10 +159,10 @@
       gap: 10px;
     }
 
-    .topbar-title h2 { font-size: 18px; font-weight: 800; color: var(--text); }
+    .topbar-title h2 { font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
     .topbar-title p { color: var(--text-muted); font-size: 12px; }
 
-    /* Butang UI */
+    /* Butang Bersih & Padat */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -187,9 +171,9 @@
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
-      padding: 9px 16px;
-      min-height: 40px;
-      border-radius: 10px;
+      padding: 8px 15px;
+      min-height: 38px;
+      border-radius: 8px;
       border: 1px solid transparent;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -197,26 +181,25 @@
     }
 
     .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--primary-gradient); color: white; box-shadow: 0 2px 8px rgba(4,120,87,0.3); }
+    .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--primary-hover); }
     .btn-secondary { background: white; border-color: var(--border); color: var(--text); }
-    .btn-secondary:hover { background: #f1f5f9; }
+    .btn-secondary:hover { background: #f8fafc; }
     .btn-danger { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
-    .btn-install { background: #10b981; color: white; padding: 6px 14px; min-height: 32px; font-size: 12px; border-radius: 8px; }
     .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
-    /* FAB Butang Bulat Tambah Transaksi (Gaya WhatsApp) */
+    /* Floating Action Button (FAB) */
     .fab-btn {
       position: fixed;
       bottom: 78px;
-      right: 18px;
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, #10b981, #047857);
+      right: 20px;
+      width: 52px;
+      height: 52px;
+      background: var(--primary);
       color: white;
       border-radius: 50%;
       border: none;
-      box-shadow: 0 6px 18px rgba(4, 120, 87, 0.45);
+      box-shadow: 0 4px 14px rgba(4, 120, 87, 0.35);
       cursor: pointer;
       display: grid;
       place-items: center;
@@ -225,9 +208,9 @@
     }
 
     .fab-btn:active { transform: scale(0.92); }
-    .fab-btn svg { width: 28px; height: 28px; stroke: #ffffff; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+    .fab-btn svg { width: 26px; height: 26px; stroke: #ffffff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* Metrik Dashboard Berwarna (Color Cards) */
+    /* Kad Metrik Bersih (Professional Clean) */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -236,33 +219,23 @@
     }
 
     .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 16px 14px;
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      border: 1px solid transparent;
       box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease, transform 0.15s ease;
     }
 
-    .metric-card:hover { transform: translateY(-2px); }
-    
-    /* Varian Warna Metrik */
-    .card-c1 { background: #f0fdf4; border-color: #bbf7d0; } /* Hijau Emerald */
-    .card-c1 .metric-val { color: #047857; }
-    .card-c2 { background: #eff6ff; border-color: #bfdbfe; } /* Biru */
-    .card-c2 .metric-val { color: #1d4ed8; }
-    .card-c3 { background: #f5f3ff; border-color: #ddd6fe; } /* Ungu */
-    .card-c3 .metric-val { color: #6d28d9; }
-    .card-c4 { background: #fffbeb; border-color: #fde68a; } /* Amber */
-    .card-c4 .metric-val { color: #b45309; }
-    .card-c5 { background: #fff1f2; border-color: #fecdd3; } /* Rose */
-    .card-c5 .metric-val { color: #be123c; }
-    .card-c6 { background: #f0fdfa; border-color: #ccfbf1; } /* Teal */
-    .card-c6 .metric-val { color: #0f766e; }
+    .metric-card:hover { 
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
 
-    .metric-title { font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; }
-    .metric-val { font-size: 24px; font-weight: 800; margin: 4px 0 2px; }
-    .metric-sub { font-size: 11px; color: #64748b; }
+    .metric-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    .metric-val { font-size: 24px; font-weight: 800; color: var(--text); margin: 4px 0 2px; letter-spacing: -0.4px; }
+    .metric-sub { font-size: 11.5px; color: var(--text-muted); }
 
     /* Panel */
     .panel {
@@ -288,7 +261,7 @@
     .panel-header h3 { font-size: 14px; font-weight: 800; color: var(--text); }
     .panel-body { padding: 18px; }
 
-    /* Form Fields & Layout */
+    /* Form Inputs */
     .form-group { display: grid; gap: 12px; }
     .input-row { 
       display: grid; 
@@ -312,54 +285,49 @@
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.15);
+      box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.12);
     }
 
     textarea { resize: vertical; min-height: 70px; }
 
-    /* Switcher Berwarna (Stok Keluar: Merah / Stok Masuk: Hijau) */
+    /* Switcher Jenis Transaksi */
     .type-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr;
       background: #f1f5f9;
-      padding: 4px;
-      border-radius: 10px;
+      padding: 3px;
+      border-radius: 8px;
       margin-bottom: 10px;
     }
 
     .type-btn {
       border: none;
       padding: 8px 10px;
-      min-height: 38px;
-      border-radius: 8px;
+      min-height: 36px;
+      border-radius: 6px;
       font-family: inherit;
       font-size: 12.5px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       background: transparent;
       color: #64748b;
       text-align: center;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
     }
 
-    .type-btn.active.out {
-      background: linear-gradient(135deg, #f43f5e, #e11d48);
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(225,29,72,0.3);
+    .type-btn.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+      font-weight: 800;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
-    .type-btn.active.in {
-      background: linear-gradient(135deg, #10b981, #047857);
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(4,120,87,0.3);
-    }
-
-    /* Baris Item Transaksi: Sebaris */
+    /* Baris Item Transaksi (Sebaris Kemas) */
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px;
-      background: #fcfcfc;
+      background: #fafafa;
       margin-bottom: 10px;
     }
 
@@ -433,7 +401,7 @@
 
     .btn-row-del:active { background: #fee2e2; }
 
-    /* Jadual */
+    /* Jadual Desktop Bersih */
     .table-container {
       overflow-x: auto;
       border: 1px solid var(--border);
@@ -444,7 +412,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12.5px;
+      font-size: 13px;
       text-align: left;
     }
 
@@ -455,13 +423,13 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.4px;
-      padding: 10px 12px;
+      padding: 11px 14px;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
     td {
-      padding: 10px 12px;
+      padding: 11px 14px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
     }
@@ -469,36 +437,34 @@
     tr:last-child td { border-bottom: none; }
     tbody tr:hover { background: #f8fafc; }
 
-    /* Badges Berwarna-warni */
+    /* Lencana Status */
     .badge {
       display: inline-block;
       padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 10.5px;
+      border-radius: 5px;
+      font-size: 11px;
       font-weight: 700;
       white-space: nowrap;
     }
 
-    .badge-ok { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-    .badge-low { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
-    .badge-empty { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-    .badge-type-in { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-    .badge-type-out { background: #ffe4e6; color: #be123c; border: 1px solid #fecdd3; }
+    .badge-ok { background: #dcfce7; color: #166534; }
+    .badge-low { background: #fef3c7; color: #92400e; }
+    .badge-empty { background: #fee2e2; color: #991b1b; }
 
-    /* Modal & Loading - Z-Index 9999 */
+    /* Modal & Popups (Z-Index Terkawal) */
     .loading-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(4px);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(3px);
       display: grid;
       place-items: center;
       z-index: 9999 !important;
     }
 
     .spinner {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border: 3px solid var(--border);
       border-top-color: var(--primary);
       border-radius: 50%;
@@ -510,7 +476,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(15, 23, 42, 0.6);
       backdrop-filter: blur(4px);
       display: grid;
       place-items: center;
@@ -551,7 +517,7 @@
       width: 100%;
       max-width: 400px;
       overflow: hidden;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-lg);
     }
 
     .scanner-body { padding: 14px; position: relative; }
@@ -596,7 +562,7 @@
     }
 
     .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.error { background: #be123c; }
+    .toast.error { background: #991b1b; }
     .hidden { display: none !important; }
 
     /* Kad Khusus Mudah Alih */
@@ -635,7 +601,7 @@
     .m-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; }
     .m-btn.active { color: var(--primary); font-weight: 800; background: var(--primary-soft); }
 
-    /* Pengoptimuman Mobile */
+    /* Responsive Views */
     @media (max-width: 1024px) {
       .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
@@ -670,12 +636,11 @@
       .card-row {
         background: #ffffff;
         border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 12px;
+        border-radius: 8px;
+        padding: 10px 12px;
         display: flex;
         flex-direction: column;
         gap: 4px;
-        box-shadow: var(--shadow-sm);
       }
 
       .card-row-top {
@@ -716,7 +681,7 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- BUTANG BULAT TERAPUNG (FAB) - TAMBAH TRANSAKSI -->
+  <!-- BUTANG BULAT TERAPUNG (FAB) -->
   <button type="button" class="fab-btn" onclick="openTxModal()" title="Rekod Transaksi">
     <svg viewBox="0 0 24 24">
       <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -741,7 +706,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: POPUP BORANG TRANSAKSI STOK -->
+  <!-- MODAL 2: BORANG TRANSAKSI STOK -->
   <div id="txModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'txModal')">
     <div class="modal-dialog">
       <div class="modal-header">
@@ -752,8 +717,8 @@
         <form id="txForm" onsubmit="submitTransaction(event)">
           <div class="form-group">
             <div class="type-switcher">
-              <button type="button" id="btnTypeOut" class="type-btn active out" onclick="setGlobalTxType('Keluar')">Stok Keluar</button>
-              <button type="button" id="btnTypeIn" class="type-btn in" onclick="setGlobalTxType('Masuk')">Stok Masuk</button>
+              <button type="button" id="btnTypeOut" class="type-btn active" onclick="setGlobalTxType('Keluar')">Stok Keluar</button>
+              <button type="button" id="btnTypeIn" class="type-btn" onclick="setGlobalTxType('Masuk')">Stok Masuk</button>
             </div>
 
             <div class="input-row">
@@ -795,7 +760,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: POPUP DAFTAR / KEMASKINI ITEM -->
+  <!-- MODAL 3: DAFTAR / KEMASKINI ITEM -->
   <div id="itemModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'itemModal')">
     <div class="modal-dialog">
       <div class="modal-header">
@@ -864,9 +829,12 @@
     <!-- Desktop Sidebar -->
     <aside class="sidebar">
       <div class="brand-box">
-        <div class="brand-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+        <div class="brand-logo" id="brandLogoContainer">
+          <!-- Logo Rasmi Vektor Tiga Lapis Perak -->
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 62 C 35 63, 65 52, 90 28 C 65 44, 35 56, 10 62 Z" fill="#ffffff" />
+            <path d="M15 62 C 40 60, 68 50, 83 40 C 62 48, 38 58, 15 62 Z" fill="#e2e8f0" />
+            <path d="M55 58 C 70 56, 85 58, 92 62 C 82 58, 70 57, 55 58 Z" fill="#cbd5e1" />
           </svg>
         </div>
         <div>
@@ -903,27 +871,13 @@
 
     <!-- Main Content -->
     <main>
-      <!-- Sepanduk Pemasangan PWA (Install Banner) -->
-      <div id="pwaInstallBanner" class="pwa-banner hidden">
-        <div class="pwa-banner-text">
-          <div class="pwa-badge">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          </div>
-          <div>
-            <div>Pasang Aplikasi e-Azzuha</div>
-            <small style="opacity: 0.8;">Buka terus dari skrin utama telefon</small>
-          </div>
-        </div>
-        <button type="button" class="btn btn-install" onclick="installPWAApp()">Pasang</button>
-      </div>
-
       <div class="topbar">
         <div class="topbar-title">
           <h2 id="viewTitle">Dashboard Stok</h2>
           <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
         </div>
         <div>
-          <button class="btn btn-secondary" style="min-height: 36px; padding: 6px 14px; font-size: 12px;" onclick="loadData()">Segar Semula</button>
+          <button class="btn btn-secondary" onclick="loadData()">Segar Semula</button>
         </div>
       </div>
 
@@ -937,6 +891,7 @@
             <button class="btn btn-secondary hidden" id="btnClearFilter" style="padding: 3px 8px; font-size: 11px; min-height: 26px;" onclick="resetDashboardFilter()">Reset Tapisan</button>
           </div>
           <div class="panel-body">
+            <!-- Desktop Table View -->
             <div class="table-container desktop-table">
               <table>
                 <thead>
@@ -953,6 +908,7 @@
                 <tbody id="attentionTbody"></tbody>
               </table>
             </div>
+            <!-- Mobile Cards View -->
             <div class="mobile-cards" id="attentionMobileCards"></div>
           </div>
         </div>
@@ -1052,7 +1008,6 @@
     let lastScanCode = '';
     let lastScanTime = 0;
     let toastTimer = null;
-    let deferredPrompt = null;
 
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('txDate').valueAsDate = new Date();
@@ -1062,57 +1017,33 @@
     });
 
     /* ========================================================
-       PEMASANGAN APLIKASI PWA
+       PWA INSTALLATION SETUP
        ======================================================== */
     function initPWA() {
-      // Jana Fail Manifest PWA Terus
+      // Manifest dengan logo rasmi perak/hitam
+      const logoSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='#000000'/><path d='M10 62 C 35 63, 65 52, 90 28 C 65 44, 35 56, 10 62 Z' fill='#ffffff'/><path d='M15 62 C 40 60, 68 50, 83 40 C 62 48, 38 58, 15 62 Z' fill='#e2e8f0'/><path d='M55 58 C 70 56, 85 58, 92 62 C 82 58, 70 57, 55 58 Z' fill='#94a3b8'/></svg>`;
+      const iconUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(logoSvg);
+
       const manifest = {
         name: "e-AzzuhaTRG Tracker",
         short_name: "e-Azzuha",
         start_url: window.location.href,
         display: "standalone",
-        background_color: "#047857",
-        theme_color: "#047857",
-        icons: [
-          {
-            src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23047857'/><path d='M50 20 L80 37 L80 63 L50 80 L20 63 L20 37 Z' fill='none' stroke='white' stroke-width='6'/><path d='M50 20 L50 80 M80 37 L20 63 M20 37 L80 63' stroke='white' stroke-width='4' opacity='0.7'/></svg>",
-            sizes: "192x192 512x512",
-            type: "image/svg+xml"
-          }
-        ]
+        background_color: "#064e3b",
+        theme_color: "#064e3b",
+        icons: [{ src: iconUrl, sizes: "192x192 512x512", type: "image/svg+xml" }]
       };
-      
-      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-      let manifestLink = document.createElement('link');
-      manifestLink.rel = 'manifest';
-      manifestLink.href = URL.createObjectURL(blob);
-      document.head.appendChild(manifestLink);
 
-      // Daftar Service Worker Ringan
-      if ('serviceWorker' in navigator) {
-        const swCode = `self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));`;
-        const swBlob = new Blob([swCode], { type: 'application/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
-      }
+      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      let link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(manifestBlob);
+      document.head.appendChild(link);
 
-      // Kesan jika boleh dipasang
-      window.addEventListener('beforeinstallprompt', e => {
-        e.preventDefault();
-        deferredPrompt = e;
-        document.getElementById('pwaInstallBanner').classList.remove('hidden');
-      });
-    }
-
-    function installPWAApp() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          document.getElementById('pwaInstallBanner').classList.add('hidden');
-          deferredPrompt = null;
-        });
-      } else {
-        alert('Untuk memasang di telefon:\n1. Buka menu pelayar (tiga titik ⋮ atau Share)\n2. Pilih "Add to Home screen" / "Install app".');
-      }
+      let appleIcon = document.createElement('link');
+      appleIcon.rel = 'apple-touch-icon';
+      appleIcon.href = iconUrl;
+      document.head.appendChild(appleIcon);
     }
 
     /* ========================================================
@@ -1145,14 +1076,8 @@
 
     function setGlobalTxType(type) {
       appState.globalTxType = type;
-      const btnOut = document.getElementById('btnTypeOut');
-      const btnIn = document.getElementById('btnTypeIn');
-      
-      btnOut.classList.toggle('active', type === 'Keluar');
-      btnOut.classList.toggle('out', type === 'Keluar');
-      btnIn.classList.toggle('active', type === 'Masuk');
-      btnIn.classList.toggle('in', type === 'Masuk');
-      
+      document.getElementById('btnTypeOut').classList.toggle('active', type === 'Keluar');
+      document.getElementById('btnTypeIn').classList.toggle('active', type === 'Masuk');
       document.getElementById('batchLabel').textContent = `Senarai Item ${type}`;
       document.getElementById('btnSubmitTx').textContent = `Simpan Transaksi (${type})`;
     }
@@ -1238,16 +1163,16 @@
     function renderDashboard() {
       const d = appState.data.dashboard;
       const cards = [
-        { label: 'Jumlah Item', val: d.totalItems, sub: 'Katalog Aktif', cls: 'card-c1', fn: null },
-        { label: 'Jumlah Unit', val: d.totalStock, sub: 'Baki Keseluruhan', cls: 'card-c2', fn: null },
-        { label: 'Stok Sedia', val: d.okStock, sub: 'Status OK', cls: 'card-c3', fn: () => filterDashboard('OK') },
-        { label: 'Low Stock', val: d.lowStock, sub: 'Perlu Ditambah', cls: 'card-c4', fn: () => filterDashboard('LOW STOCK') },
-        { label: 'Habis', val: d.emptyStock, sub: 'Paras Sifar', cls: 'card-c5', fn: () => filterDashboard('HABIS') },
-        { label: 'Hari Ini', val: d.keluarHariIni, sub: `Masuk: ${d.masukHariIni}`, cls: 'card-c6', fn: null }
+        { label: 'Jumlah Item', val: d.totalItems, sub: 'Katalog Aktif', fn: null },
+        { label: 'Jumlah Unit', val: d.totalStock, sub: 'Baki Keseluruhan', fn: null },
+        { label: 'Stok Sedia', val: d.okStock, sub: 'Status OK', fn: () => filterDashboard('OK') },
+        { label: 'Low Stock', val: d.lowStock, sub: 'Perlu Ditambah', fn: () => filterDashboard('LOW STOCK') },
+        { label: 'Habis', val: d.emptyStock, sub: 'Paras Sifar', fn: () => filterDashboard('HABIS') },
+        { label: 'Hari Ini', val: d.keluarHariIni, sub: `Masuk: ${d.masukHariIni}`, fn: null }
       ];
 
       document.getElementById('metricsCards').innerHTML = cards.map((c, i) => `
-        <div class="metric-card ${c.cls}" ${c.fn ? `onclick="cards[${i}].fn()"` : ''}>
+        <div class="metric-card" ${c.fn ? `onclick="cards[${i}].fn()"` : ''}>
           <div class="metric-title">${c.label}</div>
           <div class="metric-val">${Number(c.val).toLocaleString()}</div>
           <div class="metric-sub">${c.sub}</div>
@@ -1471,7 +1396,7 @@
         <tr>
           <td>${l.date}</td>
           <td><strong>${l.item}</strong></td>
-          <td><span class="badge ${l.type === 'Masuk' ? 'badge-type-in' : 'badge-type-out'}">${l.type}</span></td>
+          <td><span class="badge badge-${l.type === 'Masuk' ? 'ok' : 'empty'}">${l.type}</span></td>
           <td style="text-align:right; font-weight:700;">${l.qty}</td>
           <td style="text-align:right;">${l.balanceAfter}</td>
           <td>${l.pic}</td>
@@ -1486,7 +1411,7 @@
               <div class="card-title">${l.item}</div>
               <div class="card-sub">${l.date} • ${l.pic} • ${l.location}</div>
             </div>
-            <span class="badge ${l.type === 'Masuk' ? 'badge-type-in' : 'badge-type-out'}">${l.type}</span>
+            <span class="badge badge-${l.type === 'Masuk' ? 'ok' : 'empty'}">${l.type}</span>
           </div>
           <div class="card-row-bottom">
             <span>Kuantiti: <strong>${l.qty} unit</strong></span>
@@ -1504,7 +1429,10 @@
       tbody.innerHTML = items.map(i => `
         <tr>
           <td><strong>${i.itemId}</strong></td>
-          <td>${i.item}</td>
+          <td>
+            <div>${i.item}</div>
+            <small style="color:#64748b;">${i.sku || '-'}</small>
+          </td>
           <td>${i.category}</td>
           <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
           <td style="text-align:right; color:#64748b;">${i.minimum}</td>
@@ -1560,6 +1488,14 @@
         return;
       }
 
+      const payload = {
+        date: document.getElementById('txDate').value,
+        pic: document.getElementById('txPic').value,
+        location: document.getElementById('txLocation').value,
+        note: document.getElementById('txNote').value,
+        items
+      };
+
       showLoading(true, 'Menyimpan rekod...');
 
       fetch(SCRIPT_URL, {
@@ -1568,13 +1504,7 @@
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'addTransactionsBatch',
-          data: {
-            date: document.getElementById('txDate').value,
-            pic: document.getElementById('txPic').value,
-            location: document.getElementById('txLocation').value,
-            note: document.getElementById('txNote').value,
-            items
-          }
+          data: payload
         })
       })
       .then(res => res.json())
