@@ -1,148 +1,1203 @@
-// Gantikan dengan URL Deployment Web App anda
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
-
-// Gantikan fungsi loadData lama dengan versi fetch:
-function loadData() {
-  showLoading(true, 'Mengemaskini data...');
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>e-AzzuhaTRG Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  fetch(`${SCRIPT_URL}?action=getAppData`)
-    .then(res => res.json())
-    .then(res => {
-      if (!res.ok) throw new Error(res.message);
-      appState.data = res.data;
-      renderDashboard();
-      renderDropdowns();
-      renderLogs();
-      renderItems();
-      showLoading(false);
-    })
-    .catch(err => {
-      showLoading(false);
-      showToast(err.message || 'Ralat memuatkan data.', true);
-    });
-}
+  <!-- Pustaka Pengimbas Kod Bar & QR -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
-// Gantikan submitTransaction dengan versi fetch:
-function submitTransaction(e) {
-  e.preventDefault();
-  const rows = document.querySelectorAll('.batch-item-row');
-  const items = [];
-  const selectedType = appState.globalTxType;
-
-  rows.forEach(r => {
-    const itemId = r.querySelector('.batch-item').value;
-    const qty = Number(r.querySelector('.batch-qty').value);
-    if (itemId && qty > 0) {
-      items.push({ itemId, type: selectedType, qty });
+  <style>
+    :root {
+      --primary: #047857;
+      --primary-hover: #065f46;
+      --primary-dark: #064e3b;
+      --primary-light: #ecfdf5;
+      --accent: #10b981;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      
+      --status-ok-bg: #dcfce7;
+      --status-ok-text: #166534;
+      --status-low-bg: #fef3c7;
+      --status-low-text: #92400e;
+      --status-empty-bg: #fee2e2;
+      --status-empty-text: #991b1b;
+      
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+      --radius: 12px;
     }
-  });
 
-  if (!items.length) {
-    showToast('Sila masukkan sekurang-kurangnya satu item transaksi.', true);
-    return;
-  }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
 
-  const payload = {
-    date: document.getElementById('txDate').value,
-    pic: document.getElementById('txPic').value,
-    location: document.getElementById('txLocation').value,
-    note: document.getElementById('txNote').value,
-    items
-  };
+    .app-container {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      min-height: 100vh;
+    }
 
-  showLoading(true, 'Menyimpan transaksi...');
+    /* Sidebar */
+    .sidebar {
+      background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
 
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({
-      action: 'addTransactionsBatch',
-      data: payload
-    })
-  })
-  .then(res => res.json())
-  .then(res => {
-    showLoading(false);
-    if (!res.ok) throw new Error(res.message);
-    showToast(res.message);
-    appState.data = res.data;
-    renderDashboard();
-    renderLogs();
-    renderItems();
-    document.getElementById('txNote').value = '';
-    document.getElementById('batchContainer').innerHTML = '';
-    addBatchRow();
-  })
-  .catch(err => {
-    showLoading(false);
-    showToast(err.message || 'Gagal menyimpan transaksi.', true);
-  });
-}
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      margin-bottom: 24px;
+    }
 
-// Gantikan submitItem dengan versi fetch:
-function submitItem(e) {
-  e.preventDefault();
-  const payload = {
-    itemId: document.getElementById('itId').value,
-    sku: document.getElementById('itSku').value,
-    item: document.getElementById('itName').value,
-    category: document.getElementById('itCategory').value,
-    location: document.getElementById('itLocation').value,
-    openingStock: document.getElementById('itOpening').value,
-    minimum: document.getElementById('itMin').value,
-    note: document.getElementById('itNote').value
-  };
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      font-weight: 800;
+    }
 
-  showLoading(true, 'Menyimpan item...');
+    .brand-title { font-size: 15px; font-weight: 700; line-height: 1.2; }
+    .brand-sub { font-size: 11px; opacity: 0.8; }
 
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({
-      action: 'addOrUpdateItem',
-      data: payload
-    })
-  })
-  .then(res => res.json())
-  .then(res => {
-    showLoading(false);
-    if (!res.ok) throw new Error(res.message);
-    showToast(res.message);
-    appState.data = res.data;
-    renderDashboard();
-    renderItems();
-    resetItemForm();
-  })
-  .catch(err => {
-    showLoading(false);
-    showToast(err.message || 'Gagal menyimpan item.', true);
-  });
-}
+    .nav-list { display: grid; gap: 6px; list-style: none; }
+    .nav-btn {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.85);
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+    }
 
-// Gantikan deleteItemHandler dengan versi fetch:
-function deleteItemHandler() {
-  if (!appState.selectedItem) return;
-  if (!confirm(`Adakah anda pasti mahu memadam item ${appState.selectedItem}?`)) return;
+    .nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .nav-btn.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: var(--shadow);
+      font-weight: 700;
+    }
 
-  showLoading(true, 'Memadam item...');
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 11px;
+      opacity: 0.7;
+      line-height: 1.4;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 16px;
+    }
 
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({
-      action: 'deleteItem',
-      data: { itemId: appState.selectedItem }
-    })
-  })
-  .then(res => res.json())
-  .then(res => {
-    showLoading(false);
-    if (!res.ok) throw new Error(res.message);
-    showToast(res.message);
-    appState.data = res.data;
-    renderDashboard();
-    renderItems();
-    resetItemForm();
-  })
-  .catch(err => {
-    showLoading(false);
-    showToast(err.message || 'Gagal memadam item.', true);
-  });
-}
+    /* Main Area */
+    main { padding: 28px; overflow-y: auto; }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .header-title h2 { font-size: 22px; font-weight: 800; color: var(--text); }
+    .header-title p { color: var(--text-muted); font-size: 12.5px; margin-top: 2px; }
+    .header-actions { display: flex; gap: 10px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: white; border-color: var(--border); color: var(--text); }
+    .btn-secondary:hover { background: #f1f5f9; }
+    .btn-danger { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+    .btn-danger:hover { background: #fecaca; }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    /* Mode Switcher Masuk / Keluar */
+    .type-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: var(--primary-light);
+      padding: 5px;
+      border: 1px solid rgba(4, 120, 87, 0.15);
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .type-btn {
+      border: none;
+      padding: 9px 12px;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      background: transparent;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .type-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: var(--shadow-sm);
+      font-weight: 700;
+    }
+
+    /* Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .metric-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .metric-val { font-size: 24px; font-weight: 800; color: var(--primary-dark); margin: 4px 0; }
+    .metric-sub { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Panels & 50/50 Layout */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 24px;
+      min-width: 0;
+    }
+
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fafafa;
+    }
+
+    .panel-header h3 { font-size: 15px; font-weight: 700; }
+    .panel-body { padding: 20px; }
+
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* Forms */
+    .form-group { display: grid; gap: 14px; }
+    .input-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+    label { font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 5px; }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      background: #fff;
+      outline: none;
+      transition: border 0.15s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
+    }
+
+    textarea { resize: vertical; min-height: 70px; }
+
+    /* Data Tables */
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #f8fafc; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .badge-ok { background: var(--status-ok-bg); color: var(--status-ok-text); }
+    .badge-low { background: var(--status-low-bg); color: var(--status-low-text); }
+    .badge-empty { background: var(--status-empty-bg); color: var(--status-empty-text); }
+
+    /* Batch Rows */
+    .batch-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      background: #fdfdfd;
+      margin-bottom: 14px;
+    }
+
+    .batch-item-row {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 1.2fr) auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 10px;
+    }
+
+    /* Modal / Overlay */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(3px);
+      display: grid;
+      place-items: center;
+      z-index: 100;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Scanner Modal Popup */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      display: grid;
+      place-items: center;
+      z-index: 110;
+      padding: 16px;
+    }
+
+    .scanner-dialog {
+      background: #ffffff;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .scanner-header {
+      padding: 14px 18px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .scanner-header h4 { font-size: 14px; font-weight: 700; color: var(--text); }
+
+    .scanner-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #scannerReader {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .scanner-hint {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      background: var(--primary-dark);
+      color: #fff;
+      border-radius: 10px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 101;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { background: #991b1b; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 1100px) {
+      .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .two-col-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .app-container { grid-template-columns: 1fr; }
+      .sidebar { height: auto; position: static; }
+      .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .batch-item-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading State -->
+  <div id="loading" class="loading-overlay">
+    <div style="text-align: center;">
+      <div class="spinner" style="margin: 0 auto 12px;"></div>
+      <p id="loadingMsg" style="font-weight: 600; font-size: 13px;">Memuatkan sistem...</p>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Notifikasi</div>
+
+  <!-- Modal Pengimbas Barcode / QR -->
+  <div id="scannerModal" class="modal-overlay hidden">
+    <div class="scanner-dialog">
+      <div class="scanner-header">
+        <h4>Imbas Kod Bar / QR</h4>
+        <button type="button" class="btn btn-secondary" style="padding: 4px 10px;" onclick="closeScannerModal()">Tutup</button>
+      </div>
+      <div class="scanner-body">
+        <div id="scannerReader"></div>
+        <p class="scanner-hint">Arahkan kamera ke arah Kod Bar atau Kod QR item.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand-box">
+        <div class="brand-badge">A</div>
+        <div>
+          <div class="brand-title">e-AzzuhaTRG</div>
+          <div class="brand-sub">Inventory Tracker</div>
+        </div>
+      </div>
+      
+      <ul class="nav-list">
+        <li><button class="nav-btn active" onclick="switchTab('dashboard')">Dashboard</button></li>
+        <li><button class="nav-btn" onclick="switchTab('transactions')">Transaksi Stok</button></li>
+        <li><button class="nav-btn" onclick="switchTab('items')">Data Induk Item</button></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        © 2026 Azzuha Group TRG<br>
+        Sistem Pengurusan Stok Pintar
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+      <div class="header-bar">
+        <div class="header-title">
+          <h2 id="viewTitle">Dashboard Stok</h2>
+          <p id="viewSubtitle">Ringkasan status baki dan pergerakan stok inventori.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="loadData()">Segar Semula</button>
+          <button class="btn btn-primary" onclick="switchTab('transactions')">Rekod Transaksi</button>
+        </div>
+      </div>
+
+      <!-- TAB 1: DASHBOARD -->
+      <section id="tab-dashboard">
+        <div class="metrics-grid" id="metricsCards"></div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Item Perlu Perhatian (Low Stock & Habis)</h3>
+          </div>
+          <div class="panel-body">
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Item ID</th>
+                    <th>Nama Item</th>
+                    <th>Kategori</th>
+                    <th style="text-align: right;">Baki Semasa</th>
+                    <th style="text-align: right;">Minima</th>
+                    <th>Status</th>
+                    <th>Lokasi</th>
+                  </tr>
+                </thead>
+                <tbody id="attentionTbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: TRANSAKSI (Nisbah 50/50 & Pengimbas Kod) -->
+      <section id="tab-transactions" class="hidden">
+        <div class="two-col-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Borang Transaksi Stok</h3>
+            </div>
+            <div class="panel-body">
+              <form id="txForm" onsubmit="submitTransaction(event)">
+                <div class="form-group">
+                  
+                  <!-- PILIHAN GLOBAL MASUK / KELUAR -->
+                  <div>
+                    <label>Pilih Jenis Transaksi Untuk Semua Item</label>
+                    <div class="type-switcher">
+                      <button type="button" id="btnTypeOut" class="type-btn active" onclick="setGlobalTxType('Keluar')">
+                        Stok Keluar
+                      </button>
+                      <button type="button" id="btnTypeIn" class="type-btn" onclick="setGlobalTxType('Masuk')">
+                        Stok Masuk
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="input-row">
+                    <div>
+                      <label>Tarikh</label>
+                      <input type="date" id="txDate" required>
+                    </div>
+                    <div>
+                      <label>PIC Bertanggungjawab</label>
+                      <select id="txPic" required></select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label>Lokasi Transaksi</label>
+                    <select id="txLocation" required></select>
+                  </div>
+
+                  <div class="batch-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap: 8px; flex-wrap: wrap;">
+                      <span style="font-weight:700; font-size:12px;" id="batchCardLabel">Senarai Item Stok Keluar</span>
+                      <div style="display:flex; gap: 6px;">
+                        <button type="button" class="btn btn-primary" style="padding:5px 10px; font-size:11.5px;" onclick="openScannerModal()">Imbas Kod</button>
+                        <button type="button" class="btn btn-secondary" style="padding:5px 10px; font-size:11.5px;" onclick="addBatchRow()">+ Tambah Item</button>
+                      </div>
+                    </div>
+                    <div id="batchContainer"></div>
+                  </div>
+
+                  <div>
+                    <label>Catatan / Rujukan</label>
+                    <textarea id="txNote" placeholder="Tujuan kegunaan / No. Resit / Event"></textarea>
+                  </div>
+
+                  <button type="submit" id="btnSubmitTx" class="btn btn-primary" style="width: 100%;">Simpan Transaksi (Keluar)</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Log Transaksi Terkini</h3>
+            </div>
+            <div class="panel-body">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Tarikh</th>
+                      <th>Item</th>
+                      <th>Jenis</th>
+                      <th style="text-align: right;">Qty</th>
+                      <th style="text-align: right;">Baki</th>
+                      <th>PIC</th>
+                    </tr>
+                  </thead>
+                  <tbody id="logsTbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: DATA INDUK (Nisbah 50/50) -->
+      <section id="tab-items" class="hidden">
+        <div class="two-col-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <h3 id="itemFormTitle">Daftar / Kemaskini Item</h3>
+            </div>
+            <div class="panel-body">
+              <form id="itemForm" onsubmit="submitItem(event)">
+                <div class="form-group">
+                  <div class="input-row">
+                    <div>
+                      <label>Item ID</label>
+                      <input type="text" id="itId" placeholder="AZZ-001">
+                    </div>
+                    <div>
+                      <label>SKU Kod</label>
+                      <input type="text" id="itSku" placeholder="SKU-XXX">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label>Nama Item</label>
+                    <input type="text" id="itName" required placeholder="Contoh: Beg Galas Umrah">
+                  </div>
+
+                  <div class="input-row">
+                    <div>
+                      <label>Kategori</label>
+                      <select id="itCategory" required></select>
+                    </div>
+                    <div>
+                      <label>Lokasi Simpanan</label>
+                      <select id="itLocation" required></select>
+                    </div>
+                  </div>
+
+                  <div class="input-row">
+                    <div>
+                      <label>Stok Awal</label>
+                      <input type="number" id="itOpening" min="0" value="0" required>
+                    </div>
+                    <div>
+                      <label>Paras Minima</label>
+                      <input type="number" id="itMin" min="0" value="10" required>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label>Catatan</label>
+                    <textarea id="itNote" placeholder="Maklumat tambahan item"></textarea>
+                  </div>
+
+                  <div style="display:flex; gap:8px;">
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Simpan Item</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetItemForm()">Reset</button>
+                    <button type="button" id="btnDeleteItem" class="btn btn-danger hidden" onclick="deleteItemHandler()">Padam</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Senarai Katalog Item</h3>
+              <input type="text" id="tableSearch" placeholder="Cari item..." style="width:160px; padding:4px 8px; font-size:12px;" oninput="filterItemsTable()">
+            </div>
+            <div class="panel-body">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Item / SKU</th>
+                      <th>Kategori</th>
+                      <th style="text-align: right;">Baki</th>
+                      <th>Status</th>
+                      <th style="text-align: center;">Tindakan</th>
+                    </tr>
+                  </thead>
+                  <tbody id="itemsTbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // =========================================================================
+    // SALIN DAN TAMPAL URL WEB APP ANDA DI SINI
+    // =========================================================================
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
+
+    let appState = {
+      data: null,
+      activeTab: 'dashboard',
+      selectedItem: null,
+      globalTxType: 'Keluar'
+    };
+
+    let html5QrCodeScanner = null;
+    let lastScannedCode = '';
+    let lastScanTime = 0;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('txDate').valueAsDate = new Date();
+      addBatchRow();
+      loadData();
+    });
+
+    function setGlobalTxType(type) {
+      appState.globalTxType = type;
+      const btnOut = document.getElementById('btnTypeOut');
+      const btnIn = document.getElementById('btnTypeIn');
+      const submitBtn = document.getElementById('btnSubmitTx');
+      const label = document.getElementById('batchCardLabel');
+
+      if (type === 'Keluar') {
+        btnOut.classList.add('active');
+        btnIn.classList.remove('active');
+        submitBtn.textContent = 'Simpan Transaksi (Keluar)';
+        label.textContent = 'Senarai Item Stok Keluar';
+      } else {
+        btnIn.classList.add('active');
+        btnOut.classList.remove('active');
+        submitBtn.textContent = 'Simpan Transaksi (Masuk)';
+        label.textContent = 'Senarai Item Stok Masuk';
+      }
+    }
+
+    function switchTab(tab) {
+      appState.activeTab = tab;
+      document.querySelectorAll('.nav-btn').forEach((b, idx) => {
+        b.classList.toggle('active', ['dashboard', 'transactions', 'items'][idx] === tab);
+      });
+
+      document.getElementById('tab-dashboard').classList.toggle('hidden', tab !== 'dashboard');
+      document.getElementById('tab-transactions').classList.toggle('hidden', tab !== 'transactions');
+      document.getElementById('tab-items').classList.toggle('hidden', tab !== 'items');
+
+      const titles = {
+        dashboard: ['Dashboard Stok', 'Ringkasan status baki dan pergerakan stok inventori.'],
+        transactions: ['Transaksi Stok', 'Rekod kemasukan dan pengeluaran item inventori.'],
+        items: ['Data Induk Item', 'Pusat pendaftaran dan pengurusan katalog item.']
+      };
+      document.getElementById('viewTitle').textContent = titles[tab][0];
+      document.getElementById('viewSubtitle').textContent = titles[tab][1];
+    }
+
+    function showLoading(show, msg = 'Memuatkan sistem...') {
+      document.getElementById('loadingMsg').textContent = msg;
+      document.getElementById('loading').classList.toggle('hidden', !show);
+    }
+
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.toggle('error', isError);
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // PANGGILAN GET: Muat turun data daripada Apps Script via fetch
+    function loadData() {
+      showLoading(true, 'Mengemaskini data...');
+      
+      fetch(`${SCRIPT_URL}?action=getAppData`)
+        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error(res.message);
+          appState.data = res.data;
+          renderDashboard();
+          renderDropdowns();
+          renderLogs();
+          renderItems();
+          showLoading(false);
+        })
+        .catch(err => {
+          showLoading(false);
+          showToast(err.message || 'Ralat memuatkan data.', true);
+        });
+    }
+
+    function renderDashboard() {
+      const d = appState.data.dashboard;
+      const cards = [
+        { label: 'Jumlah Item', val: d.totalItems, sub: 'Katalog Aktif' },
+        { label: 'Jumlah Unit', val: d.totalStock, sub: 'Baki Stok Semasa' },
+        { label: 'Stok Sedia', val: d.okStock, sub: 'Status Mencukupi' },
+        { label: 'Low Stock', val: d.lowStock, sub: 'Perlu Ditambah' },
+        { label: 'Habis', val: d.emptyStock, sub: 'Paras Sifar' },
+        { label: 'Hari Ini', val: d.keluarHariIni, sub: `Masuk: ${d.masukHariIni}` }
+      ];
+
+      document.getElementById('metricsCards').innerHTML = cards.map(c => `
+        <div class="metric-card">
+          <div class="metric-title">${c.label}</div>
+          <div class="metric-val">${Number(c.val).toLocaleString()}</div>
+          <div class="metric-sub">${c.sub}</div>
+        </div>
+      `).join('');
+
+      const attentionItems = appState.data.items.filter(i => i.status !== 'OK');
+      const tbody = document.getElementById('attentionTbody');
+      if (!attentionItems.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">Semua item berada dalam keadaan mencukupi.</td></tr>`;
+      } else {
+        tbody.innerHTML = attentionItems.map(i => `
+          <tr>
+            <td><strong>${i.itemId}</strong></td>
+            <td>${i.item}</td>
+            <td>${i.category}</td>
+            <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
+            <td style="text-align:right; color:#64748b;">${i.minimum}</td>
+            <td><span class="badge badge-${i.status === 'HABIS' ? 'empty' : 'low'}">${i.status}</span></td>
+            <td>${i.location}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function renderDropdowns() {
+      const l = appState.data.lists;
+      const fill = (id, arr) => {
+        document.getElementById(id).innerHTML = arr.map(x => `<option value="${x}">${x}</option>`).join('');
+      };
+      fill('txPic', l.pic);
+      fill('txLocation', l.lokasi);
+      fill('itCategory', l.kategori);
+      fill('itLocation', l.lokasi);
+      updateBatchItemOptions();
+    }
+
+    function addBatchRow(prefillItemId = '', prefillQty = '') {
+      const container = document.getElementById('batchContainer');
+      const div = document.createElement('div');
+      div.className = 'batch-item-row';
+      div.innerHTML = `
+        <div>
+          <select class="batch-item" required></select>
+        </div>
+        <div>
+          <input type="number" class="batch-qty" min="1" placeholder="Kuantiti" value="${prefillQty}" required>
+        </div>
+        <div>
+          <button type="button" class="btn btn-secondary" style="padding:7px 10px; color:#64748b;" onclick="removeBatchRow(this)">Buang</button>
+        </div>
+      `;
+      container.appendChild(div);
+      updateBatchItemOptions();
+      
+      if (prefillItemId) {
+        const sel = div.querySelector('.batch-item');
+        sel.value = prefillItemId;
+      }
+      return div;
+    }
+
+    function removeBatchRow(btn) {
+      const rows = document.querySelectorAll('.batch-item-row');
+      if (rows.length > 1) {
+        btn.closest('.batch-item-row').remove();
+      } else {
+        showToast('Sekurang-kurangnya satu baris item diperlukan.', true);
+      }
+    }
+
+    function updateBatchItemOptions() {
+      const items = appState.data?.items || [];
+      const opts = `<option value="">Pilih Item...</option>` + items.map(i => `
+        <option value="${i.itemId}">${i.itemId} — ${i.item} (Baki: ${i.currentStock})</option>
+      `).join('');
+      document.querySelectorAll('.batch-item').forEach(sel => {
+        const cur = sel.value;
+        sel.innerHTML = opts;
+        sel.value = cur;
+      });
+    }
+
+    /* ========================================================
+       MODAL & PENGIMBAS BARCODE / QR SCANNER
+       ======================================================== */
+    function openScannerModal() {
+      document.getElementById('scannerModal').classList.remove('hidden');
+      
+      if (!html5QrCodeScanner) {
+        html5QrCodeScanner = new Html5Qrcode("scannerReader");
+      }
+
+      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+      
+      html5QrCodeScanner.start(
+        { facingMode: "environment" }, 
+        config, 
+        onScanSuccess
+      ).catch(err => {
+        showToast('Tidak dapat memulakan kamera: ' + (err.message || err), true);
+        closeScannerModal();
+      });
+    }
+
+    function closeScannerModal() {
+      if (html5QrCodeScanner && html5QrCodeScanner.isScanning) {
+        html5QrCodeScanner.stop().then(() => {
+          document.getElementById('scannerModal').classList.add('hidden');
+        }).catch(() => {
+          document.getElementById('scannerModal').classList.add('hidden');
+        });
+      } else {
+        document.getElementById('scannerModal').classList.add('hidden');
+      }
+    }
+
+    function playBeepSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 880;
+        gain.gain.value = 0.1;
+        osc.start();
+        setTimeout(() => {
+          osc.stop();
+          ctx.close();
+        }, 150);
+      } catch (e) {}
+    }
+
+    function onScanSuccess(decodedText) {
+      const now = Date.now();
+      if (decodedText === lastScannedCode && now - lastScanTime < 2000) {
+        return;
+      }
+      lastScannedCode = decodedText;
+      lastScanTime = now;
+
+      const items = appState.data?.items || [];
+      const cleanCode = decodedText.trim().toLowerCase();
+
+      const matched = items.find(i => 
+        (i.itemId && i.itemId.toLowerCase() === cleanCode) ||
+        (i.sku && i.sku.toLowerCase() === cleanCode)
+      );
+
+      if (!matched) {
+        showToast('Item tidak dijumpai: ' + decodedText, true);
+        return;
+      }
+
+      playBeepSound();
+      showToast('Item diimbas: ' + matched.item);
+
+      let existingRow = null;
+      document.querySelectorAll('.batch-item-row').forEach(row => {
+        const sel = row.querySelector('.batch-item');
+        if (sel.value === matched.itemId) {
+          existingRow = row;
+        }
+      });
+
+      if (existingRow) {
+        const qtyInput = existingRow.querySelector('.batch-qty');
+        qtyInput.value = (Number(qtyInput.value) || 0) + 1;
+      } else {
+        const firstEmptyRow = Array.from(document.querySelectorAll('.batch-item-row')).find(row => {
+          return !row.querySelector('.batch-item').value;
+        });
+
+        if (firstEmptyRow) {
+          firstEmptyRow.querySelector('.batch-item').value = matched.itemId;
+          firstEmptyRow.querySelector('.batch-qty').value = 1;
+        } else {
+          addBatchRow(matched.itemId, 1);
+        }
+      }
+    }
+
+    function renderLogs() {
+      const logs = appState.data.logs;
+      const tbody = document.getElementById('logsTbody');
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td>${l.date}</td>
+          <td><strong>${l.item}</strong></td>
+          <td><span class="badge badge-${l.type === 'Masuk' ? 'ok' : 'empty'}">${l.type}</span></td>
+          <td style="text-align:right; font-weight:700;">${l.qty}</td>
+          <td style="text-align:right;">${l.balanceAfter}</td>
+          <td>${l.pic}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderItems() {
+      const items = appState.data.items;
+      const tbody = document.getElementById('itemsTbody');
+      tbody.innerHTML = items.map(i => `
+        <tr>
+          <td><strong>${i.itemId}</strong></td>
+          <td>
+            <div>${i.item}</div>
+            <small style="color:#64748b;">${i.sku || '-'}</small>
+          </td>
+          <td>${i.category}</td>
+          <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
+          <td><span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span></td>
+          <td style="text-align:center;">
+            <button class="btn btn-secondary" style="padding:3px 8px; font-size:11px;" onclick='populateEditItem(${JSON.stringify(i).replace(/'/g, "&apos;")})'>Edit</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterItemsTable() {
+      const q = document.getElementById('tableSearch').value.toLowerCase();
+      document.querySelectorAll('#itemsTbody tr').forEach(tr => {
+        tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+
+    // PANGGILAN POST: Simpan Transaksi Batch
+    function submitTransaction(e) {
+      e.preventDefault();
+      const rows = document.querySelectorAll('.batch-item-row');
+      const items = [];
+      const selectedType = appState.globalTxType;
+
+      rows.forEach(r => {
+        const itemId = r.querySelector('.batch-item').value;
+        const qty = Number(r.querySelector('.batch-qty').value);
+        if (itemId && qty > 0) {
+          items.push({ itemId, type: selectedType, qty });
+        }
+      });
+
+      if (!items.length) {
+        showToast('Sila masukkan sekurang-kurangnya satu item transaksi.', true);
+        return;
+      }
+
+      const payload = {
+        date: document.getElementById('txDate').value,
+        pic: document.getElementById('txPic').value,
+        location: document.getElementById('txLocation').value,
+        note: document.getElementById('txNote').value,
+        items
+      };
+
+      showLoading(true, 'Menyimpan transaksi...');
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'addTransactionsBatch',
+          data: payload
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        showLoading(false);
+        if (!res.ok) throw new Error(res.message);
+        showToast(res.message);
+        appState.data = res.data;
+        renderDashboard();
+        renderLogs();
+        renderItems();
+        document.getElementById('txNote').value = '';
+        document.getElementById('batchContainer').innerHTML = '';
+        addBatchRow();
+      })
+      .catch(err => {
+        showLoading(false);
+        showToast(err.message || 'Gagal menyimpan transaksi.', true);
+      });
+    }
+
+    function populateEditItem(item) {
+      appState.selectedItem = item.itemId;
+      document.getElementById('itId').value = item.itemId;
+      document.getElementById('itId').readOnly = true;
+      document.getElementById('itSku').value = item.sku;
+      document.getElementById('itName').value = item.item;
+      document.getElementById('itCategory').value = item.category;
+      document.getElementById('itLocation').value = item.location;
+      document.getElementById('itOpening').value = item.openingStock;
+      document.getElementById('itMin').value = item.minimum;
+      document.getElementById('itNote').value = item.note;
+
+      document.getElementById('itemFormTitle').textContent = `Kemaskini: ${item.itemId}`;
+      document.getElementById('btnDeleteItem').classList.remove('hidden');
+    }
+
+    function resetItemForm() {
+      appState.selectedItem = null;
+      document.getElementById('itemForm').reset();
+      document.getElementById('itId').readOnly = false;
+      document.getElementById('itemFormTitle').textContent = 'Daftar / Kemaskini Item';
+      document.getElementById('btnDeleteItem').classList.add('hidden');
+    }
+
+    // PANGGILAN POST: Tambah atau Kemaskini Item
+    function submitItem(e) {
+      e.preventDefault();
+      const payload = {
+        itemId: document.getElementById('itId').value,
+        sku: document.getElementById('itSku').value,
+        item: document.getElementById('itName').value,
+        category: document.getElementById('itCategory').value,
+        location: document.getElementById('itLocation').value,
+        openingStock: document.getElementById('itOpening').value,
+        minimum: document.getElementById('itMin').value,
+        note: document.getElementById('itNote').value
+      };
+
+      showLoading(true, 'Menyimpan item...');
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'addOrUpdateItem',
+          data: payload
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        showLoading(false);
+        if (!res.ok) throw new Error(res.message);
+        showToast(res.message);
+        appState.data = res.data;
+        renderDashboard();
+        renderItems();
+        resetItemForm();
+      })
+      .catch(err => {
+        showLoading(false);
+        showToast(err.message || 'Gagal menyimpan item.', true);
+      });
+    }
+
+    // PANGGILAN POST: Padam Item
+    function deleteItemHandler() {
+      if (!appState.selectedItem) return;
+      if (!confirm(`Adakah anda pasti mahu memadam item ${appState.selectedItem}?`)) return;
+
+      showLoading(true, 'Memadam item...');
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'deleteItem',
+          data: { itemId: appState.selectedItem }
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        showLoading(false);
+        if (!res.ok) throw new Error(res.message);
+        showToast(res.message);
+        appState.data = res.data;
+        renderDashboard();
+        renderItems();
+        resetItemForm();
+      })
+      .catch(err => {
+        showLoading(false);
+        showToast(err.message || 'Gagal memadam item.', true);
+      });
+    }
+  </script>
+</body>
+</html>
