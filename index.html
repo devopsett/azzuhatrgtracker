@@ -6,12 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>e-AzzuhaTRG Tracker</title>
   
+  <!-- PWA & Mobile App Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="e-Azzuha">
-  <meta name="theme-color" content="#064e3b">
-  
+  <meta name="theme-color" content="#047857">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -20,17 +21,31 @@
 
   <style>
     :root {
+      /* Tema Eksekutif & Bersih: Hijau Zamrud Korporat */
       --primary: #047857;
       --primary-hover: #065f46;
       --primary-dark: #064e3b;
       --primary-soft: #ecfdf5;
+      --accent: #10b981;
+
       --bg: #f8fafc;
       --surface: #ffffff;
       --text: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
       --border-light: #f1f5f9;
-      --radius: 10px;
+      --radius: 12px;
+
+      --status-ok-bg: #ecfdf5;
+      --status-ok-text: #047857;
+      --status-low-bg: #fffbeb;
+      --status-low-text: #b45309;
+      --status-empty-bg: #fef2f2;
+      --status-empty-text: #b91c1c;
+
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
     }
 
     * { 
@@ -42,23 +57,23 @@
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-size: 13px;
+      font-size: 13.5px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
     .app-layout {
       display: grid;
-      grid-template-columns: 240px minmax(0, 1fr);
+      grid-template-columns: 250px minmax(0, 1fr);
       min-height: 100vh;
     }
 
-    /* Sidebar Desktop */
+    /* Sidebar Desktop Elegan */
     .sidebar {
-      background: #064e3b;
+      background: linear-gradient(180deg, #064e3b, #022c22);
       color: white;
       padding: 24px 16px;
       display: flex;
@@ -67,7 +82,6 @@
       top: 0;
       height: 100vh;
       z-index: 20;
-      border-right: 1px solid rgba(255,255,255,0.08);
     }
 
     .brand-box {
@@ -79,30 +93,27 @@
       margin-bottom: 24px;
     }
 
-    .brand-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      background: #022c22;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      border: 1px solid rgba(255,255,255,0.15);
+    .brand-logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #000;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
-    .brand-icon svg { width: 24px; height: 24px; fill: #ffffff; }
+    .brand-title { font-size: 15px; font-weight: 800; line-height: 1.2; letter-spacing: -0.2px; }
+    .brand-sub { font-size: 11px; color: #a7f3d0; font-weight: 500; }
 
-    .brand-title { font-size: 14px; font-weight: 800; letter-spacing: -0.2px; }
-    .brand-sub { font-size: 11px; opacity: 0.7; }
-
-    .nav-list { display: grid; gap: 4px; list-style: none; }
+    .nav-list { display: grid; gap: 6px; list-style: none; }
     .nav-btn {
       width: 100%;
       border: none;
       background: transparent;
-      color: rgba(255,255,255,0.8);
-      padding: 10px 12px;
-      border-radius: 6px;
+      color: rgba(255,255,255,0.85);
+      padding: 12px 14px;
+      border-radius: 8px;
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
@@ -111,57 +122,75 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      transition: all 0.15s;
+      transition: all 0.18s;
     }
 
-    .nav-btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.2; }
-    .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .nav-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+    .nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
     .nav-btn.active {
       background: #ffffff;
       color: var(--primary-dark);
       font-weight: 700;
+      box-shadow: var(--shadow-sm);
     }
 
     .sidebar-footer {
       margin-top: auto;
       font-size: 11px;
-      opacity: 0.6;
+      opacity: 0.7;
       line-height: 1.4;
-      border-top: 1px solid rgba(255,255,255,0.1);
+      border-top: 1px solid rgba(255,255,255,0.12);
       padding-top: 16px;
     }
 
-    /* Main Content */
-    main { padding: 24px; overflow-y: auto; }
+    /* Main Area Desktop & Mobile */
+    main { padding: 26px 32px; overflow-y: auto; }
     
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       background: var(--surface);
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-radius: var(--radius);
       border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
 
-    .topbar-title h2 { font-size: 17px; font-weight: 800; color: var(--text); }
-    .topbar-title p { color: var(--text-muted); font-size: 12px; }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
 
-    /* Butang */
+    .topbar-mobile-logo {
+      display: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #000;
+      border: 1px solid var(--border);
+    }
+
+    .topbar-title h2 { font-size: 19px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+    .topbar-title p { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+
+    /* Butang Bersih */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
       font-family: inherit;
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 600;
-      padding: 8px 14px;
-      min-height: 38px;
-      border-radius: 6px;
+      padding: 9px 16px;
+      min-height: 40px;
+      border-radius: 8px;
       border: 1px solid transparent;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -176,13 +205,13 @@
     .btn-danger { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
     .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
-    /* FAB Butang Bulat Tambah Transaksi */
+    /* FAB Butang Bulat Tambah Transaksi (Gaya WhatsApp) */
     .fab-btn {
       position: fixed;
       bottom: 78px;
       right: 20px;
-      width: 52px;
-      height: 52px;
+      width: 56px;
+      height: 56px;
       background: var(--primary);
       color: white;
       border-radius: 50%;
@@ -192,45 +221,52 @@
       display: grid;
       place-items: center;
       z-index: 950;
-      transition: all 0.2s ease;
+      transition: transform 0.2s ease, background 0.15s ease;
     }
 
-    .fab-btn:active { transform: scale(0.92); }
-    .fab-btn svg { width: 24px; height: 24px; stroke: #ffffff; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+    .fab-btn:active { transform: scale(0.92); background: var(--primary-hover); }
+    .fab-btn svg { width: 26px; height: 26px; stroke: #ffffff; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* Kad Metrik Dashboard: Clean Monochrome/Corporate */
+    /* Metrik Dashboard Bersih & Profesional */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
     .metric-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px;
+      padding: 16px 18px;
       cursor: pointer;
-      transition: border-color 0.15s ease;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s ease;
+      position: relative;
     }
 
-    .metric-card:hover { border-color: var(--primary); }
-    .metric-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .metric-val { font-size: 22px; font-weight: 800; color: #0f172a; margin: 4px 0 2px; }
-    .metric-sub { font-size: 11px; color: var(--text-muted); }
+    .metric-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
 
-    /* Panel */
+    .metric-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .metric-val { font-size: 24px; font-weight: 800; color: var(--text); margin: 6px 0 2px; }
+    .metric-sub { font-size: 11.5px; color: var(--text-muted); }
+
+    /* Panel & Table Layout */
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-sm);
     }
 
     .panel-header {
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -240,81 +276,87 @@
       gap: 8px;
     }
 
-    .panel-header h3 { font-size: 13.5px; font-weight: 800; color: var(--text); }
-    .panel-body { padding: 18px; }
+    .panel-header h3 { font-size: 15px; font-weight: 800; color: var(--text); }
+    .panel-body { padding: 20px; }
 
-    /* Form & Inputs */
-    .form-group { display: grid; gap: 12px; }
-    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    label { font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+    /* Form Fields & Layout Sebaris */
+    .form-group { display: grid; gap: 14px; }
+    .input-row { 
+      display: grid; 
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); 
+      gap: 12px; 
+    }
+    label { font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 5px; }
     
     input, select, textarea {
       width: 100%;
-      min-height: 38px;
-      padding: 8px 12px;
+      min-height: 42px;
+      padding: 9px 12px;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       font-family: inherit;
-      font-size: 13px;
+      font-size: 13.5px;
       background: #fff;
       outline: none;
       color: var(--text);
+      transition: border 0.15s;
     }
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.15);
+      box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.12);
     }
 
-    textarea { resize: vertical; min-height: 60px; }
+    textarea { resize: vertical; min-height: 70px; }
 
     .type-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      background: var(--border-light);
+      background: #e2e8f0;
       padding: 3px;
-      border-radius: 6px;
+      border-radius: 8px;
       margin-bottom: 10px;
     }
 
     .type-btn {
       border: none;
       padding: 8px 10px;
-      min-height: 34px;
-      border-radius: 5px;
+      min-height: 38px;
+      border-radius: 6px;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       background: transparent;
       color: #64748b;
       text-align: center;
+      transition: all 0.15s ease;
     }
 
     .type-btn.active {
       background: #ffffff;
-      color: var(--primary);
+      color: var(--primary-dark);
       font-weight: 800;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    /* Baris Item Transaksi: Sebaris */
+    /* Baris Item Transaksi: Sebaris Tanpa Kekusutan */
     .batch-card {
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      background: #fcfcfc;
+      border-radius: 10px;
+      padding: 14px;
+      background: #fafafa;
       margin-bottom: 10px;
     }
 
     .batch-item-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto auto;
-      gap: 8px;
+      gap: 10px;
       align-items: center;
-      margin-bottom: 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
     }
 
     .batch-item-row:last-child {
@@ -326,19 +368,19 @@
     .stepper {
       display: inline-flex;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
       background: #fff;
-      height: 38px;
+      height: 42px;
       flex-shrink: 0;
     }
 
     .stepper-btn {
-      width: 32px;
-      height: 38px;
+      width: 36px;
+      height: 42px;
       border: none;
       background: #f8fafc;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 800;
       color: #334155;
       cursor: pointer;
@@ -347,8 +389,8 @@
     .stepper-btn:active { background: #e2e8f0; }
 
     .stepper-input {
-      width: 44px !important;
-      min-height: 38px !important;
+      width: 48px !important;
+      min-height: 42px !important;
       border: none !important;
       border-left: 1px solid var(--border) !important;
       border-right: 1px solid var(--border) !important;
@@ -359,36 +401,36 @@
     }
 
     .btn-row-del {
-      width: 34px;
-      height: 38px;
-      min-height: 38px;
+      width: 38px;
+      height: 42px;
+      min-height: 42px;
       padding: 0;
       display: grid;
       place-items: center;
       border: 1px solid #fecaca;
       background: #fff;
       color: #b91c1c;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 14px;
       flex-shrink: 0;
     }
 
     .btn-row-del:active { background: #fee2e2; }
 
-    /* Jadual Desktop: Viewable & Readable */
+    /* Jadual Desktop Sangat Jelas & Mudah Dibaca */
     .table-container {
       overflow-x: auto;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       background: #fff;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12.5px;
+      font-size: 13px;
       text-align: left;
     }
 
@@ -396,18 +438,19 @@
       background: #f8fafc;
       color: #475569;
       font-weight: 700;
-      font-size: 11px;
+      font-size: 11.5px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 10px 14px;
+      padding: 12px 14px;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
     td {
-      padding: 10px 14px;
+      padding: 12px 14px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
+      color: #1e293b;
     }
 
     tr:last-child td { border-bottom: none; }
@@ -415,16 +458,16 @@
 
     .badge {
       display: inline-block;
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-size: 10.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
       font-weight: 700;
       white-space: nowrap;
     }
 
-    .badge-ok { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-    .badge-low { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
-    .badge-empty { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .badge-ok { background: var(--status-ok-bg); color: var(--status-ok-text); }
+    .badge-low { background: var(--status-low-bg); color: var(--status-low-text); }
+    .badge-empty { background: var(--status-empty-bg); color: var(--status-empty-text); }
 
     /* Modal & Loading */
     .loading-overlay {
@@ -438,8 +481,8 @@
     }
 
     .spinner {
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       border: 3px solid var(--border);
       border-top-color: var(--primary);
       border-radius: 50%;
@@ -452,7 +495,7 @@
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(3px);
+      backdrop-filter: blur(4px);
       display: grid;
       place-items: center;
       z-index: 1100;
@@ -462,17 +505,17 @@
 
     .modal-dialog {
       background: #ffffff;
-      border-radius: 10px;
+      border-radius: 14px;
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       overflow: hidden;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-lg);
       margin: auto;
       position: relative;
     }
 
     .modal-header {
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -480,23 +523,23 @@
       background: #fafafa;
     }
 
-    .modal-header h4 { font-size: 14px; font-weight: 800; color: var(--text); }
-    .modal-body { padding: 18px; max-height: calc(85vh - 70px); overflow-y: auto; }
+    .modal-header h4 { font-size: 15px; font-weight: 800; color: var(--text); }
+    .modal-body { padding: 20px; max-height: calc(85vh - 70px); overflow-y: auto; }
 
     #scannerModal { z-index: 2000 !important; }
     #scannerModal .scanner-dialog {
       z-index: 2001 !important;
       position: relative;
       background: #ffffff;
-      border-radius: 10px;
+      border-radius: 14px;
       width: 100%;
-      max-width: 380px;
+      max-width: 400px;
       overflow: hidden;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
     }
 
-    .scanner-body { padding: 14px; position: relative; }
-    .scanner-camera-wrapper { position: relative; width: 100%; border-radius: 8px; overflow: hidden; background: #000; }
+    .scanner-body { padding: 16px; position: relative; }
+    .scanner-camera-wrapper { position: relative; width: 100%; border-radius: 10px; overflow: hidden; background: #000; }
     #scannerReader { width: 100%; }
 
     .scanner-overlay-toast {
@@ -524,12 +567,12 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      padding: 10px 16px;
-      background: #0f172a;
+      padding: 12px 18px;
+      background: var(--text);
       color: #fff;
-      border-radius: 6px;
+      border-radius: 8px;
       font-weight: 600;
-      font-size: 12.5px;
+      font-size: 13px;
       transform: translateY(100px);
       opacity: 0;
       transition: all 0.2s ease;
@@ -537,52 +580,52 @@
     }
 
     .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.error { background: #991b1b; }
+    .toast.error { background: #b91c1c; }
     .hidden { display: none !important; }
 
     /* Kad Khusus Mudah Alih */
     .mobile-cards { display: none; }
 
-    /* Navigasi Bawah Telefon */
+    /* Bar Navigasi Bawah Telefon */
     .mobile-nav {
       display: none;
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 56px;
+      height: 60px;
       background: #ffffff;
       border-top: 1px solid var(--border);
       z-index: 900;
       grid-template-columns: repeat(3, 1fr);
-      padding: 2px 4px;
+      padding: 4px;
     }
 
     .m-btn {
       border: none;
       background: transparent;
       color: var(--text-muted);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 3px;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
     }
 
-    .m-btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+    .m-btn svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2.2; }
     .m-btn.active { color: var(--primary); font-weight: 800; background: var(--primary-soft); }
 
-    /* Pengoptimuman Mobile */
-    @media (max-width: 1024px) {
+    /* Media Queries */
+    @media (max-width: 1200px) {
       .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
     @media (max-width: 768px) {
-      .app-layout { grid-template-columns: 1fr; padding-bottom: 64px; }
+      .app-layout { grid-template-columns: 1fr; padding-bottom: 68px; }
       .sidebar { display: none; }
       .mobile-nav { display: grid; }
       main { padding: 14px; }
@@ -591,7 +634,8 @@
         padding: 12px 14px;
         margin-bottom: 14px;
       }
-      .topbar-title h2 { font-size: 15px; }
+      .topbar-mobile-logo { display: block; }
+      .topbar-title h2 { font-size: 16px; }
 
       .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -599,7 +643,7 @@
         margin-bottom: 14px;
       }
 
-      .metric-card { padding: 10px 12px; }
+      .metric-card { padding: 12px 14px; }
       .metric-val { font-size: 20px; }
       .panel-body { padding: 14px; }
 
@@ -612,7 +656,7 @@
         background: #ffffff;
         border: 1px solid var(--border);
         border-radius: 8px;
-        padding: 10px 12px;
+        padding: 12px 14px;
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -624,21 +668,22 @@
         align-items: flex-start;
       }
 
-      .card-title { font-weight: 700; color: var(--text); font-size: 13px; }
+      .card-title { font-weight: 700; color: var(--text); font-size: 13.5px; }
       .card-sub { font-size: 11px; color: var(--text-muted); }
 
       .card-row-bottom {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 11.5px;
+        font-size: 12px;
         margin-top: 4px;
         padding-top: 4px;
         border-top: 1px dashed var(--border);
       }
 
-      .toast { left: 14px; right: 14px; bottom: 70px; text-align: center; }
-      .modal-dialog { max-width: 100%; border-radius: 8px; }
+      .toast { left: 14px; right: 14px; bottom: 74px; text-align: center; }
+
+      .modal-dialog { max-width: 100%; border-radius: 12px; }
       .modal-body { max-height: calc(88vh - 60px); padding: 14px; }
     }
   </style>
@@ -655,7 +700,7 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- BUTANG BULAT TERAPUNG (FAB) -->
+  <!-- BUTANG BULAT TERAPUNG (FAB) - TAMBAH TRANSAKSI -->
   <button type="button" class="fab-btn" onclick="openTxModal()" title="Rekod Transaksi">
     <svg viewBox="0 0 24 24">
       <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -667,7 +712,7 @@
   <div id="scannerModal" class="modal-overlay hidden">
     <div class="scanner-dialog">
       <div class="modal-header">
-        <h4>Imbas Kod Bar / QR</h4>
+        <h4 style="font-size: 13px; font-weight: 700;">Imbas Kod Bar / QR</h4>
         <button type="button" class="btn btn-secondary" style="padding: 4px 10px; min-height: 28px; font-size: 12px;" onclick="closeScannerModal()">Tutup</button>
       </div>
       <div class="scanner-body">
@@ -800,20 +845,13 @@
 
   <!-- APP LAYOUT -->
   <div class="app-layout">
-    <!-- Desktop Sidebar -->
+    <!-- Desktop Sidebar Bersama Logo Az Zuha -->
     <aside class="sidebar">
       <div class="brand-box">
-        <div class="brand-icon">
-          <!-- Logo Rasmi Azzuha: 3 Bilah Melengkung -->
-          <svg viewBox="0 0 100 100">
-            <path d="M10,62 C35,62 65,48 80,26 C62,42 35,52 10,62 Z" />
-            <path d="M30,60 C52,58 72,48 83,38 C68,48 48,55 30,60 Z" />
-            <path d="M55,60 C70,58 84,55 92,62 C82,58 68,57 55,60 Z" />
-          </svg>
-        </div>
+        <img id="sidebarLogo" class="brand-logo-img" alt="Logo Az Zuha">
         <div>
           <div class="brand-title">e-AzzuhaTRG</div>
-          <div class="brand-sub">Inventory Tracker</div>
+          <div class="brand-sub">Sistem Pengurusan Stok</div>
         </div>
       </div>
       
@@ -846,35 +884,38 @@
     <!-- Main Content -->
     <main>
       <div class="topbar">
-        <div class="topbar-title">
-          <h2 id="viewTitle">Dashboard Stok</h2>
-          <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
+        <div class="topbar-left">
+          <img id="mobileTopLogo" class="topbar-mobile-logo" alt="Logo Az Zuha">
+          <div class="topbar-title">
+            <h2 id="viewTitle">Dashboard Stok</h2>
+            <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
+          </div>
         </div>
         <div>
-          <button class="btn btn-secondary" onclick="loadData()">Segar Semula</button>
+          <button class="btn btn-secondary" style="min-height: 36px; padding: 6px 14px; font-size: 12px;" onclick="loadData()">Segar Semula</button>
         </div>
       </div>
 
       <!-- TAB 1: DASHBOARD -->
       <section id="tab-dashboard">
-        <!-- Kad Metrik Seragam & Bersih -->
         <div class="metrics-grid" id="metricsCards"></div>
 
         <div class="panel">
           <div class="panel-header">
             <h3 id="attentionHeader">Item Perlu Perhatian</h3>
-            <button class="btn btn-secondary hidden" id="btnClearFilter" style="padding: 2px 8px; font-size: 11px; min-height: 26px;" onclick="resetDashboardFilter()">Reset Tapisan</button>
+            <button class="btn btn-secondary hidden" id="btnClearFilter" style="padding: 3px 8px; font-size: 11px; min-height: 26px;" onclick="resetDashboardFilter()">Reset Tapisan</button>
           </div>
           <div class="panel-body">
+            <!-- Desktop Table: Sangat Jelas & Mudah Dibaca -->
             <div class="table-container desktop-table">
               <table>
                 <thead>
                   <tr>
                     <th>Item ID</th>
-                    <th>Nama Item</th>
+                    <th>Item</th>
                     <th>Kategori</th>
                     <th style="text-align: right;">Baki Semasa</th>
-                    <th style="text-align: right;">Minima</th>
+                    <th style="text-align: right;">Paras Min</th>
                     <th>Status</th>
                     <th>Lokasi</th>
                   </tr>
@@ -882,6 +923,7 @@
                 <tbody id="attentionTbody"></tbody>
               </table>
             </div>
+            <!-- Mobile Cards -->
             <div class="mobile-cards" id="attentionMobileCards"></div>
           </div>
         </div>
@@ -902,7 +944,7 @@
                     <th>Item</th>
                     <th>Jenis</th>
                     <th style="text-align: right;">Qty</th>
-                    <th style="text-align: right;">Baki</th>
+                    <th style="text-align: right;">Baki Selepas</th>
                     <th>PIC</th>
                     <th>Lokasi</th>
                   </tr>
@@ -933,8 +975,8 @@
                     <th>ID</th>
                     <th>Item</th>
                     <th>Kategori</th>
-                    <th style="text-align: right;">Baki</th>
-                    <th style="text-align: right;">Min</th>
+                    <th style="text-align: right;">Baki Semasa</th>
+                    <th style="text-align: right;">Paras Min</th>
                     <th>Status</th>
                     <th>Lokasi</th>
                     <th style="text-align: center;">Tindakan</th>
@@ -969,6 +1011,9 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
 
+    // Logo Rasmi Az Zuha (Compact Base64)
+    const AZZUHA_LOGO = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAA4ADgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwC0QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf/9k=";
+
     let appState = {
       data: null,
       activeTab: 'dashboard',
@@ -983,38 +1028,77 @@
     let toastTimer = null;
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Pasang Logo Rasmi
+      const sbLogo = document.getElementById('sidebarLogo');
+      const mbLogo = document.getElementById('mobileTopLogo');
+      if (sbLogo) sbLogo.src = AZZUHA_LOGO;
+      if (mbLogo) mbLogo.src = AZZUHA_LOGO;
+
       document.getElementById('txDate').valueAsDate = new Date();
       addBatchRow();
       loadData();
       initPWA();
     });
 
-    /* PWA Manifest Terbina Dalam */
+    /* ========================================================
+       PEMASANGAN APLIKASI (PWA INSTALLABLE)
+       ======================================================== */
     function initPWA() {
-      const azzuhaSvgIcon = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23064e3b'/><path d='M10,62 C35,62 65,48 80,26 C62,42 35,52 10,62 Z' fill='white'/><path d='M30,60 C52,58 72,48 83,38 C68,48 48,55 30,60 Z' fill='white'/><path d='M55,60 C70,58 84,55 92,62 C82,58 68,57 55,60 Z' fill='white'/></svg>";
-      
       const manifest = {
         name: "e-AzzuhaTRG Tracker",
         short_name: "e-Azzuha",
         start_url: window.location.href,
         display: "standalone",
-        background_color: "#064e3b",
-        theme_color: "#064e3b",
-        icons: [{ src: azzuhaSvgIcon, sizes: "192x192 512x512", type: "image/svg+xml" }]
+        background_color: "#047857",
+        theme_color: "#047857",
+        icons: [
+          {
+            src: AZZUHA_LOGO,
+            sizes: "144x144 192x192 512x512",
+            type: "image/jpeg"
+          }
+        ]
       };
       
       const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-      let link = document.createElement('link');
-      link.rel = 'manifest';
-      link.href = URL.createObjectURL(blob);
-      document.head.appendChild(link);
+      let manifestLink = document.createElement('link');
+      manifestLink.rel = 'manifest';
+      manifestLink.href = URL.createObjectURL(blob);
+      document.head.appendChild(manifestLink);
+
+      // Favicon Pelayar
+      let fav = document.createElement('link');
+      fav.rel = 'icon';
+      fav.href = AZZUHA_LOGO;
+      document.head.appendChild(fav);
+
+      if ('serviceWorker' in navigator) {
+        const swCode = `self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));`;
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+      }
     }
 
-    /* Modal Controllers */
-    function openTxModal() { document.getElementById('txModal').classList.remove('hidden'); }
-    function closeTxModal() { document.getElementById('txModal').classList.add('hidden'); }
-    function openItemModal() { resetItemForm(); document.getElementById('itemModal').classList.remove('hidden'); }
-    function closeItemModal() { document.getElementById('itemModal').classList.add('hidden'); resetItemForm(); }
+    /* ========================================================
+       MODAL CONTROLLERS (TRANSAKSI & ITEM)
+       ======================================================== */
+    function openTxModal() {
+      document.getElementById('txModal').classList.remove('hidden');
+    }
+
+    function closeTxModal() {
+      document.getElementById('txModal').classList.add('hidden');
+    }
+
+    function openItemModal() {
+      resetItemForm();
+      document.getElementById('itemModal').classList.remove('hidden');
+    }
+
+    function closeItemModal() {
+      document.getElementById('itemModal').classList.add('hidden');
+      resetItemForm();
+    }
 
     function closeModalOnBackdrop(e, modalId) {
       if (e.target.id === modalId) {
@@ -1045,8 +1129,8 @@
 
       const titles = {
         dashboard: ['Dashboard Stok', 'Ringkasan pergerakan inventori.'],
-        transactions: ['Transaksi Stok', 'Rekod stok masuk dan keluar.'],
-        items: ['Data Induk Item', 'Pusat pendaftaran katalog item.']
+        transactions: ['Transaksi Stok', 'Rekod log keluar dan masuk.'],
+        items: ['Data Induk Item', 'Katalog pengurusan item stok.']
       };
       document.getElementById('viewTitle').textContent = titles[tab][0];
       document.getElementById('viewSubtitle').textContent = titles[tab][1];
@@ -1140,15 +1224,15 @@
       const mCards = document.getElementById('attentionMobileCards');
 
       if (!items.length) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:16px; color:#64748b;">Tiada rekod item ditemui.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:18px; color:#64748b;">Tiada item ditemui.</td></tr>`;
         mCards.innerHTML = `<div style="text-align:center; padding:16px; color:#64748b; font-size:12px;">Tiada item ditemui.</div>`;
       } else {
         tbody.innerHTML = items.map(i => `
           <tr>
             <td><strong>${i.itemId}</strong></td>
-            <td>${i.item}</td>
+            <td><strong>${i.item}</strong></td>
             <td>${i.category}</td>
-            <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
+            <td style="text-align:right; font-weight:800; color:var(--primary-dark); font-size:13.5px;">${i.currentStock}</td>
             <td style="text-align:right; color:#64748b;">${i.minimum}</td>
             <td><span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span></td>
             <td>${i.location}</td>
@@ -1185,7 +1269,7 @@
       updateBatchOptions();
     }
 
-    /* Baris Transaksi Sebaris Penuh (Select + Stepper + Del) */
+    /* Baris Transaksi Sebaris Penuh */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
@@ -1240,7 +1324,7 @@
       }
     }
 
-    /* Pilihan Dropdown Item Bersih */
+    /* Pilihan Dropdown Item: Bersih Tanpa Baki Dalam Kurungan */
     function updateBatchOptions() {
       const items = appState.data?.items || [];
       const opts = `<option value="">Pilih Item...</option>` + items.map(i => `
@@ -1348,7 +1432,7 @@
           <td>${l.date}</td>
           <td><strong>${l.item}</strong></td>
           <td><span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span></td>
-          <td style="text-align:right; font-weight:700;">${l.qty}</td>
+          <td style="text-align:right; font-weight:800;">${l.qty}</td>
           <td style="text-align:right;">${l.balanceAfter}</td>
           <td>${l.pic}</td>
           <td>${l.location}</td>
@@ -1380,17 +1464,14 @@
       tbody.innerHTML = items.map(i => `
         <tr>
           <td><strong>${i.itemId}</strong></td>
-          <td>
-            <div>${i.item}</div>
-            <small style="color:#64748b;">${i.sku || '-'}</small>
-          </td>
+          <td><strong>${i.item}</strong></td>
           <td>${i.category}</td>
-          <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
+          <td style="text-align:right; font-weight:800; color:var(--primary-dark); font-size:13.5px;">${i.currentStock}</td>
           <td style="text-align:right; color:#64748b;">${i.minimum}</td>
           <td><span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span></td>
           <td>${i.location}</td>
           <td style="text-align:center;">
-            <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 11px; min-height: 28px;" onclick='populateEditItem(${JSON.stringify(i).replace(/'/g, "&apos;")})'>Edit</button>
+            <button class="btn btn-secondary" style="padding: 3px 10px; font-size: 11px; min-height: 28px;" onclick='populateEditItem(${JSON.stringify(i).replace(/'/g, "&apos;")})'>Edit</button>
           </td>
         </tr>
       `).join('');
