@@ -16,7 +16,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Pustaka Pengimbas Kod Bar & QR -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
   <style>
@@ -50,7 +49,7 @@
       margin: 0; 
       padding: 0; 
       -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation; /* Menghapuskan 300ms click delay di mobile */
+      touch-action: manipulation;
     }
 
     body {
@@ -141,7 +140,7 @@
       padding-top: 16px;
     }
 
-    /* Floating Navigation Mobile Pantas & Jelas */
+    /* Floating Navigation Mobile */
     .mobile-bottom-nav {
       display: none;
       position: fixed;
@@ -149,14 +148,15 @@
       left: 14px;
       right: 14px;
       height: 64px;
-      background: #ffffff;
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
       border-radius: 20px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
-      z-index: 999; /* Sentiasa di atas elemen lain */
+      z-index: 999;
       grid-template-columns: repeat(3, 1fr);
       padding: 4px;
-      pointer-events: auto;
     }
 
     .m-nav-btn {
@@ -178,7 +178,6 @@
       transition: background 0.15s, color 0.15s;
     }
 
-    /* Ikon Simbol Jelas Diwarnakan */
     .m-nav-btn svg {
       width: 22px;
       height: 22px;
@@ -196,9 +195,7 @@
       font-weight: 800;
     }
 
-    .m-nav-btn.active svg {
-      stroke: var(--primary);
-    }
+    .m-nav-btn.active svg { stroke: var(--primary); }
 
     /* Main Area */
     main { padding: 28px; overflow-y: auto; }
@@ -210,6 +207,32 @@
       margin-bottom: 24px;
       flex-wrap: wrap;
       gap: 12px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      background: var(--primary-light);
+      border: 1px solid rgba(4, 120, 87, 0.2);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+    }
+
+    .status-dot.offline {
+      background: #94a3b8;
+      box-shadow: none;
     }
 
     .header-title h2 { font-size: 24px; font-weight: 800; color: var(--text); letter-spacing: -0.4px; }
@@ -255,7 +278,7 @@
 
     .type-btn {
       border: none;
-      padding: 10px 12px;
+      padding: 11px 12px;
       min-height: 40px;
       border-radius: 9px;
       font-family: inherit;
@@ -275,7 +298,7 @@
       font-weight: 800;
     }
 
-    /* Grid Metrik */
+    /* Grid Metrik Interaktif */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -291,6 +314,13 @@
       box-shadow: var(--shadow-sm);
       position: relative;
       overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.16s ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
     }
 
     .metric-card::before {
@@ -366,7 +396,7 @@
 
     textarea { resize: vertical; min-height: 80px; }
 
-    /* Jadual */
+    /* Jadual Desktop & Card View di Mobile */
     .table-container {
       overflow-x: auto;
       border: 1px solid var(--border);
@@ -417,7 +447,7 @@
     .badge-low { background: var(--status-low-bg); color: var(--status-low-text); }
     .badge-empty { background: var(--status-empty-bg); color: var(--status-empty-text); }
 
-    /* Kotak Item Transaksi Batch */
+    /* Kotak Item Transaksi Batch Pintar (Stepper) */
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -428,9 +458,9 @@
 
     .batch-item-row {
       display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 1.2fr) auto;
+      grid-template-columns: minmax(0, 3fr) auto auto;
       gap: 10px;
-      align-items: end;
+      align-items: center;
       margin-bottom: 12px;
       padding-bottom: 12px;
       border-bottom: 1px dashed var(--border);
@@ -440,6 +470,45 @@
       border-bottom: none;
       margin-bottom: 0;
       padding-bottom: 0;
+    }
+
+    .stepper-box {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #ffffff;
+      height: 42px;
+    }
+
+    .stepper-btn {
+      width: 38px;
+      height: 42px;
+      border: none;
+      background: #f8fafc;
+      font-size: 16px;
+      font-weight: 800;
+      color: #334155;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background 0.15s ease;
+    }
+
+    .stepper-btn:active { background: #e2e8f0; }
+
+    .stepper-input {
+      width: 50px !important;
+      min-height: 42px !important;
+      border: none !important;
+      border-left: 1px solid var(--border) !important;
+      border-right: 1px solid var(--border) !important;
+      border-radius: 0 !important;
+      text-align: center;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 0 !important;
     }
 
     /* Modal / Overlay */
@@ -515,6 +584,36 @@
 
     #scannerReader { width: 100%; }
 
+    .scanner-hud-counter {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      z-index: 10;
+      letter-spacing: 0.5px;
+    }
+
+    .scanner-torch-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      z-index: 10;
+    }
+
     .scanner-overlay-toast {
       position: absolute;
       top: 14px;
@@ -560,7 +659,9 @@
     .toast.error { background: #991b1b; }
     .hidden { display: none !important; }
 
-    /* Pengoptimuman Mobile */
+    /* Kad Ringkas Telefon Pintar (Mobile Stacked Card) */
+    .mobile-item-cards { display: none; }
+
     @media (max-width: 1100px) {
       .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .two-col-grid { grid-template-columns: 1fr; }
@@ -635,14 +736,64 @@
         padding: 12px;
         border-radius: 10px;
         border: 1px solid var(--border);
+        gap: 10px;
+      }
+
+      .batch-item-row-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         gap: 8px;
       }
 
       .batch-item-row .btn-secondary {
-        width: 100%;
-        min-height: 36px;
+        min-height: 38px;
         border-color: #fecaca;
         color: #b91c1c;
+      }
+
+      /* Tukar jadual kepada kad kemas di telefon */
+      .desktop-table-container { display: none; }
+      .mobile-item-cards {
+        display: grid;
+        gap: 10px;
+      }
+
+      .m-item-card {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .m-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .m-item-title {
+        font-weight: 800;
+        color: var(--text);
+        font-size: 13.5px;
+      }
+
+      .m-item-id {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+
+      .m-item-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        margin-top: 4px;
+        padding-top: 6px;
+        border-top: 1px dashed var(--border);
       }
 
       .toast {
@@ -656,7 +807,6 @@
 </head>
 <body>
 
-  <!-- Skrin Memuatkan -->
   <div id="loading" class="loading-overlay">
     <div style="text-align: center;">
       <div class="spinner" style="margin: 0 auto 12px;"></div>
@@ -666,7 +816,7 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- Modal Pengimbas Barcode / QR -->
+  <!-- Modal Pengimbas Barcode / QR dengan Lampu & Kaunter -->
   <div id="scannerModal" class="modal-overlay hidden">
     <div class="scanner-dialog">
       <div class="scanner-header">
@@ -677,8 +827,10 @@
         <div class="scanner-camera-wrapper">
           <div id="scannerOverlayToast" class="scanner-overlay-toast">Item Berjaya Diimbas</div>
           <div id="scannerReader"></div>
+          <div id="scannerHudCounter" class="scanner-hud-counter">0 Item Diimbas</div>
+          <button type="button" id="scannerTorchBtn" class="scanner-torch-btn" onclick="toggleScannerTorch()">Lampu: Tutup</button>
         </div>
-        <p class="scanner-hint">Arahkan kamera ke arah Kod Bar atau Kod QR item.</p>
+        <p class="scanner-hint">Arahkan kamera tepat ke arah Kod Bar atau Kod QR item.</p>
       </div>
     </div>
   </div>
@@ -745,7 +897,10 @@
     <main>
       <div class="header-bar">
         <div class="header-title">
-          <h2 id="viewTitle">Dashboard Stok</h2>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <h2 id="viewTitle">Dashboard Stok</h2>
+            <span class="status-pill"><span id="connectionDot" class="status-dot"></span> <span id="connectionText">Tersambung</span></span>
+          </div>
           <p id="viewSubtitle">Ringkasan status baki dan pergerakan stok inventori.</p>
         </div>
         <div class="header-actions">
@@ -760,10 +915,12 @@
 
         <div class="panel">
           <div class="panel-header">
-            <h3>Item Perlu Perhatian (Low Stock & Habis)</h3>
+            <h3 id="attentionHeaderTitle">Item Perlu Perhatian (Low Stock & Habis)</h3>
+            <button class="btn btn-secondary hidden" id="btnClearFilter" style="padding:4px 8px; font-size:11px;" onclick="resetDashboardFilter()">Kosongkan Tapisan</button>
           </div>
           <div class="panel-body">
-            <div class="table-container">
+            <!-- Paparan Jadual Desktop -->
+            <div class="table-container desktop-table-container">
               <table>
                 <thead>
                   <tr>
@@ -779,11 +936,14 @@
                 <tbody id="attentionTbody"></tbody>
               </table>
             </div>
+
+            <!-- Paparan Kad Mudah Alih (Mobile View) -->
+            <div class="mobile-item-cards" id="attentionMobileCards"></div>
           </div>
         </div>
       </section>
 
-      <!-- TAB 2: TRANSAKSI -->
+      <!-- TAB 2: TRANSAKSI (Nisbah 50/50 & Stepper Kuantiti) -->
       <section id="tab-transactions" class="hidden">
         <div class="two-col-grid">
           <div class="panel">
@@ -848,7 +1008,7 @@
               <h3>Log Transaksi Terkini</h3>
             </div>
             <div class="panel-body">
-              <div class="table-container">
+              <div class="table-container desktop-table-container">
                 <table>
                   <thead>
                     <tr>
@@ -863,6 +1023,7 @@
                   <tbody id="logsTbody"></tbody>
                 </table>
               </div>
+              <div class="mobile-item-cards" id="logsMobileCards"></div>
             </div>
           </div>
         </div>
@@ -937,7 +1098,7 @@
               <input type="text" id="tableSearch" placeholder="Cari item..." style="width:140px; padding:6px 10px; font-size:12px; min-height:36px;" oninput="filterItemsTable()">
             </div>
             <div class="panel-body">
-              <div class="table-container">
+              <div class="table-container desktop-table-container">
                 <table>
                   <thead>
                     <tr>
@@ -952,13 +1113,14 @@
                   <tbody id="itemsTbody"></tbody>
                 </table>
               </div>
+              <div class="mobile-item-cards" id="itemsMobileCards"></div>
             </div>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- Navigasi Bawah Telefon (Ikon Jelas & Respon Pantas) -->
+    <!-- Navigasi Bawah Telefon -->
     <nav class="mobile-bottom-nav">
       <button class="m-nav-btn active" type="button" onclick="switchTab('dashboard')">
         <svg viewBox="0 0 24 24">
@@ -996,16 +1158,19 @@
       data: null,
       activeTab: 'dashboard',
       selectedItem: null,
-      globalTxType: 'Keluar'
+      globalTxType: 'Keluar',
+      dashboardFilterStatus: null
     };
 
     let html5QrCodeScanner = null;
+    let isTorchOn = false;
     let lastScannedCode = '';
     let lastScanTime = 0;
     let overlayTimer = null;
 
     const loadingFailsafe = setTimeout(() => {
       showLoading(false);
+      setConnectionStatus(false);
       showToast('Sambungan mengambil masa. Sila semak talian internet anda.', true);
     }, 8000);
 
@@ -1015,6 +1180,15 @@
       loadData();
       registerPWA();
     });
+
+    function setConnectionStatus(online) {
+      const dot = document.getElementById('connectionDot');
+      const txt = document.getElementById('connectionText');
+      if (dot && txt) {
+        dot.classList.toggle('offline', !online);
+        txt.textContent = online ? 'Tersambung' : 'Terputus';
+      }
+    }
 
     function registerPWA() {
       const manifest = {
@@ -1060,23 +1234,19 @@
       }
     }
 
-    /* Penukaran Tab Sepantas Kilat */
     function switchTab(tab) {
       if (appState.activeTab === tab) return;
       appState.activeTab = tab;
       
-      // Desktop Nav Buttons
       const desktopTabs = ['dashboard', 'transactions', 'items'];
       document.querySelectorAll('.nav-btn').forEach((b, idx) => {
         b.classList.toggle('active', desktopTabs[idx] === tab);
       });
 
-      // Mobile Nav Buttons
       document.querySelectorAll('.m-nav-btn').forEach((b, idx) => {
         b.classList.toggle('active', desktopTabs[idx] === tab);
       });
 
-      // Show/Hide Sections
       document.getElementById('tab-dashboard').classList.toggle('hidden', tab !== 'dashboard');
       document.getElementById('tab-transactions').classList.toggle('hidden', tab !== 'transactions');
       document.getElementById('tab-items').classList.toggle('hidden', tab !== 'items');
@@ -1127,6 +1297,7 @@
       .then(res => res.json())
       .then(res => {
         clearTimeout(loadingFailsafe);
+        setConnectionStatus(true);
         if (!res.ok) throw new Error(res.message);
         appState.data = res.data;
         renderDashboard();
@@ -1137,34 +1308,60 @@
       })
       .catch(err => {
         clearTimeout(loadingFailsafe);
+        setConnectionStatus(false);
         showLoading(false);
         showToast(err.message || 'Ralat memuatkan data.', true);
       });
     }
 
+    /* Kad Metrik Klikable Untuk Tapisan Pantas */
+    function filterDashboardByStatus(status) {
+      appState.dashboardFilterStatus = status;
+      renderDashboard();
+      document.getElementById('btnClearFilter').classList.remove('hidden');
+      document.getElementById('attentionHeaderTitle').textContent = `Senarai Item: Status [${status}]`;
+    }
+
+    function resetDashboardFilter() {
+      appState.dashboardFilterStatus = null;
+      renderDashboard();
+      document.getElementById('btnClearFilter').classList.add('hidden');
+      document.getElementById('attentionHeaderTitle').textContent = 'Item Perlu Perhatian (Low Stock & Habis)';
+    }
+
     function renderDashboard() {
       const d = appState.data.dashboard;
       const cards = [
-        { label: 'Jumlah Item', val: d.totalItems, sub: 'Katalog Aktif' },
-        { label: 'Jumlah Unit', val: d.totalStock, sub: 'Baki Stok Semasa' },
-        { label: 'Stok Sedia', val: d.okStock, sub: 'Status Mencukupi' },
-        { label: 'Low Stock', val: d.lowStock, sub: 'Perlu Ditambah' },
-        { label: 'Habis', val: d.emptyStock, sub: 'Paras Sifar' },
-        { label: 'Hari Ini', val: d.keluarHariIni, sub: `Masuk: ${d.masukHariIni}` }
+        { label: 'Jumlah Item', val: d.totalItems, sub: 'Katalog Aktif', action: null },
+        { label: 'Jumlah Unit', val: d.totalStock, sub: 'Baki Stok Semasa', action: null },
+        { label: 'Stok Sedia', val: d.okStock, sub: 'Tapisan Status OK', action: "filterDashboardByStatus('OK')" },
+        { label: 'Low Stock', val: d.lowStock, sub: 'Tapisan Status Rendah', action: "filterDashboardByStatus('LOW STOCK')" },
+        { label: 'Habis', val: d.emptyStock, sub: 'Tapisan Status Sifar', action: "filterDashboardByStatus('HABIS')" },
+        { label: 'Hari Ini', val: d.keluarHariIni, sub: `Masuk: ${d.masukHariIni}`, action: null }
       ];
 
       document.getElementById('metricsCards').innerHTML = cards.map(c => `
-        <div class="metric-card">
+        <div class="metric-card" ${c.action ? `onclick="${c.action}"` : ''}>
           <div class="metric-title">${c.label}</div>
           <div class="metric-val">${Number(c.val).toLocaleString()}</div>
           <div class="metric-sub">${c.sub}</div>
         </div>
       `).join('');
 
-      const attentionItems = appState.data.items.filter(i => i.status !== 'OK');
+      let attentionItems = appState.data.items;
+      if (appState.dashboardFilterStatus) {
+        attentionItems = attentionItems.filter(i => i.status === appState.dashboardFilterStatus);
+      } else {
+        attentionItems = attentionItems.filter(i => i.status !== 'OK');
+      }
+
       const tbody = document.getElementById('attentionTbody');
+      const mobileCards = document.getElementById('attentionMobileCards');
+
       if (!attentionItems.length) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">Semua item berada dalam keadaan mencukupi.</td></tr>`;
+        const emptyMsg = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">Tiada rekod item ditemui bagi kriteria ini.</td></tr>`;
+        tbody.innerHTML = emptyMsg;
+        mobileCards.innerHTML = `<div style="text-align:center; padding:16px; color:#64748b; font-size:12px;">Tiada item ditemui.</div>`;
       } else {
         tbody.innerHTML = attentionItems.map(i => `
           <tr>
@@ -1173,9 +1370,25 @@
             <td>${i.category}</td>
             <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
             <td style="text-align:right; color:#64748b;">${i.minimum}</td>
-            <td><span class="badge badge-${i.status === 'HABIS' ? 'empty' : 'low'}">${i.status}</span></td>
+            <td><span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span></td>
             <td>${i.location}</td>
           </tr>
+        `).join('');
+
+        mobileCards.innerHTML = attentionItems.map(i => `
+          <div class="m-item-card">
+            <div class="m-item-header">
+              <div>
+                <div class="m-item-title">${i.item}</div>
+                <div class="m-item-id">${i.itemId} • ${i.category}</div>
+              </div>
+              <span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span>
+            </div>
+            <div class="m-item-meta">
+              <span>Baki Semasa: <strong style="color:var(--primary-dark); font-size:13px;">${i.currentStock} unit</strong></span>
+              <span style="color:#64748b;">Min: ${i.minimum}</span>
+            </div>
+          </div>
         `).join('');
       }
     }
@@ -1192,19 +1405,23 @@
       updateBatchItemOptions();
     }
 
-    function addBatchRow(prefillItemId = '', prefillQty = '') {
+    /* Baris Transaksi Bersama Stepper (- / +) */
+    function addBatchRow(prefillItemId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
       div.className = 'batch-item-row';
       div.innerHTML = `
         <div>
-          <select class="batch-item" required></select>
+          <select class="batch-item" onchange="updateRowStockWarning(this)" required></select>
+          <div class="batch-stock-hint" style="font-size:11px; margin-top:3px; color:#64748b;"></div>
         </div>
-        <div>
-          <input type="number" class="batch-qty" min="1" placeholder="Kuantiti" value="${prefillQty}" required>
-        </div>
-        <div>
-          <button type="button" class="btn btn-secondary" style="padding:7px 10px; color:#64748b;" onclick="removeBatchRow(this)">Buang</button>
+        <div class="batch-item-row-controls">
+          <div class="stepper-box">
+            <button type="button" class="stepper-btn" onclick="stepQty(this, -1)">-</button>
+            <input type="number" class="batch-qty stepper-input" min="1" value="${prefillQty}" required>
+            <button type="button" class="stepper-btn" onclick="stepQty(this, 1)">+</button>
+          </div>
+          <button type="button" class="btn btn-secondary" style="padding:4px 10px; font-size:11.5px;" onclick="removeBatchRow(this)">Buang</button>
         </div>
       `;
       container.appendChild(div);
@@ -1213,14 +1430,37 @@
       if (prefillItemId) {
         const sel = div.querySelector('.batch-item');
         sel.value = prefillItemId;
+        updateRowStockWarning(sel);
       }
+      updateScannerHudCounter();
       return div;
+    }
+
+    function stepQty(btn, change) {
+      const input = btn.closest('.stepper-box').querySelector('.batch-qty');
+      let val = (Number(input.value) || 1) + change;
+      if (val < 1) val = 1;
+      input.value = val;
+      updateScannerHudCounter();
+    }
+
+    function updateRowStockWarning(selectEl) {
+      const hint = selectEl.closest('.batch-item-row').querySelector('.batch-stock-hint');
+      const itemId = selectEl.value;
+      const item = (appState.data?.items || []).find(i => i.itemId === itemId);
+      if (item) {
+        const isLow = item.currentStock <= item.minimum;
+        hint.innerHTML = `Baki: <strong style="color:${isLow ? '#b91c1c' : '#047857'}">${item.currentStock} unit</strong> (${item.location})`;
+      } else {
+        hint.innerHTML = '';
+      }
     }
 
     function removeBatchRow(btn) {
       const rows = document.querySelectorAll('.batch-item-row');
       if (rows.length > 1) {
         btn.closest('.batch-item-row').remove();
+        updateScannerHudCounter();
       } else {
         showToast('Sekurang-kurangnya satu baris item diperlukan.', true);
       }
@@ -1238,7 +1478,25 @@
       });
     }
 
-    /* PENGIMBAS DENGAN LAZY LOADING */
+    function updateScannerHudCounter() {
+      const rows = document.querySelectorAll('.batch-item-row');
+      let totalQty = 0;
+      let totalLines = 0;
+      rows.forEach(r => {
+        const sel = r.querySelector('.batch-item');
+        const qty = Number(r.querySelector('.batch-qty')?.value) || 0;
+        if (sel.value && qty > 0) {
+          totalLines++;
+          totalQty += qty;
+        }
+      });
+      const hud = document.getElementById('scannerHudCounter');
+      if (hud) {
+        hud.textContent = `${totalLines} Jenis Item • ${totalQty} Unit`;
+      }
+    }
+
+    /* PENGIMBAS DENGAN FLASHLIGHT & HAPTIC */
     function loadScannerLibrary(callback) {
       if (window.Html5Qrcode) {
         callback();
@@ -1261,6 +1519,7 @@
     function openScannerModal() {
       loadScannerLibrary(() => {
         document.getElementById('scannerModal').classList.remove('hidden');
+        updateScannerHudCounter();
         
         if (!html5QrCodeScanner) {
           html5QrCodeScanner = new Html5Qrcode("scannerReader");
@@ -1272,11 +1531,30 @@
           { facingMode: "environment" }, 
           config, 
           onScanSuccess
-        ).catch(err => {
+        ).then(() => {
+          isTorchOn = false;
+          document.getElementById('scannerTorchBtn').textContent = 'Lampu: Tutup';
+        }).catch(err => {
           showToast('Kamera tidak dapat diakses: ' + (err.message || err), true);
           closeScannerModal();
         });
       });
+    }
+
+    function toggleScannerTorch() {
+      if (!html5QrCodeScanner) return;
+      try {
+        isTorchOn = !isTorchOn;
+        html5QrCodeScanner.applyVideoConstraints({
+          advanced: [{ torch: isTorchOn }]
+        }).then(() => {
+          document.getElementById('scannerTorchBtn').textContent = `Lampu: ${isTorchOn ? 'Buka' : 'Tutup'}`;
+        }).catch(() => {
+          showToast('Peranti ini tidak menyokong kawalan lampu kamera.', true);
+        });
+      } catch (e) {
+        showToast('Lampu denyar tidak dapat diaktifkan.', true);
+      }
     }
 
     function closeScannerModal() {
@@ -1291,7 +1569,8 @@
       }
     }
 
-    function playBeepSound() {
+    function triggerScanFeedback() {
+      // 1. Bunyi Beep Audio
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = ctx.createOscillator();
@@ -1304,8 +1583,13 @@
         setTimeout(() => {
           osc.stop();
           ctx.close();
-        }, 150);
+        }, 140);
       } catch (e) {}
+
+      // 2. Getaran Haptik Telefon
+      if (navigator.vibrate) {
+        navigator.vibrate(80);
+      }
     }
 
     function onScanSuccess(decodedText) {
@@ -1325,12 +1609,12 @@
       );
 
       if (!matched) {
-        playBeepSound();
+        triggerScanFeedback();
         showScannerOverlayToast('Item tidak dijumpai: ' + decodedText, true);
         return;
       }
 
-      playBeepSound();
+      triggerScanFeedback();
 
       let existingRow = null;
       document.querySelectorAll('.batch-item-row').forEach(row => {
@@ -1353,16 +1637,20 @@
         if (firstEmptyRow) {
           firstEmptyRow.querySelector('.batch-item').value = matched.itemId;
           firstEmptyRow.querySelector('.batch-qty').value = 1;
+          updateRowStockWarning(firstEmptyRow.querySelector('.batch-item'));
         } else {
           addBatchRow(matched.itemId, 1);
         }
         showScannerOverlayToast(`Ditambah: ${matched.item} (1 unit)`);
       }
+      updateScannerHudCounter();
     }
 
     function renderLogs() {
       const logs = appState.data.logs;
       const tbody = document.getElementById('logsTbody');
+      const mobileCards = document.getElementById('logsMobileCards');
+
       tbody.innerHTML = logs.map(l => `
         <tr>
           <td>${l.date}</td>
@@ -1373,11 +1661,29 @@
           <td>${l.pic}</td>
         </tr>
       `).join('');
+
+      mobileCards.innerHTML = logs.map(l => `
+        <div class="m-item-card">
+          <div class="m-item-header">
+            <div>
+              <div class="m-item-title">${l.item}</div>
+              <div class="m-item-id">${l.date} • ${l.pic}</div>
+            </div>
+            <span class="badge badge-${l.type === 'Masuk' ? 'ok' : 'empty'}">${l.type}</span>
+          </div>
+          <div class="m-item-meta">
+            <span>Kuantiti: <strong>${l.qty} unit</strong></span>
+            <span style="color:#64748b;">Baki: ${l.balanceAfter}</span>
+          </div>
+        </div>
+      `).join('');
     }
 
     function renderItems() {
       const items = appState.data.items;
       const tbody = document.getElementById('itemsTbody');
+      const mobileCards = document.getElementById('itemsMobileCards');
+
       tbody.innerHTML = items.map(i => `
         <tr>
           <td><strong>${i.itemId}</strong></td>
@@ -1393,12 +1699,31 @@
           </td>
         </tr>
       `).join('');
+
+      mobileCards.innerHTML = items.map(i => `
+        <div class="m-item-card">
+          <div class="m-item-header">
+            <div>
+              <div class="m-item-title">${i.item}</div>
+              <div class="m-item-id">${i.itemId} • SKU: ${i.sku || '-'}</div>
+            </div>
+            <span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span>
+          </div>
+          <div class="m-item-meta">
+            <span>Baki: <strong>${i.currentStock} unit</strong></span>
+            <button class="btn btn-secondary" style="padding:2px 8px; font-size:11px; min-height:28px;" onclick='populateEditItem(${JSON.stringify(i).replace(/'/g, "&apos;")})'>Kemaskini</button>
+          </div>
+        </div>
+      `).join('');
     }
 
     function filterItemsTable() {
       const q = document.getElementById('tableSearch').value.toLowerCase();
       document.querySelectorAll('#itemsTbody tr').forEach(tr => {
         tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+      document.querySelectorAll('#itemsMobileCards .m-item-card').forEach(card => {
+        card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
       });
     }
 
@@ -1429,7 +1754,6 @@
         items: items
       };
 
-      // Tunjukkan status proses pantas
       showLoading(true, 'Menyimpan transaksi...');
 
       fetch(SCRIPT_URL, {
@@ -1445,19 +1769,15 @@
       .then(res => {
         showLoading(false);
         if (!res.ok) throw new Error(res.message);
-        
         showToast(res.message);
-        if (res.data) {
-          appState.data = res.data;
-          renderDashboard();
-          renderLogs();
-          renderItems();
-        }
-        
-        // Reset borang serta-merta
+        appState.data = res.data;
+        renderDashboard();
+        renderLogs();
+        renderItems();
         document.getElementById('txNote').value = '';
         document.getElementById('batchContainer').innerHTML = '';
         addBatchRow();
+        updateScannerHudCounter();
       })
       .catch(err => {
         showLoading(false);
@@ -1479,6 +1799,7 @@
 
       document.getElementById('itemFormTitle').textContent = `Kemaskini: ${item.itemId}`;
       document.getElementById('btnDeleteItem').classList.remove('hidden');
+      switchTab('items');
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
