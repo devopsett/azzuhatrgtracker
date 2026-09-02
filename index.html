@@ -758,10 +758,8 @@
   </div>
 
   <script>
-    // =========================================================================
-    // SALIN DAN TAMPAL URL DEPLOYMENT WEB APP ANDA DI SINI
-    // =========================================================================
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYOUR_DEPLOYMENT_ID/exec';
+    // URL Web App deployment anda
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
 
     let appState = {
       data: null,
@@ -833,7 +831,6 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
-    /* Popup Ringkas Yang Timbul Di Atas Kamera Langsung */
     function showScannerOverlayToast(msg, isError = false) {
       const el = document.getElementById('scannerOverlayToast');
       el.textContent = msg;
@@ -846,24 +843,28 @@
       }, 2200);
     }
 
+    // Panggilan GET dengan redirect: 'follow' untuk melepasi sekatan Google 302
     function loadData() {
       showLoading(true, 'Mengemaskini data...');
       
-      fetch(`${SCRIPT_URL}?action=getAppData`)
-        .then(res => res.json())
-        .then(res => {
-          if (!res.ok) throw new Error(res.message);
-          appState.data = res.data;
-          renderDashboard();
-          renderDropdowns();
-          renderLogs();
-          renderItems();
-          showLoading(false);
-        })
-        .catch(err => {
-          showLoading(false);
-          showToast(err.message || 'Ralat memuatkan data.', true);
-        });
+      fetch(`${SCRIPT_URL}?action=getAppData`, {
+        method: 'GET',
+        redirect: 'follow'
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(res.message);
+        appState.data = res.data;
+        renderDashboard();
+        renderDropdowns();
+        renderLogs();
+        renderItems();
+        showLoading(false);
+      })
+      .catch(err => {
+        showLoading(false);
+        showToast(err.message || 'Ralat memuatkan data.', true);
+      });
     }
 
     function renderDashboard() {
@@ -963,7 +964,7 @@
     }
 
     /* ========================================================
-       MODAL & PENGIMBAS BARCODE / QR SCANNER
+       PENGIMBAS BARCODE / QR SCANNER
        ======================================================== */
     function openScannerModal() {
       document.getElementById('scannerModal').classList.remove('hidden');
@@ -1107,6 +1108,7 @@
       });
     }
 
+    // PANGGILAN POST: Bebas sekatan CORS dengan text/plain & redirect follow
     function submitTransaction(e) {
       e.preventDefault();
       const rows = document.querySelectorAll('.batch-item-row');
@@ -1138,6 +1140,8 @@
 
       fetch(SCRIPT_URL, {
         method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'addTransactionsBatch',
           data: payload
@@ -1186,6 +1190,7 @@
       document.getElementById('btnDeleteItem').classList.add('hidden');
     }
 
+    // PANGGILAN POST: Tambah atau Kemaskini Item
     function submitItem(e) {
       e.preventDefault();
       const payload = {
@@ -1203,6 +1208,8 @@
 
       fetch(SCRIPT_URL, {
         method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'addOrUpdateItem',
           data: payload
@@ -1224,6 +1231,7 @@
       });
     }
 
+    // PANGGILAN POST: Padam Item
     function deleteItemHandler() {
       if (!appState.selectedItem) return;
       if (!confirm(`Adakah anda pasti mahu memadam item ${appState.selectedItem}?`)) return;
@@ -1232,6 +1240,8 @@
 
       fetch(SCRIPT_URL, {
         method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'deleteItem',
           data: { itemId: appState.selectedItem }
