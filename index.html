@@ -1,0 +1,148 @@
+// Gantikan dengan URL Deployment Web App anda
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
+
+// Gantikan fungsi loadData lama dengan versi fetch:
+function loadData() {
+  showLoading(true, 'Mengemaskini data...');
+  
+  fetch(`${SCRIPT_URL}?action=getAppData`)
+    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(res.message);
+      appState.data = res.data;
+      renderDashboard();
+      renderDropdowns();
+      renderLogs();
+      renderItems();
+      showLoading(false);
+    })
+    .catch(err => {
+      showLoading(false);
+      showToast(err.message || 'Ralat memuatkan data.', true);
+    });
+}
+
+// Gantikan submitTransaction dengan versi fetch:
+function submitTransaction(e) {
+  e.preventDefault();
+  const rows = document.querySelectorAll('.batch-item-row');
+  const items = [];
+  const selectedType = appState.globalTxType;
+
+  rows.forEach(r => {
+    const itemId = r.querySelector('.batch-item').value;
+    const qty = Number(r.querySelector('.batch-qty').value);
+    if (itemId && qty > 0) {
+      items.push({ itemId, type: selectedType, qty });
+    }
+  });
+
+  if (!items.length) {
+    showToast('Sila masukkan sekurang-kurangnya satu item transaksi.', true);
+    return;
+  }
+
+  const payload = {
+    date: document.getElementById('txDate').value,
+    pic: document.getElementById('txPic').value,
+    location: document.getElementById('txLocation').value,
+    note: document.getElementById('txNote').value,
+    items
+  };
+
+  showLoading(true, 'Menyimpan transaksi...');
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      action: 'addTransactionsBatch',
+      data: payload
+    })
+  })
+  .then(res => res.json())
+  .then(res => {
+    showLoading(false);
+    if (!res.ok) throw new Error(res.message);
+    showToast(res.message);
+    appState.data = res.data;
+    renderDashboard();
+    renderLogs();
+    renderItems();
+    document.getElementById('txNote').value = '';
+    document.getElementById('batchContainer').innerHTML = '';
+    addBatchRow();
+  })
+  .catch(err => {
+    showLoading(false);
+    showToast(err.message || 'Gagal menyimpan transaksi.', true);
+  });
+}
+
+// Gantikan submitItem dengan versi fetch:
+function submitItem(e) {
+  e.preventDefault();
+  const payload = {
+    itemId: document.getElementById('itId').value,
+    sku: document.getElementById('itSku').value,
+    item: document.getElementById('itName').value,
+    category: document.getElementById('itCategory').value,
+    location: document.getElementById('itLocation').value,
+    openingStock: document.getElementById('itOpening').value,
+    minimum: document.getElementById('itMin').value,
+    note: document.getElementById('itNote').value
+  };
+
+  showLoading(true, 'Menyimpan item...');
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      action: 'addOrUpdateItem',
+      data: payload
+    })
+  })
+  .then(res => res.json())
+  .then(res => {
+    showLoading(false);
+    if (!res.ok) throw new Error(res.message);
+    showToast(res.message);
+    appState.data = res.data;
+    renderDashboard();
+    renderItems();
+    resetItemForm();
+  })
+  .catch(err => {
+    showLoading(false);
+    showToast(err.message || 'Gagal menyimpan item.', true);
+  });
+}
+
+// Gantikan deleteItemHandler dengan versi fetch:
+function deleteItemHandler() {
+  if (!appState.selectedItem) return;
+  if (!confirm(`Adakah anda pasti mahu memadam item ${appState.selectedItem}?`)) return;
+
+  showLoading(true, 'Memadam item...');
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      action: 'deleteItem',
+      data: { itemId: appState.selectedItem }
+    })
+  })
+  .then(res => res.json())
+  .then(res => {
+    showLoading(false);
+    if (!res.ok) throw new Error(res.message);
+    showToast(res.message);
+    appState.data = res.data;
+    renderDashboard();
+    renderItems();
+    resetItemForm();
+  })
+  .catch(err => {
+    showLoading(false);
+    showToast(err.message || 'Gagal memadam item.', true);
+  });
+}
