@@ -172,6 +172,39 @@
     .btn-danger { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
     .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
+    /* FAB Butang Bulat Tambah Transaksi (Gaya WhatsApp) */
+    .fab-btn {
+      position: fixed;
+      bottom: 78px;
+      right: 20px;
+      width: 54px;
+      height: 54px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      border: none;
+      box-shadow: 0 4px 14px rgba(4, 120, 87, 0.45);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      z-index: 950;
+      transition: all 0.2s ease;
+    }
+
+    .fab-btn:active {
+      transform: scale(0.92);
+      background: var(--primary-hover);
+    }
+
+    .fab-btn svg {
+      width: 26px;
+      height: 26px;
+      stroke: #ffffff;
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     /* Metrik Dashboard */
     .metrics-grid {
       display: grid;
@@ -276,7 +309,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    /* Baris Item Transaksi Diperkemas (Elak Teks Bertindih) */
+    /* Baris Item Transaksi: Sebaris */
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -404,9 +437,7 @@
     .badge-low { background: #fef3c7; color: #92400e; }
     .badge-empty { background: #fee2e2; color: #991b1b; }
 
-    /* ========================================================
-       MODAL & LOADING: Z-INDEX TERTINGGI MUTLAK (9999)
-       ======================================================== */
+    /* Modal & Loading */
     .loading-overlay {
       position: fixed;
       inset: 0;
@@ -414,7 +445,7 @@
       backdrop-filter: blur(4px);
       display: grid;
       place-items: center;
-      z-index: 9999 !important; /* Sentiasa di lapisan paling atas */
+      z-index: 9999 !important;
     }
 
     .spinner {
@@ -536,7 +567,7 @@
       height: 60px;
       background: #ffffff;
       border-top: 1px solid var(--border);
-      z-index: 999;
+      z-index: 900;
       grid-template-columns: repeat(3, 1fr);
       padding: 4px;
     }
@@ -638,7 +669,7 @@
 </head>
 <body>
 
-  <!-- Loading State - Z-Index 9999 -->
+  <!-- Loading State -->
   <div id="loading" class="loading-overlay hidden">
     <div style="text-align: center;">
       <div class="spinner" style="margin: 0 auto 10px;"></div>
@@ -647,6 +678,14 @@
   </div>
 
   <div id="toast" class="toast">Notifikasi</div>
+
+  <!-- BUTANG BULAT TERAPUNG (FAB) - TAMBAH TRANSAKSI (GAYA WHATSAPP) -->
+  <button type="button" class="fab-btn" onclick="openTxModal()" title="Rekod Transaksi">
+    <svg viewBox="0 0 24 24">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+  </button>
 
   <!-- MODAL 1: PENGIMBAS KAMERA -->
   <div id="scannerModal" class="modal-overlay hidden">
@@ -832,9 +871,9 @@
           <h2 id="viewTitle">Dashboard Stok</h2>
           <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
         </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn btn-secondary" style="min-height: 36px; padding: 6px 12px; font-size: 12px;" onclick="loadData()">Segar Semula</button>
-          <button class="btn btn-primary" id="btnMainAction" style="min-height: 36px; padding: 6px 14px; font-size: 12px;" onclick="openTxModal()">+ Rekod Transaksi</button>
+        <div>
+          <!-- Butang Segar Semula Tunggal Tanpa Pengulangan -->
+          <button class="btn btn-secondary" style="min-height: 36px; padding: 6px 14px; font-size: 12px;" onclick="loadData()">Segar Semula</button>
         </div>
       </div>
 
@@ -871,12 +910,11 @@
         </div>
       </section>
 
-      <!-- TAB 2: TRANSAKSI -->
+      <!-- TAB 2: TRANSAKSI (LOG SAHAJA) -->
       <section id="tab-transactions" class="hidden">
         <div class="panel">
           <div class="panel-header">
             <h3>Log Transaksi Terkini</h3>
-            <button class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; min-height: 34px;" onclick="openTxModal()">+ Rekod Transaksi</button>
           </div>
           <div class="panel-body">
             <div class="table-container desktop-table">
@@ -900,7 +938,7 @@
         </div>
       </section>
 
-      <!-- TAB 3: DATA INDUK -->
+      <!-- TAB 3: DATA INDUK (KATALOG SAHAJA) -->
       <section id="tab-items" class="hidden">
         <div class="panel">
           <div class="panel-header">
@@ -1028,15 +1066,6 @@
       };
       document.getElementById('viewTitle').textContent = titles[tab][0];
       document.getElementById('viewSubtitle').textContent = titles[tab][1];
-
-      const mainBtn = document.getElementById('btnMainAction');
-      if (tab === 'items') {
-        mainBtn.textContent = '+ Tambah Item';
-        mainBtn.onclick = openItemModal;
-      } else {
-        mainBtn.textContent = '+ Rekod Transaksi';
-        mainBtn.onclick = openTxModal;
-      }
 
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
@@ -1172,6 +1201,7 @@
       updateBatchOptions();
     }
 
+    /* Baris Transaksi Sebaris Penuh (Select + Stepper + Del) */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
@@ -1179,7 +1209,7 @@
       div.innerHTML = `
         <div style="min-width: 0;">
           <select class="batch-item" onchange="updateRowHint(this)" required></select>
-          <div class="row-hint" style="font-size:11px; margin-top:2px; color:#047857; font-weight:700;"></div>
+          <div class="row-hint" style="font-size:11px; margin-top:3px; color:#047857; font-weight:700;"></div>
         </div>
         <div class="stepper">
           <button type="button" class="stepper-btn" onclick="stepQty(this, -1)">-</button>
@@ -1226,10 +1256,11 @@
       }
     }
 
+    /* Pilihan Dropdown Item: Tanpa Teks Baki Dalam Kurungan */
     function updateBatchOptions() {
       const items = appState.data?.items || [];
       const opts = `<option value="">Pilih Item...</option>` + items.map(i => `
-        <option value="${i.itemId}">${i.itemId} — ${i.item} (Baki: ${i.currentStock})</option>
+        <option value="${i.itemId}">${i.itemId} — ${i.item}</option>
       `).join('');
       document.querySelectorAll('.batch-item').forEach(sel => {
         const cur = sel.value;
@@ -1365,10 +1396,12 @@
       tbody.innerHTML = items.map(i => `
         <tr>
           <td><strong>${i.itemId}</strong></td>
-          <td>${i.item}</td>
+          <td>
+            <div>${i.item}</div>
+            <small style="color:#64748b;">${i.sku || '-'}</small>
+          </td>
           <td>${i.category}</td>
           <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
-          <td style="text-align:right; color:#64748b;">${i.minimum}</td>
           <td><span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span></td>
           <td>${i.location}</td>
           <td style="text-align:center;">
@@ -1421,6 +1454,14 @@
         return;
       }
 
+      const payload = {
+        date: document.getElementById('txDate').value,
+        pic: document.getElementById('txPic').value,
+        location: document.getElementById('txLocation').value,
+        note: document.getElementById('txNote').value,
+        items
+      };
+
       showLoading(true, 'Menyimpan rekod...');
 
       fetch(SCRIPT_URL, {
@@ -1429,13 +1470,7 @@
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'addTransactionsBatch',
-          data: {
-            date: document.getElementById('txDate').value,
-            pic: document.getElementById('txPic').value,
-            location: document.getElementById('txLocation').value,
-            note: document.getElementById('txNote').value,
-            items
-          }
+          data: payload
         })
       })
       .then(res => res.json())
