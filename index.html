@@ -276,7 +276,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    /* Baris Item Transaksi: Sebaris */
+    /* Baris Item Transaksi Diperkemas (Elak Teks Bertindih) */
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -290,7 +290,7 @@
       grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 8px;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       padding-bottom: 10px;
       border-bottom: 1px solid var(--border-light);
     }
@@ -308,6 +308,7 @@
       overflow: hidden;
       background: #fff;
       height: 40px;
+      flex-shrink: 0;
     }
 
     .stepper-btn {
@@ -349,6 +350,7 @@
       cursor: pointer;
       font-weight: 700;
       font-size: 14px;
+      flex-shrink: 0;
     }
 
     .btn-row-del:active { background: #fee2e2; }
@@ -403,8 +405,29 @@
     .badge-empty { background: #fee2e2; color: #991b1b; }
 
     /* ========================================================
-       MODAL POPUPS & Z-INDEX HIERARCHY
+       MODAL & LOADING: Z-INDEX TERTINGGI MUTLAK (9999)
        ======================================================== */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(4px);
+      display: grid;
+      place-items: center;
+      z-index: 9999 !important; /* Sentiasa di lapisan paling atas */
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -440,7 +463,6 @@
     .modal-header h4 { font-size: 14px; font-weight: 800; color: var(--text); }
     .modal-body { padding: 18px; max-height: calc(85vh - 70px); overflow-y: auto; }
 
-    /* PENGIMBAS KAMERA: Z-INDEX LEBIH TINGGI DARIPADA MODAL LAIN */
     #scannerModal {
       z-index: 2000 !important;
     }
@@ -453,7 +475,7 @@
       width: 100%;
       max-width: 400px;
       overflow: hidden;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
     }
 
     .scanner-body { padding: 14px; position: relative; }
@@ -494,7 +516,7 @@
       transform: translateY(100px);
       opacity: 0;
       transition: all 0.2s ease;
-      z-index: 2500;
+      z-index: 9999;
     }
 
     .toast.show { transform: translateY(0); opacity: 1; }
@@ -616,7 +638,7 @@
 </head>
 <body>
 
-  <!-- Loading State -->
+  <!-- Loading State - Z-Index 9999 -->
   <div id="loading" class="loading-overlay hidden">
     <div style="text-align: center;">
       <div class="spinner" style="margin: 0 auto 10px;"></div>
@@ -626,7 +648,7 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- MODAL 1: PENGIMBAS KAMERA (Z-INDEX: 2000) -->
+  <!-- MODAL 1: PENGIMBAS KAMERA -->
   <div id="scannerModal" class="modal-overlay hidden">
     <div class="scanner-dialog">
       <div class="modal-header">
@@ -1157,7 +1179,7 @@
       div.innerHTML = `
         <div style="min-width: 0;">
           <select class="batch-item" onchange="updateRowHint(this)" required></select>
-          <div class="row-hint" style="font-size:11px; margin-top:2px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+          <div class="row-hint" style="font-size:11px; margin-top:2px; color:#047857; font-weight:700;"></div>
         </div>
         <div class="stepper">
           <button type="button" class="stepper-btn" onclick="stepQty(this, -1)">-</button>
@@ -1188,7 +1210,8 @@
       const item = (appState.data?.items || []).find(i => i.itemId === sel.value);
       if (item) {
         const isLow = item.currentStock <= item.minimum;
-        hint.innerHTML = `Baki: <strong style="color:${isLow ? '#b91c1c' : '#047857'}">${item.currentStock} unit</strong>`;
+        hint.innerHTML = `Baki: ${item.currentStock} unit`;
+        hint.style.color = isLow ? '#b91c1c' : '#047857';
       } else {
         hint.innerHTML = '';
       }
@@ -1249,12 +1272,12 @@
         const gain = ctx.createGain();
         osc.connect(gain);
         gain.connect(ctx.destination);
-        osc.frequency.value = 800;
-        gain.gain.value = 0.1;
+        osc.frequency.value = 880;
+        gain.gain.value = 0.12;
         osc.start();
-        setTimeout(() => { osc.stop(); ctx.close(); }, 120);
+        setTimeout(() => { osc.stop(); ctx.close(); }, 140);
       } catch (e) {}
-      if (navigator.vibrate) navigator.vibrate(60);
+      if (navigator.vibrate) navigator.vibrate(80);
     }
 
     function onScanSuccess(decodedText) {
