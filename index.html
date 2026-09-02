@@ -357,11 +357,11 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Scanner Modal Popup */
+    /* Scanner Modal Popup & Camera Overlay */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(4px);
       display: grid;
       place-items: center;
@@ -396,19 +396,56 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
 
-    #scannerReader {
+    .scanner-camera-wrapper {
+      position: relative;
       width: 100%;
       border-radius: 10px;
       overflow: hidden;
       background: #000;
     }
 
+    #scannerReader {
+      width: 100%;
+    }
+
+    /* Popup Status Tepat Atas Kamera (Scanner HUD) */
+    .scanner-overlay-toast {
+      position: absolute;
+      top: 14px;
+      left: 12px;
+      right: 12px;
+      background: rgba(4, 120, 87, 0.92);
+      color: #ffffff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      transform: translateY(-50px);
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .scanner-overlay-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .scanner-overlay-toast.error {
+      background: rgba(185, 28, 28, 0.95);
+    }
+
     .scanner-hint {
       font-size: 11.5px;
       color: var(--text-muted);
-      margin-top: 10px;
+      margin-top: 12px;
       text-align: center;
     }
 
@@ -456,7 +493,7 @@
     </div>
   </div>
 
-  <!-- Toast Notification -->
+  <!-- Standard Toast Notification -->
   <div id="toast" class="toast">Notifikasi</div>
 
   <!-- Modal Pengimbas Barcode / QR -->
@@ -467,7 +504,11 @@
         <button type="button" class="btn btn-secondary" style="padding: 4px 10px;" onclick="closeScannerModal()">Tutup</button>
       </div>
       <div class="scanner-body">
-        <div id="scannerReader"></div>
+        <div class="scanner-camera-wrapper">
+          <!-- Popup Status Di Atas Kamera Langsung -->
+          <div id="scannerOverlayToast" class="scanner-overlay-toast">Item Berjaya Diimbas</div>
+          <div id="scannerReader"></div>
+        </div>
         <p class="scanner-hint">Arahkan kamera ke arah Kod Bar atau Kod QR item.</p>
       </div>
     </div>
@@ -718,9 +759,9 @@
 
   <script>
     // =========================================================================
-    // SALIN DAN TAMPAL URL WEB APP ANDA DI SINI
+    // SALIN DAN TAMPAL URL DEPLOYMENT WEB APP ANDA DI SINI
     // =========================================================================
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYOUR_DEPLOYMENT_ID/exec';
 
     let appState = {
       data: null,
@@ -732,6 +773,7 @@
     let html5QrCodeScanner = null;
     let lastScannedCode = '';
     let lastScanTime = 0;
+    let overlayTimer = null;
 
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('txDate').valueAsDate = new Date();
@@ -791,7 +833,19 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
-    // PANGGILAN GET: Muat turun data daripada Apps Script via fetch
+    /* Popup Ringkas Yang Timbul Di Atas Kamera Langsung */
+    function showScannerOverlayToast(msg, isError = false) {
+      const el = document.getElementById('scannerOverlayToast');
+      el.textContent = msg;
+      el.classList.toggle('error', isError);
+      el.classList.add('show');
+
+      if (overlayTimer) clearTimeout(overlayTimer);
+      overlayTimer = setTimeout(() => {
+        el.classList.remove('show');
+      }, 2200);
+    }
+
     function loadData() {
       showLoading(true, 'Mengemaskini data...');
       
@@ -918,7 +972,7 @@
         html5QrCodeScanner = new Html5Qrcode("scannerReader");
       }
 
-      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+      const config = { fps: 12, qrbox: { width: 250, height: 250 } };
       
       html5QrCodeScanner.start(
         { facingMode: "environment" }, 
@@ -961,7 +1015,7 @@
 
     function onScanSuccess(decodedText) {
       const now = Date.now();
-      if (decodedText === lastScannedCode && now - lastScanTime < 2000) {
+      if (decodedText === lastScannedCode && now - lastScanTime < 1800) {
         return;
       }
       lastScannedCode = decodedText;
@@ -976,12 +1030,12 @@
       );
 
       if (!matched) {
-        showToast('Item tidak dijumpai: ' + decodedText, true);
+        playBeepSound();
+        showScannerOverlayToast('Item tidak dijumpai: ' + decodedText, true);
         return;
       }
 
       playBeepSound();
-      showToast('Item diimbas: ' + matched.item);
 
       let existingRow = null;
       document.querySelectorAll('.batch-item-row').forEach(row => {
@@ -993,7 +1047,9 @@
 
       if (existingRow) {
         const qtyInput = existingRow.querySelector('.batch-qty');
-        qtyInput.value = (Number(qtyInput.value) || 0) + 1;
+        const newQty = (Number(qtyInput.value) || 0) + 1;
+        qtyInput.value = newQty;
+        showScannerOverlayToast(`${matched.item} (+1) -> Kuantiti: ${newQty}`);
       } else {
         const firstEmptyRow = Array.from(document.querySelectorAll('.batch-item-row')).find(row => {
           return !row.querySelector('.batch-item').value;
@@ -1005,6 +1061,7 @@
         } else {
           addBatchRow(matched.itemId, 1);
         }
+        showScannerOverlayToast(`Ditambah: ${matched.item} (1 unit)`);
       }
     }
 
@@ -1050,7 +1107,6 @@
       });
     }
 
-    // PANGGILAN POST: Simpan Transaksi Batch
     function submitTransaction(e) {
       e.preventDefault();
       const rows = document.querySelectorAll('.batch-item-row');
@@ -1061,7 +1117,7 @@
         const itemId = r.querySelector('.batch-item').value;
         const qty = Number(r.querySelector('.batch-qty').value);
         if (itemId && qty > 0) {
-          items.push({ itemId, type: selectedType, qty });
+          items.push({ itemId: itemId, type: selectedType, qty: qty });
         }
       });
 
@@ -1075,7 +1131,7 @@
         pic: document.getElementById('txPic').value,
         location: document.getElementById('txLocation').value,
         note: document.getElementById('txNote').value,
-        items
+        items: items
       };
 
       showLoading(true, 'Menyimpan transaksi...');
@@ -1130,7 +1186,6 @@
       document.getElementById('btnDeleteItem').classList.add('hidden');
     }
 
-    // PANGGILAN POST: Tambah atau Kemaskini Item
     function submitItem(e) {
       e.preventDefault();
       const payload = {
@@ -1169,7 +1224,6 @@
       });
     }
 
-    // PANGGILAN POST: Padam Item
     function deleteItemHandler() {
       if (!appState.selectedItem) return;
       if (!confirm(`Adakah anda pasti mahu memadam item ${appState.selectedItem}?`)) return;
