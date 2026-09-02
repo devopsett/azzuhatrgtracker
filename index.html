@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>AzzuhaTRG Tracker</title>
+  <title>e-AzzuhaTRG Tracker</title>
   
   <!-- PWA Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -64,12 +64,16 @@
       font-size: 13.5px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     .app-layout {
       display: grid;
       grid-template-columns: 250px minmax(0, 1fr);
       min-height: 100vh;
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
     }
 
     /* Sidebar Desktop */
@@ -146,7 +150,7 @@
     }
 
     /* Main Area Desktop & Mobile */
-    main { padding: 26px 32px; overflow-y: auto; }
+    main { padding: 26px 32px; overflow-y: auto; width: 100%; min-width: 0; }
     
     .topbar {
       display: flex;
@@ -319,16 +323,25 @@
     .panel-body { padding: 20px; }
 
     /* Form Fields */
-    .form-group { display: grid; gap: 14px; }
+    .form-group { 
+      display: grid; 
+      gap: 14px; 
+      width: 100%;
+      max-width: 100%;
+    }
+    
     .input-row { 
       display: grid; 
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); 
       gap: 12px; 
+      width: 100%;
     }
+    
     label { font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 5px; }
     
     input, select, textarea {
       width: 100%;
+      max-width: 100%;
       min-height: 42px;
       padding: 9px 12px;
       border: 1px solid var(--border);
@@ -379,13 +392,16 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    /* KOTAK ITEM TRANSAKSI: NAMA ITEM LEBAR PENUH & JELAS */
+    /* KOTAK ITEM TRANSAKSI: KEKAL PADAT & TIDAK MELEBARKAN SKRIN */
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 14px;
       background: #fafafa;
       margin-bottom: 10px;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden; /* Mengunci saiz container */
     }
 
     .batch-item-row {
@@ -395,6 +411,8 @@
       margin-bottom: 14px;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--border);
+      width: 100%;
+      max-width: 100%;
     }
 
     .batch-item-row:last-child {
@@ -403,16 +421,20 @@
       padding-bottom: 0;
     }
 
-    /* Baris Atas: Dropdown Nama Item Lebar Penuh (100%) */
+    /* Baris Atas: Dropdown Nama Item Lebar 100% Dikawal */
     .item-select-col {
       width: 100%;
+      max-width: 100%;
+      min-width: 0; /* Menghalang flex item daripada tolak lebar */
     }
 
     .item-select-col select {
       width: 100%;
+      max-width: 100%;
       font-size: 13.5px;
       font-weight: 600;
       color: var(--text);
+      display: block;
     }
 
     /* Baris Bawah: Lencana Baki + Stepper + Butang Padam */
@@ -420,8 +442,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       width: 100%;
+      max-width: 100%;
     }
 
     .item-baki-badge {
@@ -435,6 +458,8 @@
       color: #047857;
       border: 1px solid #bbf7d0;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .item-baki-badge.low {
@@ -474,7 +499,7 @@
     .stepper-btn:active { background: #e2e8f0; }
 
     .stepper-input {
-      width: 48px !important;
+      width: 46px !important;
       min-height: 40px !important;
       border: none !important;
       border-left: 1px solid var(--border) !important;
@@ -587,6 +612,9 @@
       z-index: 1100;
       padding: 16px;
       overflow-y: auto;
+      overflow-x: hidden;
+      width: 100vw;
+      box-sizing: border-box;
     }
 
     .modal-dialog {
@@ -598,6 +626,7 @@
       box-shadow: var(--shadow-lg);
       margin: auto;
       position: relative;
+      box-sizing: border-box;
     }
 
     .modal-header {
@@ -610,7 +639,7 @@
     }
 
     .modal-header h4 { font-size: 15px; font-weight: 800; color: var(--text); }
-    .modal-body { padding: 20px; max-height: calc(85vh - 70px); overflow-y: auto; }
+    .modal-body { padding: 20px; max-height: calc(85vh - 70px); overflow-y: auto; overflow-x: hidden; }
 
     #scannerModal { z-index: 2000 !important; }
     #scannerModal .scanner-dialog {
@@ -714,7 +743,7 @@
       .app-layout { grid-template-columns: 1fr; padding-bottom: 68px; }
       .sidebar { display: none; }
       .mobile-nav { display: grid; }
-      main { padding: 14px; }
+      main { padding: 14px; width: 100vw; max-width: 100vw; overflow-x: hidden; }
 
       .topbar {
         padding: 12px 14px;
@@ -769,8 +798,23 @@
 
       .toast { left: 14px; right: 14px; bottom: 74px; text-align: center; }
 
-      .modal-dialog { max-width: 100%; border-radius: 12px; }
-      .modal-body { max-height: calc(88vh - 60px); padding: 14px; }
+      /* KAWALAN KETAT MODAL POPUP DI TELEFON */
+      .modal-overlay {
+        padding: 12px;
+      }
+
+      .modal-dialog { 
+        width: 100% !important;
+        max-width: 100% !important; 
+        border-radius: 12px; 
+        margin: 0;
+      }
+      
+      .modal-body { 
+        max-height: calc(85vh - 60px); 
+        padding: 14px; 
+        overflow-x: hidden;
+      }
     }
   </style>
 </head>
