@@ -13,6 +13,10 @@
   <meta name="apple-mobile-web-app-title" content="e-Azzuha">
   <meta name="theme-color" content="#047857">
 
+  <!-- Ikon Menggunakan Fail JPG Asal -->
+  <link rel="icon" type="image/jpeg" href="Logo%20Azzuha.jpg">
+  <link rel="apple-touch-icon" href="Logo%20Azzuha.jpg">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -91,16 +95,14 @@
       margin-bottom: 24px;
     }
 
-    /* Logo Azzuha Vektor Rasmi */
-    .brand-logo-svg {
+    .brand-logo-img {
       width: 44px;
       height: 44px;
       border-radius: 10px;
-      background: #044b36;
+      object-fit: cover;
+      background: #047857;
       border: 1.5px solid rgba(255,255,255,0.25);
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      display: grid;
-      place-items: center;
       flex-shrink: 0;
     }
 
@@ -172,16 +174,16 @@
       width: 40px;
       height: 40px;
       border-radius: 9px;
-      background: #044b36;
+      object-fit: cover;
+      background: #047857;
       border: 1px solid var(--border);
-      place-items: center;
       flex-shrink: 0;
     }
 
     .topbar-title h2 { font-size: 19px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
     .topbar-title p { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
 
-    /* Butang Bersih */
+    /* Butang */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -256,7 +258,7 @@
     .metric-val { font-size: 24px; font-weight: 800; color: var(--text); margin: 6px 0 2px; }
     .metric-sub { font-size: 11.5px; color: var(--text-muted); }
 
-    /* Panel & Table */
+    /* Panel */
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -635,7 +637,7 @@
         padding: 12px 14px;
         margin-bottom: 14px;
       }
-      .topbar-mobile-logo { display: grid; }
+      .topbar-mobile-logo { display: block; }
       .topbar-title h2 { font-size: 16px; }
 
       .metrics-grid {
@@ -846,16 +848,10 @@
 
   <!-- APP LAYOUT -->
   <div class="app-layout">
-    <!-- Desktop Sidebar Bersama Logo Vektor Az Zuha Asli -->
+    <!-- Desktop Sidebar Bersama Logo Asal -->
     <aside class="sidebar">
       <div class="brand-box">
-        <div class="brand-logo-svg">
-          <svg width="34" height="34" viewBox="0 0 100 100">
-            <path d="M12,62 C34,64 64,56 80,26 C68,48 44,60 12,62 Z" fill="#ffffff" />
-            <path d="M22,60 C42,60 68,52 83,39 C72,50 50,58 22,60 Z" fill="#e2e8f0" />
-            <path d="M54,58 C68,56 82,57 92,62 C84,57 72,55 54,58 Z" fill="#ffffff" />
-          </svg>
-        </div>
+        <img class="brand-logo-img" src="Logo%20Azzuha.jpg" alt="Logo Az Zuha">
         <div>
           <div class="brand-title">e-AzzuhaTRG</div>
           <div class="brand-sub">Sistem Pengurusan Stok</div>
@@ -892,14 +888,8 @@
     <main>
       <div class="topbar">
         <div class="topbar-left">
-          <!-- Logo Header Mobile Vektor -->
-          <div class="topbar-mobile-logo">
-            <svg width="30" height="30" viewBox="0 0 100 100">
-              <path d="M12,62 C34,64 64,56 80,26 C68,48 44,60 12,62 Z" fill="#ffffff" />
-              <path d="M22,60 C42,60 68,52 83,39 C72,50 50,58 22,60 Z" fill="#e2e8f0" />
-              <path d="M54,58 C68,56 82,57 92,62 C84,57 72,55 54,58 Z" fill="#ffffff" />
-            </svg>
-          </div>
+          <!-- Logo Header Mobile Menggunakan Fail JPG Asal -->
+          <img class="topbar-mobile-logo" src="Logo%20Azzuha.jpg" alt="Logo Az Zuha">
           <div class="topbar-title">
             <h2 id="viewTitle">Dashboard Stok</h2>
             <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
@@ -920,6 +910,7 @@
             <button class="btn btn-secondary hidden" id="btnClearFilter" style="padding: 3px 8px; font-size: 11px; min-height: 26px;" onclick="resetDashboardFilter()">Reset Tapisan</button>
           </div>
           <div class="panel-body">
+            <!-- Desktop Table: Jelas & Terbuka -->
             <div class="table-container desktop-table">
               <table>
                 <thead>
@@ -936,6 +927,7 @@
                 <tbody id="attentionTbody"></tbody>
               </table>
             </div>
+            <!-- Mobile Cards View -->
             <div class="mobile-cards" id="attentionMobileCards"></div>
           </div>
         </div>
@@ -1023,9 +1015,6 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
 
-    // Logo Vektor Berlatar Hijau Asli
-    const SVG_LOGO_DATA_URL = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23044b36'/><path d='M12,62 C34,64 64,56 80,26 C68,48 44,60 12,62 Z' fill='%23ffffff'/><path d='M22,60 C42,60 68,52 83,39 C72,50 50,58 22,60 Z' fill='%23e2e8f0'/><path d='M54,58 C68,56 82,57 92,62 C84,57 72,55 54,58 Z' fill='%23ffffff'/></svg>";
-
     let appState = {
       data: null,
       activeTab: 'dashboard',
@@ -1056,9 +1045,9 @@
         theme_color: "#047857",
         icons: [
           {
-            src: SVG_LOGO_DATA_URL,
+            src: "Logo%20Azzuha.jpg",
             sizes: "192x192 512x512",
-            type: "image/svg+xml"
+            type: "image/jpeg"
           }
         ]
       };
@@ -1068,11 +1057,6 @@
       manifestLink.rel = 'manifest';
       manifestLink.href = URL.createObjectURL(blob);
       document.head.appendChild(manifestLink);
-
-      let fav = document.createElement('link');
-      fav.rel = 'icon';
-      fav.href = SVG_LOGO_DATA_URL;
-      document.head.appendChild(fav);
 
       if ('serviceWorker' in navigator) {
         const swCode = `self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));`;
