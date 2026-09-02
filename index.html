@@ -9,6 +9,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="e-AzzuhaTRG">
   <meta name="theme-color" content="#064e3b">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -138,6 +139,8 @@
       padding: 14px 18px;
       border-radius: var(--radius);
       border: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .topbar-title h2 { font-size: 18px; font-weight: 800; color: var(--text); }
@@ -191,7 +194,7 @@
     .metric-val { font-size: 22px; font-weight: 800; color: var(--primary-dark); margin: 4px 0 2px; }
     .metric-sub { font-size: 11px; color: var(--text-muted); }
 
-    /* Panel & Grid 50/50 */
+    /* Panel */
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -207,21 +210,20 @@
       justify-content: space-between;
       align-items: center;
       background: #fafafa;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .panel-header h3 { font-size: 14px; font-weight: 800; color: var(--text); }
     .panel-body { padding: 18px; }
 
-    .two-col-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 18px;
-      align-items: start;
-    }
-
-    /* Form Fields */
+    /* Form Fields & Layout */
     .form-group { display: grid; gap: 12px; }
-    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .input-row { 
+      display: grid; 
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); 
+      gap: 10px; 
+    }
     label { font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px; }
     
     input, select, textarea {
@@ -244,7 +246,6 @@
 
     textarea { resize: vertical; min-height: 70px; }
 
-    /* Switcher Jenis Transaksi */
     .type-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -275,11 +276,11 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    /* Senarai Item Transaksi Batch */
+    /* Baris Item Transaksi: Sebaris */
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 14px;
+      padding: 12px;
       background: #fcfcfc;
       margin-bottom: 10px;
     }
@@ -306,11 +307,12 @@
       border-radius: 8px;
       overflow: hidden;
       background: #fff;
+      height: 40px;
     }
 
     .stepper-btn {
       width: 34px;
-      height: 38px;
+      height: 40px;
       border: none;
       background: #f8fafc;
       font-size: 16px;
@@ -323,7 +325,7 @@
 
     .stepper-input {
       width: 44px !important;
-      min-height: 38px !important;
+      min-height: 40px !important;
       border: none !important;
       border-left: 1px solid var(--border) !important;
       border-right: 1px solid var(--border) !important;
@@ -332,6 +334,24 @@
       font-weight: 800;
       padding: 0 !important;
     }
+
+    .btn-row-del {
+      width: 36px;
+      height: 40px;
+      min-height: 40px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid #fecaca;
+      background: #fff;
+      color: #b91c1c;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .btn-row-del:active { background: #fee2e2; }
 
     /* Jadual */
     .table-container {
@@ -382,28 +402,7 @@
     .badge-low { background: #fef3c7; color: #92400e; }
     .badge-empty { background: #fee2e2; color: #991b1b; }
 
-    /* Modal / Overlay */
-    .loading-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(3px);
-      display: grid;
-      place-items: center;
-      z-index: 1000;
-    }
-
-    .spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
+    /* Modal / Form Popups */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -413,7 +412,30 @@
       place-items: center;
       z-index: 1100;
       padding: 16px;
+      overflow-y: auto;
     }
+
+    .modal-dialog {
+      background: #ffffff;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 520px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      margin: auto;
+    }
+
+    .modal-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fafafa;
+    }
+
+    .modal-header h4 { font-size: 14px; font-weight: 800; color: var(--text); }
+    .modal-body { padding: 18px; max-height: calc(85vh - 70px); overflow-y: auto; }
 
     .scanner-dialog {
       background: #ffffff;
@@ -421,14 +443,6 @@
       width: 100%;
       max-width: 400px;
       overflow: hidden;
-    }
-
-    .scanner-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
 
     .scanner-body { padding: 14px; position: relative; }
@@ -469,17 +483,17 @@
       transform: translateY(100px);
       opacity: 0;
       transition: all 0.2s ease;
-      z-index: 1050;
+      z-index: 1200;
     }
 
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast.error { background: #991b1b; }
     .hidden { display: none !important; }
 
-    /* Kad Khusus Mudah Alih (Stacked Card) */
+    /* Kad Khusus Mudah Alih */
     .mobile-cards { display: none; }
 
-    /* Bar Navigasi Bawah (Mobile Nav) */
+    /* Bar Navigasi Bawah */
     .mobile-nav {
       display: none;
       position: fixed;
@@ -515,7 +529,6 @@
     /* Pengoptimuman Skrin Telefon */
     @media (max-width: 1024px) {
       .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .two-col-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
@@ -538,16 +551,11 @@
 
       .metric-card { padding: 10px 12px; }
       .metric-val { font-size: 20px; }
-
       .panel-body { padding: 14px; }
-      .input-row { grid-template-columns: 1fr; gap: 10px; }
 
-      .batch-item-row {
-        grid-template-columns: 1fr;
-        background: #f8fafc;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid var(--border);
+      .input-row { 
+        grid-template-columns: 1fr 1fr; 
+        gap: 8px; 
       }
 
       .desktop-table { display: none; }
@@ -583,13 +591,23 @@
       }
 
       .toast { left: 14px; right: 14px; bottom: 74px; text-align: center; }
+
+      /* Penyesuaian Modal di Skrin Kecil */
+      .modal-dialog {
+        max-width: 100%;
+        border-radius: 12px;
+      }
+      .modal-body {
+        max-height: calc(88vh - 60px);
+        padding: 14px;
+      }
     }
   </style>
 </head>
 <body>
 
   <!-- Loading State -->
-  <div id="loading" class="loading-overlay">
+  <div id="loading" class="loading-overlay hidden">
     <div style="text-align: center;">
       <div class="spinner" style="margin: 0 auto 10px;"></div>
       <p id="loadingMsg" style="font-size: 12px; font-weight: 600; color: var(--primary-dark);">Memuatkan data...</p>
@@ -598,10 +616,10 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- Modal Pengimbas Kamera -->
+  <!-- MODAL 1: PENGIMBAS KAMERA -->
   <div id="scannerModal" class="modal-overlay hidden">
     <div class="scanner-dialog">
-      <div class="scanner-header">
+      <div class="modal-header">
         <h4 style="font-size: 13px; font-weight: 700;">Imbas Kod Bar / QR</h4>
         <button type="button" class="btn btn-secondary" style="padding: 4px 10px; min-height: 28px; font-size: 12px;" onclick="closeScannerModal()">Tutup</button>
       </div>
@@ -615,6 +633,125 @@
     </div>
   </div>
 
+  <!-- MODAL 2: POPUP BORANG TRANSAKSI STOK -->
+  <div id="txModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'txModal')">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h4>Rekod Transaksi Stok</h4>
+        <button type="button" class="btn btn-secondary" style="padding: 4px 10px; min-height: 28px; font-size: 12px;" onclick="closeTxModal()">Tutup</button>
+      </div>
+      <div class="modal-body">
+        <form id="txForm" onsubmit="submitTransaction(event)">
+          <div class="form-group">
+            <div class="type-switcher">
+              <button type="button" id="btnTypeOut" class="type-btn active" onclick="setGlobalTxType('Keluar')">Stok Keluar</button>
+              <button type="button" id="btnTypeIn" class="type-btn" onclick="setGlobalTxType('Masuk')">Stok Masuk</button>
+            </div>
+
+            <div class="input-row">
+              <div>
+                <label>Tarikh</label>
+                <input type="date" id="txDate" required>
+              </div>
+              <div>
+                <label>PIC</label>
+                <select id="txPic" required></select>
+              </div>
+            </div>
+
+            <div>
+              <label>Lokasi</label>
+              <select id="txLocation" required></select>
+            </div>
+
+            <div class="batch-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-weight: 700; font-size: 12px;" id="batchLabel">Senarai Item Keluar</span>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" class="btn btn-primary" style="padding: 4px 10px; font-size: 11.5px; min-height: 32px;" onclick="openScannerModal()">Imbas Kod</button>
+                  <button type="button" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px; min-height: 32px;" onclick="addBatchRow()">+ Item</button>
+                </div>
+              </div>
+              <div id="batchContainer"></div>
+            </div>
+
+            <div>
+              <label>Catatan</label>
+              <textarea id="txNote" placeholder="Tujuan / No. Rujukan"></textarea>
+            </div>
+
+            <button type="submit" id="btnSubmitTx" class="btn btn-primary" style="width: 100%;">Simpan Transaksi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: POPUP DAFTAR / KEMASKINI ITEM -->
+  <div id="itemModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'itemModal')">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h4 id="itemFormTitle">Daftar / Kemaskini Item</h4>
+        <button type="button" class="btn btn-secondary" style="padding: 4px 10px; min-height: 28px; font-size: 12px;" onclick="closeItemModal()">Tutup</button>
+      </div>
+      <div class="modal-body">
+        <form id="itemForm" onsubmit="submitItem(event)">
+          <div class="form-group">
+            <div class="input-row">
+              <div>
+                <label>Item ID</label>
+                <input type="text" id="itId" placeholder="AZZ-001">
+              </div>
+              <div>
+                <label>SKU</label>
+                <input type="text" id="itSku" placeholder="Kod Bar / SKU">
+              </div>
+            </div>
+
+            <div>
+              <label>Nama Item</label>
+              <input type="text" id="itName" required placeholder="Nama penuh item">
+            </div>
+
+            <div class="input-row">
+              <div>
+                <label>Kategori</label>
+                <select id="itCategory" required></select>
+              </div>
+              <div>
+                <label>Lokasi</label>
+                <select id="itLocation" required></select>
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div>
+                <label>Stok Awal</label>
+                <input type="number" id="itOpening" min="0" value="0" required>
+              </div>
+              <div>
+                <label>Paras Min</label>
+                <input type="number" id="itMin" min="0" value="10" required>
+              </div>
+            </div>
+
+            <div>
+              <label>Catatan</label>
+              <textarea id="itNote" placeholder="Maklumat tambahan"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 4px;">
+              <button type="submit" class="btn btn-primary" style="flex: 1;">Simpan Item</button>
+              <button type="button" class="btn btn-secondary" onclick="resetItemForm()">Reset</button>
+              <button type="button" id="btnDeleteItem" class="btn btn-danger hidden" onclick="deleteItemHandler()">Padam</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP LAYOUT -->
   <div class="app-layout">
     <!-- Desktop Sidebar -->
     <aside class="sidebar">
@@ -663,9 +800,9 @@
           <h2 id="viewTitle">Dashboard Stok</h2>
           <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
         </div>
-        <div style="display: flex; gap: 6px;">
-          <button class="btn btn-secondary" style="min-height: 34px; padding: 6px 12px; font-size: 12px;" onclick="loadData()">Segar Semula</button>
-          <button class="btn btn-primary" style="min-height: 34px; padding: 6px 12px; font-size: 12px;" onclick="switchTab('transactions')">Rekod</button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" style="min-height: 36px; padding: 6px 12px; font-size: 12px;" onclick="loadData()">Segar Semula</button>
+          <button class="btn btn-primary" id="btnMainAction" style="min-height: 36px; padding: 6px 14px; font-size: 12px;" onclick="openTxModal()">+ Rekod Transaksi</button>
         </div>
       </div>
 
@@ -702,171 +839,64 @@
         </div>
       </section>
 
-      <!-- TAB 2: TRANSAKSI -->
+      <!-- TAB 2: TRANSAKSI (PAPARAN PENUH DENGAN MODAL) -->
       <section id="tab-transactions" class="hidden">
-        <div class="two-col-grid">
-          <div class="panel">
-            <div class="panel-header">
-              <h3>Borang Transaksi</h3>
-            </div>
-            <div class="panel-body">
-              <form id="txForm" onsubmit="submitTransaction(event)">
-                <div class="form-group">
-                  <div class="type-switcher">
-                    <button type="button" id="btnTypeOut" class="type-btn active" onclick="setGlobalTxType('Keluar')">Stok Keluar</button>
-                    <button type="button" id="btnTypeIn" class="type-btn" onclick="setGlobalTxType('Masuk')">Stok Masuk</button>
-                  </div>
-
-                  <div class="input-row">
-                    <div>
-                      <label>Tarikh</label>
-                      <input type="date" id="txDate" required>
-                    </div>
-                    <div>
-                      <label>PIC</label>
-                      <select id="txPic" required></select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label>Lokasi</label>
-                    <select id="txLocation" required></select>
-                  </div>
-
-                  <div class="batch-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                      <span style="font-weight: 700; font-size: 12px;" id="batchLabel">Senarai Item Keluar</span>
-                      <div style="display: flex; gap: 6px;">
-                        <button type="button" class="btn btn-primary" style="padding: 4px 10px; font-size: 11.5px; min-height: 32px;" onclick="openScannerModal()">Imbas Kod</button>
-                        <button type="button" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px; min-height: 32px;" onclick="addBatchRow()">+ Item</button>
-                      </div>
-                    </div>
-                    <div id="batchContainer"></div>
-                  </div>
-
-                  <div>
-                    <label>Catatan</label>
-                    <textarea id="txNote" placeholder="Tujuan / No. Rujukan"></textarea>
-                  </div>
-
-                  <button type="submit" id="btnSubmitTx" class="btn btn-primary" style="width: 100%;">Simpan Transaksi</button>
-                </div>
-              </form>
-            </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Log Transaksi Terkini</h3>
+            <button class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; min-height: 34px;" onclick="openTxModal()">+ Rekod Transaksi</button>
           </div>
-
-          <div class="panel">
-            <div class="panel-header">
-              <h3>Log Transaksi Terkini</h3>
+          <div class="panel-body">
+            <div class="table-container desktop-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tarikh</th>
+                    <th>Item</th>
+                    <th>Jenis</th>
+                    <th style="text-align: right;">Qty</th>
+                    <th style="text-align: right;">Baki</th>
+                    <th>PIC</th>
+                    <th>Lokasi</th>
+                  </tr>
+                </thead>
+                <tbody id="logsTbody"></tbody>
+              </table>
             </div>
-            <div class="panel-body">
-              <div class="table-container desktop-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Tarikh</th>
-                      <th>Item</th>
-                      <th>Jenis</th>
-                      <th style="text-align: right;">Qty</th>
-                      <th style="text-align: right;">Baki</th>
-                      <th>PIC</th>
-                    </tr>
-                  </thead>
-                  <tbody id="logsTbody"></tbody>
-                </table>
-              </div>
-              <div class="mobile-cards" id="logsMobileCards"></div>
-            </div>
+            <div class="mobile-cards" id="logsMobileCards"></div>
           </div>
         </div>
       </section>
 
-      <!-- TAB 3: DATA INDUK -->
+      <!-- TAB 3: DATA INDUK (PAPARAN PENUH DENGAN MODAL) -->
       <section id="tab-items" class="hidden">
-        <div class="two-col-grid">
-          <div class="panel">
-            <div class="panel-header">
-              <h3 id="itemFormTitle">Daftar / Kemaskini Item</h3>
-            </div>
-            <div class="panel-body">
-              <form id="itemForm" onsubmit="submitItem(event)">
-                <div class="form-group">
-                  <div class="input-row">
-                    <div>
-                      <label>Item ID</label>
-                      <input type="text" id="itId" placeholder="AZZ-001">
-                    </div>
-                    <div>
-                      <label>SKU</label>
-                      <input type="text" id="itSku" placeholder="Kod Bar / SKU">
-                    </div>
-                  </div>
-
-                  <div>
-                    <label>Nama Item</label>
-                    <input type="text" id="itName" required placeholder="Nama penuh item">
-                  </div>
-
-                  <div class="input-row">
-                    <div>
-                      <label>Kategori</label>
-                      <select id="itCategory" required></select>
-                    </div>
-                    <div>
-                      <label>Lokasi</label>
-                      <select id="itLocation" required></select>
-                    </div>
-                  </div>
-
-                  <div class="input-row">
-                    <div>
-                      <label>Stok Awal</label>
-                      <input type="number" id="itOpening" min="0" value="0" required>
-                    </div>
-                    <div>
-                      <label>Paras Min</label>
-                      <input type="number" id="itMin" min="0" value="10" required>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label>Catatan</label>
-                    <textarea id="itNote" placeholder="Maklumat tambahan"></textarea>
-                  </div>
-
-                  <div style="display: flex; gap: 8px;">
-                    <button type="submit" class="btn btn-primary" style="flex: 1;">Simpan</button>
-                    <button type="button" class="btn btn-secondary" onclick="resetItemForm()">Reset</button>
-                    <button type="button" id="btnDeleteItem" class="btn btn-danger hidden" onclick="deleteItemHandler()">Padam</button>
-                  </div>
-                </div>
-              </form>
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Senarai Semua Item</h3>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="text" id="tableSearch" placeholder="Cari item..." style="width: 140px; min-height: 34px; padding: 4px 8px; font-size: 12px;" oninput="filterItemsTable()">
+              <button class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; min-height: 34px;" onclick="openItemModal()">+ Tambah Item</button>
             </div>
           </div>
-
-          <div class="panel">
-            <div class="panel-header">
-              <h3>Senarai Semua Item</h3>
-              <input type="text" id="tableSearch" placeholder="Cari..." style="width: 140px; min-height: 32px; padding: 4px 8px; font-size: 12px;" oninput="filterItemsTable()">
+          <div class="panel-body">
+            <div class="table-container desktop-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Item</th>
+                    <th>Kategori</th>
+                    <th style="text-align: right;">Baki</th>
+                    <th style="text-align: right;">Min</th>
+                    <th>Status</th>
+                    <th>Lokasi</th>
+                    <th style="text-align: center;">Tindakan</th>
+                  </tr>
+                </thead>
+                <tbody id="itemsTbody"></tbody>
+              </table>
             </div>
-            <div class="panel-body">
-              <div class="table-container desktop-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Item</th>
-                      <th>Kategori</th>
-                      <th style="text-align: right;">Baki</th>
-                      <th>Status</th>
-                      <th>Tindakan</th>
-                    </tr>
-                  </thead>
-                  <tbody id="itemsTbody"></tbody>
-                </table>
-              </div>
-              <div class="mobile-cards" id="itemsMobileCards"></div>
-            </div>
+            <div class="mobile-cards" id="itemsMobileCards"></div>
           </div>
         </div>
       </section>
@@ -911,6 +941,34 @@
       loadData();
     });
 
+    /* ========================================================
+       MODAL CONTROLLERS (TRANSAKSI & ITEM)
+       ======================================================== */
+    function openTxModal() {
+      document.getElementById('txModal').classList.remove('hidden');
+    }
+
+    function closeTxModal() {
+      document.getElementById('txModal').classList.add('hidden');
+    }
+
+    function openItemModal() {
+      resetItemForm();
+      document.getElementById('itemModal').classList.remove('hidden');
+    }
+
+    function closeItemModal() {
+      document.getElementById('itemModal').classList.add('hidden');
+      resetItemForm();
+    }
+
+    function closeModalOnBackdrop(e, modalId) {
+      if (e.target.id === modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+        if (modalId === 'itemModal') resetItemForm();
+      }
+    }
+
     function setGlobalTxType(type) {
       appState.globalTxType = type;
       document.getElementById('btnTypeOut').classList.toggle('active', type === 'Keluar');
@@ -938,6 +996,16 @@
       };
       document.getElementById('viewTitle').textContent = titles[tab][0];
       document.getElementById('viewSubtitle').textContent = titles[tab][1];
+
+      // Kemas kini butang tindakan utama di topbar
+      const mainBtn = document.getElementById('btnMainAction');
+      if (tab === 'items') {
+        mainBtn.textContent = '+ Tambah Item';
+        mainBtn.onclick = openItemModal;
+      } else {
+        mainBtn.textContent = '+ Rekod Transaksi';
+        mainBtn.onclick = openTxModal;
+      }
 
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
@@ -1073,21 +1141,22 @@
       updateBatchOptions();
     }
 
+    /* Baris Transaksi Sebaris Penuh (Select + Stepper + Del) */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
       div.className = 'batch-item-row';
       div.innerHTML = `
-        <div>
+        <div style="min-width: 0;">
           <select class="batch-item" onchange="updateRowHint(this)" required></select>
-          <div class="row-hint" style="font-size:11px; margin-top:2px; color:#64748b;"></div>
+          <div class="row-hint" style="font-size:11px; margin-top:2px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
         </div>
         <div class="stepper">
           <button type="button" class="stepper-btn" onclick="stepQty(this, -1)">-</button>
           <input type="number" class="batch-qty stepper-input" min="1" value="${prefillQty}" required>
           <button type="button" class="stepper-btn" onclick="stepQty(this, 1)">+</button>
         </div>
-        <button type="button" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px; min-height: 36px; border-color: #fecaca; color: #b91c1c;" onclick="removeBatchRow(this)">✕</button>
+        <button type="button" class="btn-row-del" onclick="removeBatchRow(this)">✕</button>
       `;
       container.appendChild(div);
       updateBatchOptions();
@@ -1111,7 +1180,7 @@
       const item = (appState.data?.items || []).find(i => i.itemId === sel.value);
       if (item) {
         const isLow = item.currentStock <= item.minimum;
-        hint.innerHTML = `Baki semasa: <strong style="color:${isLow ? '#b91c1c' : '#047857'}">${item.currentStock} unit</strong>`;
+        hint.innerHTML = `Baki: <strong style="color:${isLow ? '#b91c1c' : '#047857'}">${item.currentStock} unit</strong>`;
       } else {
         hint.innerHTML = '';
       }
@@ -1236,6 +1305,7 @@
           <td style="text-align:right; font-weight:700;">${l.qty}</td>
           <td style="text-align:right;">${l.balanceAfter}</td>
           <td>${l.pic}</td>
+          <td>${l.location}</td>
         </tr>
       `).join('');
 
@@ -1244,7 +1314,7 @@
           <div class="card-row-top">
             <div>
               <div class="card-title">${l.item}</div>
-              <div class="card-sub">${l.date} • ${l.pic}</div>
+              <div class="card-sub">${l.date} • ${l.pic} • ${l.location}</div>
             </div>
             <span class="badge badge-${l.type === 'Masuk' ? 'ok' : 'empty'}">${l.type}</span>
           </div>
@@ -1264,11 +1334,16 @@
       tbody.innerHTML = items.map(i => `
         <tr>
           <td><strong>${i.itemId}</strong></td>
-          <td>${i.item}</td>
+          <td>
+            <div>${i.item}</div>
+            <small style="color:#64748b;">${i.sku || '-'}</small>
+          </td>
           <td>${i.category}</td>
           <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
+          <td style="text-align:right; color:#64748b;">${i.minimum}</td>
           <td><span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span></td>
-          <td>
+          <td>${i.location}</td>
+          <td style="text-align:center;">
             <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 11px; min-height: 28px;" onclick='populateEditItem(${JSON.stringify(i).replace(/'/g, "&apos;")})'>Edit</button>
           </td>
         </tr>
@@ -1279,7 +1354,7 @@
           <div class="card-row-top">
             <div>
               <div class="card-title">${i.item}</div>
-              <div class="card-sub">${i.itemId} • SKU: ${i.sku || '-'}</div>
+              <div class="card-sub">${i.itemId} • SKU: ${i.sku || '-'} • ${i.category}</div>
             </div>
             <span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span>
           </div>
@@ -1340,6 +1415,7 @@
         showLoading(false);
         if (!res.ok) throw new Error(res.message);
         showToast(res.message);
+        closeTxModal();
         appState.data = res.data;
         renderDashboard();
         renderLogs();
@@ -1368,14 +1444,14 @@
 
       document.getElementById('itemFormTitle').textContent = `Kemaskini: ${item.itemId}`;
       document.getElementById('btnDeleteItem').classList.remove('hidden');
-      switchTab('items');
+      document.getElementById('itemModal').classList.remove('hidden');
     }
 
     function resetItemForm() {
       appState.selectedItem = null;
       document.getElementById('itemForm').reset();
       document.getElementById('itId').readOnly = false;
-      document.getElementById('itemFormTitle').textContent = 'Daftar / Kemaskini Item';
+      document.getElementById('itemFormTitle').textContent = 'Daftar Item Baharu';
       document.getElementById('btnDeleteItem').classList.add('hidden');
     }
 
@@ -1406,6 +1482,7 @@
         showLoading(false);
         if (!res.ok) throw new Error(res.message);
         showToast(res.message);
+        closeItemModal();
         appState.data = res.data;
         renderDashboard();
         renderItems();
@@ -1436,6 +1513,7 @@
         showLoading(false);
         if (!res.ok) throw new Error(res.message);
         showToast(res.message);
+        closeItemModal();
         appState.data = res.data;
         renderDashboard();
         renderItems();
