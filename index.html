@@ -12,10 +12,6 @@
   <meta name="apple-mobile-web-app-title" content="e-Azzuha">
   <meta name="theme-color" content="#064e3b">
   
-  <!-- Ikon Rasmi Menggunakan Fail Imej Asal -->
-  <link rel="icon" type="image/jpeg" href="Logo Azzuha.jpg">
-  <link rel="apple-touch-icon" href="Logo Azzuha.jpg">
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,18 +24,13 @@
       --primary-hover: #065f46;
       --primary-dark: #064e3b;
       --primary-soft: #ecfdf5;
-      
       --bg: #f8fafc;
       --surface: #ffffff;
       --text: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
       --border-light: #f1f5f9;
-      --radius: 12px;
-      
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
-      --shadow-lg: 0 12px 24px -4px rgba(0,0,0,0.1);
+      --radius: 10px;
     }
 
     * { 
@@ -51,10 +42,10 @@
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-size: 13.5px;
+      font-size: 13px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
@@ -76,6 +67,7 @@
       top: 0;
       height: 100vh;
       z-index: 20;
+      border-right: 1px solid rgba(255,255,255,0.08);
     }
 
     .brand-box {
@@ -83,32 +75,34 @@
       align-items: center;
       gap: 12px;
       padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.12);
       margin-bottom: 24px;
     }
 
-    /* Bekas Logo Asal */
-    .brand-logo-img {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      object-fit: cover;
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: #022c22;
+      display: grid;
+      place-items: center;
       flex-shrink: 0;
-      background: #000;
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.15);
     }
 
-    .brand-title { font-size: 15px; font-weight: 800; line-height: 1.2; letter-spacing: -0.2px; }
-    .brand-sub { font-size: 11px; opacity: 0.75; color: #cbd5e1; }
+    .brand-icon svg { width: 24px; height: 24px; fill: #ffffff; }
 
-    .nav-list { display: grid; gap: 6px; list-style: none; }
+    .brand-title { font-size: 14px; font-weight: 800; letter-spacing: -0.2px; }
+    .brand-sub { font-size: 11px; opacity: 0.7; }
+
+    .nav-list { display: grid; gap: 4px; list-style: none; }
     .nav-btn {
       width: 100%;
       border: none;
       background: transparent;
-      color: rgba(255,255,255,0.85);
-      padding: 11px 14px;
-      border-radius: 8px;
+      color: rgba(255,255,255,0.8);
+      padding: 10px 12px;
+      border-radius: 6px;
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
@@ -117,28 +111,27 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      transition: all 0.15s ease;
+      transition: all 0.15s;
     }
 
-    .nav-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+    .nav-btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.2; }
     .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
     .nav-btn.active {
       background: #ffffff;
       color: var(--primary-dark);
       font-weight: 700;
-      box-shadow: var(--shadow-sm);
     }
 
     .sidebar-footer {
       margin-top: auto;
       font-size: 11px;
-      opacity: 0.65;
+      opacity: 0.6;
       line-height: 1.4;
       border-top: 1px solid rgba(255,255,255,0.1);
       padding-top: 16px;
     }
 
-    /* Main Area */
+    /* Main Content */
     main { padding: 24px; overflow-y: auto; }
     
     .topbar {
@@ -150,26 +143,11 @@
       padding: 14px 18px;
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
       flex-wrap: wrap;
       gap: 10px;
     }
 
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .topbar-logo-img {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 1px solid var(--border);
-    }
-
-    .topbar-title h2 { font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+    .topbar-title h2 { font-size: 17px; font-weight: 800; color: var(--text); }
     .topbar-title p { color: var(--text-muted); font-size: 12px; }
 
     /* Butang */
@@ -179,11 +157,11 @@
       justify-content: center;
       gap: 6px;
       font-family: inherit;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
-      padding: 8px 15px;
+      padding: 8px 14px;
       min-height: 38px;
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid transparent;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -198,7 +176,7 @@
     .btn-danger { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
     .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
-    /* FAB Butang Bulat Terapung */
+    /* FAB Butang Bulat Tambah Transaksi */
     .fab-btn {
       position: fixed;
       bottom: 78px;
@@ -209,18 +187,18 @@
       color: white;
       border-radius: 50%;
       border: none;
-      box-shadow: 0 4px 14px rgba(4, 120, 87, 0.35);
+      box-shadow: 0 4px 14px rgba(4, 120, 87, 0.4);
       cursor: pointer;
       display: grid;
       place-items: center;
       z-index: 950;
-      transition: transform 0.2s ease;
+      transition: all 0.2s ease;
     }
 
     .fab-btn:active { transform: scale(0.92); }
-    .fab-btn svg { width: 26px; height: 26px; stroke: #ffffff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .fab-btn svg { width: 24px; height: 24px; stroke: #ffffff; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* Metrik Dashboard Bersih & Profesional */
+    /* Kad Metrik Dashboard: Clean Monochrome/Corporate */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -232,20 +210,15 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px 14px;
+      padding: 14px;
       cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      transition: border-color 0.15s ease, transform 0.15s ease;
+      transition: border-color 0.15s ease;
     }
 
-    .metric-card:hover { 
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-
-    .metric-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
-    .metric-val { font-size: 24px; font-weight: 800; color: var(--text); margin: 4px 0 2px; letter-spacing: -0.4px; }
-    .metric-sub { font-size: 11.5px; color: var(--text-muted); }
+    .metric-card:hover { border-color: var(--primary); }
+    .metric-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .metric-val { font-size: 22px; font-weight: 800; color: #0f172a; margin: 4px 0 2px; }
+    .metric-sub { font-size: 11px; color: var(--text-muted); }
 
     /* Panel */
     .panel {
@@ -254,7 +227,6 @@
       border-radius: var(--radius);
       overflow: hidden;
       margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
     }
 
     .panel-header {
@@ -268,26 +240,22 @@
       gap: 8px;
     }
 
-    .panel-header h3 { font-size: 14px; font-weight: 800; color: var(--text); }
+    .panel-header h3 { font-size: 13.5px; font-weight: 800; color: var(--text); }
     .panel-body { padding: 18px; }
 
-    /* Form Fields */
+    /* Form & Inputs */
     .form-group { display: grid; gap: 12px; }
-    .input-row { 
-      display: grid; 
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); 
-      gap: 10px; 
-    }
-    label { font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px; }
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    label { font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
     
     input, select, textarea {
       width: 100%;
-      min-height: 40px;
+      min-height: 38px;
       padding: 8px 12px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 6px;
       font-family: inherit;
-      font-size: 13.5px;
+      font-size: 13px;
       background: #fff;
       outline: none;
       color: var(--text);
@@ -295,49 +263,47 @@
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.12);
+      box-shadow: 0 0 0 2px rgba(4, 120, 87, 0.15);
     }
 
-    textarea { resize: vertical; min-height: 70px; }
+    textarea { resize: vertical; min-height: 60px; }
 
-    /* Switcher Jenis Transaksi */
     .type-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      background: #f1f5f9;
+      background: var(--border-light);
       padding: 3px;
-      border-radius: 8px;
+      border-radius: 6px;
       margin-bottom: 10px;
     }
 
     .type-btn {
       border: none;
       padding: 8px 10px;
-      min-height: 36px;
-      border-radius: 6px;
+      min-height: 34px;
+      border-radius: 5px;
       font-family: inherit;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       background: transparent;
       color: #64748b;
       text-align: center;
-      transition: all 0.15s ease;
     }
 
     .type-btn.active {
       background: #ffffff;
-      color: var(--primary-dark);
+      color: var(--primary);
       font-weight: 800;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
     }
 
-    /* Baris Item Transaksi (Sebaris) */
+    /* Baris Item Transaksi: Sebaris */
     .batch-card {
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 12px;
-      background: #fafafa;
+      background: #fcfcfc;
       margin-bottom: 10px;
     }
 
@@ -346,7 +312,7 @@
       grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 8px;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       padding-bottom: 10px;
       border-bottom: 1px solid var(--border-light);
     }
@@ -360,19 +326,19 @@
     .stepper {
       display: inline-flex;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 6px;
       overflow: hidden;
       background: #fff;
-      height: 40px;
+      height: 38px;
       flex-shrink: 0;
     }
 
     .stepper-btn {
-      width: 34px;
-      height: 40px;
+      width: 32px;
+      height: 38px;
       border: none;
       background: #f8fafc;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: #334155;
       cursor: pointer;
@@ -382,7 +348,7 @@
 
     .stepper-input {
       width: 44px !important;
-      min-height: 40px !important;
+      min-height: 38px !important;
       border: none !important;
       border-left: 1px solid var(--border) !important;
       border-right: 1px solid var(--border) !important;
@@ -393,36 +359,36 @@
     }
 
     .btn-row-del {
-      width: 36px;
-      height: 40px;
-      min-height: 40px;
+      width: 34px;
+      height: 38px;
+      min-height: 38px;
       padding: 0;
       display: grid;
       place-items: center;
       border: 1px solid #fecaca;
       background: #fff;
       color: #b91c1c;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
       flex-shrink: 0;
     }
 
     .btn-row-del:active { background: #fee2e2; }
 
-    /* Jadual Desktop */
+    /* Jadual Desktop: Viewable & Readable */
     .table-container {
       overflow-x: auto;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 6px;
       background: #fff;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 12.5px;
       text-align: left;
     }
 
@@ -432,14 +398,14 @@
       font-weight: 700;
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
-      padding: 11px 14px;
+      letter-spacing: 0.5px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
     td {
-      padding: 11px 14px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
     }
@@ -449,31 +415,31 @@
 
     .badge {
       display: inline-block;
-      padding: 3px 8px;
-      border-radius: 5px;
-      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10.5px;
       font-weight: 700;
       white-space: nowrap;
     }
 
-    .badge-ok { background: #dcfce7; color: #166534; }
-    .badge-low { background: #fef3c7; color: #92400e; }
-    .badge-empty { background: #fee2e2; color: #991b1b; }
+    .badge-ok { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .badge-low { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .badge-empty { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 
-    /* Loading & Modal */
+    /* Modal & Loading */
     .loading-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(3px);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(4px);
       display: grid;
       place-items: center;
       z-index: 9999 !important;
     }
 
     .spinner {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border: 3px solid var(--border);
       border-top-color: var(--primary);
       border-radius: 50%;
@@ -485,8 +451,8 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(3px);
       display: grid;
       place-items: center;
       z-index: 1100;
@@ -496,11 +462,11 @@
 
     .modal-dialog {
       background: #ffffff;
-      border-radius: var(--radius);
+      border-radius: 10px;
       width: 100%;
-      max-width: 520px;
+      max-width: 500px;
       overflow: hidden;
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
       margin: auto;
       position: relative;
     }
@@ -522,15 +488,15 @@
       z-index: 2001 !important;
       position: relative;
       background: #ffffff;
-      border-radius: var(--radius);
+      border-radius: 10px;
       width: 100%;
-      max-width: 400px;
+      max-width: 380px;
       overflow: hidden;
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
     }
 
     .scanner-body { padding: 14px; position: relative; }
-    .scanner-camera-wrapper { position: relative; width: 100%; border-radius: 10px; overflow: hidden; background: #000; }
+    .scanner-camera-wrapper { position: relative; width: 100%; border-radius: 8px; overflow: hidden; background: #000; }
     #scannerReader { width: 100%; }
 
     .scanner-overlay-toast {
@@ -561,9 +527,9 @@
       padding: 10px 16px;
       background: #0f172a;
       color: #fff;
-      border-radius: 8px;
+      border-radius: 6px;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 12.5px;
       transform: translateY(100px);
       opacity: 0;
       transition: all 0.2s ease;
@@ -577,46 +543,46 @@
     /* Kad Khusus Mudah Alih */
     .mobile-cards { display: none; }
 
-    /* Bar Navigasi Bawah Telefon */
+    /* Navigasi Bawah Telefon */
     .mobile-nav {
       display: none;
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      height: 60px;
+      height: 56px;
       background: #ffffff;
       border-top: 1px solid var(--border);
       z-index: 900;
       grid-template-columns: repeat(3, 1fr);
-      padding: 4px;
+      padding: 2px 4px;
     }
 
     .m-btn {
       border: none;
       background: transparent;
       color: var(--text-muted);
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 600;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 3px;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
     }
 
-    .m-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+    .m-btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.2; }
     .m-btn.active { color: var(--primary); font-weight: 800; background: var(--primary-soft); }
 
-    /* Responsive Handlers */
+    /* Pengoptimuman Mobile */
     @media (max-width: 1024px) {
       .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
     @media (max-width: 768px) {
-      .app-layout { grid-template-columns: 1fr; padding-bottom: 68px; }
+      .app-layout { grid-template-columns: 1fr; padding-bottom: 64px; }
       .sidebar { display: none; }
       .mobile-nav { display: grid; }
       main { padding: 14px; }
@@ -625,7 +591,7 @@
         padding: 12px 14px;
         margin-bottom: 14px;
       }
-      .topbar-title h2 { font-size: 16px; }
+      .topbar-title h2 { font-size: 15px; }
 
       .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -671,9 +637,8 @@
         border-top: 1px dashed var(--border);
       }
 
-      .toast { left: 14px; right: 14px; bottom: 74px; text-align: center; }
-
-      .modal-dialog { max-width: 100%; border-radius: 12px; }
+      .toast { left: 14px; right: 14px; bottom: 70px; text-align: center; }
+      .modal-dialog { max-width: 100%; border-radius: 8px; }
       .modal-body { max-height: calc(88vh - 60px); padding: 14px; }
     }
   </style>
@@ -702,7 +667,7 @@
   <div id="scannerModal" class="modal-overlay hidden">
     <div class="scanner-dialog">
       <div class="modal-header">
-        <h4 style="font-size: 13px; font-weight: 700;">Imbas Kod Bar / QR</h4>
+        <h4>Imbas Kod Bar / QR</h4>
         <button type="button" class="btn btn-secondary" style="padding: 4px 10px; min-height: 28px; font-size: 12px;" onclick="closeScannerModal()">Tutup</button>
       </div>
       <div class="scanner-body">
@@ -715,7 +680,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: BORANG TRANSAKSI STOK -->
+  <!-- MODAL 2: POPUP BORANG TRANSAKSI STOK -->
   <div id="txModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'txModal')">
     <div class="modal-dialog">
       <div class="modal-header">
@@ -769,7 +734,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: DAFTAR / KEMASKINI ITEM -->
+  <!-- MODAL 3: POPUP DAFTAR / KEMASKINI ITEM -->
   <div id="itemModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'itemModal')">
     <div class="modal-dialog">
       <div class="modal-header">
@@ -838,11 +803,17 @@
     <!-- Desktop Sidebar -->
     <aside class="sidebar">
       <div class="brand-box">
-        <!-- Logo Asal Dipasang Terus -->
-        <img class="brand-logo-img" src="Logo Azzuha.jpg" alt="Logo Azzuha" onerror="this.src='https://via.placeholder.com/44x44/000000/ffffff?text=A'">
+        <div class="brand-icon">
+          <!-- Logo Rasmi Azzuha: 3 Bilah Melengkung -->
+          <svg viewBox="0 0 100 100">
+            <path d="M10,62 C35,62 65,48 80,26 C62,42 35,52 10,62 Z" />
+            <path d="M30,60 C52,58 72,48 83,38 C68,48 48,55 30,60 Z" />
+            <path d="M55,60 C70,58 84,55 92,62 C82,58 68,57 55,60 Z" />
+          </svg>
+        </div>
         <div>
           <div class="brand-title">e-AzzuhaTRG</div>
-          <div class="brand-sub">Sistem Pengurusan Stok</div>
+          <div class="brand-sub">Inventory Tracker</div>
         </div>
       </div>
       
@@ -875,12 +846,9 @@
     <!-- Main Content -->
     <main>
       <div class="topbar">
-        <div class="topbar-brand">
-          <img class="topbar-logo-img" src="Logo Azzuha.jpg" alt="Logo Azzuha" onerror="this.style.display='none'">
-          <div class="topbar-title">
-            <h2 id="viewTitle">Dashboard Stok</h2>
-            <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
-          </div>
+        <div class="topbar-title">
+          <h2 id="viewTitle">Dashboard Stok</h2>
+          <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
         </div>
         <div>
           <button class="btn btn-secondary" onclick="loadData()">Segar Semula</button>
@@ -889,24 +857,24 @@
 
       <!-- TAB 1: DASHBOARD -->
       <section id="tab-dashboard">
+        <!-- Kad Metrik Seragam & Bersih -->
         <div class="metrics-grid" id="metricsCards"></div>
 
         <div class="panel">
           <div class="panel-header">
             <h3 id="attentionHeader">Item Perlu Perhatian</h3>
-            <button class="btn btn-secondary hidden" id="btnClearFilter" style="padding: 3px 8px; font-size: 11px; min-height: 26px;" onclick="resetDashboardFilter()">Reset Tapisan</button>
+            <button class="btn btn-secondary hidden" id="btnClearFilter" style="padding: 2px 8px; font-size: 11px; min-height: 26px;" onclick="resetDashboardFilter()">Reset Tapisan</button>
           </div>
           <div class="panel-body">
-            <!-- Desktop Table View -->
             <div class="table-container desktop-table">
               <table>
                 <thead>
                   <tr>
                     <th>Item ID</th>
-                    <th>Item</th>
+                    <th>Nama Item</th>
                     <th>Kategori</th>
-                    <th style="text-align: right;">Baki</th>
-                    <th style="text-align: right;">Min</th>
+                    <th style="text-align: right;">Baki Semasa</th>
+                    <th style="text-align: right;">Minima</th>
                     <th>Status</th>
                     <th>Lokasi</th>
                   </tr>
@@ -914,7 +882,6 @@
                 <tbody id="attentionTbody"></tbody>
               </table>
             </div>
-            <!-- Mobile Cards View -->
             <div class="mobile-cards" id="attentionMobileCards"></div>
           </div>
         </div>
@@ -1022,10 +989,10 @@
       initPWA();
     });
 
-    /* ========================================================
-       PWA INSTALLATION SETUP (LOGO ASAL)
-       ======================================================== */
+    /* PWA Manifest Terbina Dalam */
     function initPWA() {
+      const azzuhaSvgIcon = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23064e3b'/><path d='M10,62 C35,62 65,48 80,26 C62,42 35,52 10,62 Z' fill='white'/><path d='M30,60 C52,58 72,48 83,38 C68,48 48,55 30,60 Z' fill='white'/><path d='M55,60 C70,58 84,55 92,62 C82,58 68,57 55,60 Z' fill='white'/></svg>";
+      
       const manifest = {
         name: "e-AzzuhaTRG Tracker",
         short_name: "e-Azzuha",
@@ -1033,38 +1000,21 @@
         display: "standalone",
         background_color: "#064e3b",
         theme_color: "#064e3b",
-        icons: [
-          { src: "Logo Azzuha.jpg", sizes: "192x192 512x512", type: "image/jpeg" }
-        ]
+        icons: [{ src: azzuhaSvgIcon, sizes: "192x192 512x512", type: "image/svg+xml" }]
       };
-
-      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      
+      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
       let link = document.createElement('link');
       link.rel = 'manifest';
-      link.href = URL.createObjectURL(manifestBlob);
+      link.href = URL.createObjectURL(blob);
       document.head.appendChild(link);
     }
 
-    /* ========================================================
-       MODAL CONTROLLERS (TRANSAKSI & ITEM)
-       ======================================================== */
-    function openTxModal() {
-      document.getElementById('txModal').classList.remove('hidden');
-    }
-
-    function closeTxModal() {
-      document.getElementById('txModal').classList.add('hidden');
-    }
-
-    function openItemModal() {
-      resetItemForm();
-      document.getElementById('itemModal').classList.remove('hidden');
-    }
-
-    function closeItemModal() {
-      document.getElementById('itemModal').classList.add('hidden');
-      resetItemForm();
-    }
+    /* Modal Controllers */
+    function openTxModal() { document.getElementById('txModal').classList.remove('hidden'); }
+    function closeTxModal() { document.getElementById('txModal').classList.add('hidden'); }
+    function openItemModal() { resetItemForm(); document.getElementById('itemModal').classList.remove('hidden'); }
+    function closeItemModal() { document.getElementById('itemModal').classList.add('hidden'); resetItemForm(); }
 
     function closeModalOnBackdrop(e, modalId) {
       if (e.target.id === modalId) {
@@ -1190,7 +1140,7 @@
       const mCards = document.getElementById('attentionMobileCards');
 
       if (!items.length) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:16px; color:#64748b;">Tiada item ditemui.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:16px; color:#64748b;">Tiada rekod item ditemui.</td></tr>`;
         mCards.innerHTML = `<div style="text-align:center; padding:16px; color:#64748b; font-size:12px;">Tiada item ditemui.</div>`;
       } else {
         tbody.innerHTML = items.map(i => `
@@ -1235,6 +1185,7 @@
       updateBatchOptions();
     }
 
+    /* Baris Transaksi Sebaris Penuh (Select + Stepper + Del) */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
@@ -1242,7 +1193,7 @@
       div.innerHTML = `
         <div style="min-width: 0;">
           <select class="batch-item" onchange="updateRowHint(this)" required></select>
-          <div class="row-hint" style="font-size:11px; margin-top:2px; color:#047857; font-weight:700;"></div>
+          <div class="row-hint" style="font-size:11px; margin-top:3px; color:#047857; font-weight:700;"></div>
         </div>
         <div class="stepper">
           <button type="button" class="stepper-btn" onclick="stepQty(this, -1)">-</button>
@@ -1289,6 +1240,7 @@
       }
     }
 
+    /* Pilihan Dropdown Item Bersih */
     function updateBatchOptions() {
       const items = appState.data?.items || [];
       const opts = `<option value="">Pilih Item...</option>` + items.map(i => `
@@ -1395,7 +1347,7 @@
         <tr>
           <td>${l.date}</td>
           <td><strong>${l.item}</strong></td>
-          <td><span class="badge badge-${l.type === 'Masuk' ? 'ok' : 'empty'}">${l.type}</span></td>
+          <td><span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span></td>
           <td style="text-align:right; font-weight:700;">${l.qty}</td>
           <td style="text-align:right;">${l.balanceAfter}</td>
           <td>${l.pic}</td>
@@ -1410,7 +1362,7 @@
               <div class="card-title">${l.item}</div>
               <div class="card-sub">${l.date} • ${l.pic} • ${l.location}</div>
             </div>
-            <span class="badge badge-${l.type === 'Masuk' ? 'ok' : 'empty'}">${l.type}</span>
+            <span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span>
           </div>
           <div class="card-row-bottom">
             <span>Kuantiti: <strong>${l.qty} unit</strong></span>
@@ -1487,14 +1439,6 @@
         return;
       }
 
-      const payload = {
-        date: document.getElementById('txDate').value,
-        pic: document.getElementById('txPic').value,
-        location: document.getElementById('txLocation').value,
-        note: document.getElementById('txNote').value,
-        items
-      };
-
       showLoading(true, 'Menyimpan rekod...');
 
       fetch(SCRIPT_URL, {
@@ -1503,7 +1447,13 @@
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'addTransactionsBatch',
-          data: payload
+          data: {
+            date: document.getElementById('txDate').value,
+            pic: document.getElementById('txPic').value,
+            location: document.getElementById('txLocation').value,
+            note: document.getElementById('txNote').value,
+            items
+          }
         })
       })
       .then(res => res.json())
