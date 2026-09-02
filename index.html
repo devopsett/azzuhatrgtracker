@@ -84,19 +84,20 @@
     }
 
     .brand-logo {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 10px;
       background: #000000;
       display: grid;
       place-items: center;
       flex-shrink: 0;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
       overflow: hidden;
-      padding: 4px;
+      padding: 2px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    .brand-logo img, .brand-logo svg {
+    .brand-logo svg {
       width: 100%;
       height: 100%;
       object-fit: contain;
@@ -210,7 +211,7 @@
     .fab-btn:active { transform: scale(0.92); }
     .fab-btn svg { width: 26px; height: 26px; stroke: #ffffff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* Kad Metrik Bersih (Professional Clean) */
+    /* Kad Metrik Bersih */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -322,7 +323,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
-    /* Baris Item Transaksi (Sebaris Kemas) */
+    /* Baris Item Transaksi */
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -829,12 +830,38 @@
     <!-- Desktop Sidebar -->
     <aside class="sidebar">
       <div class="brand-box">
+        <!-- Logo Rasmi Az Zuha (Tiga Bilah Perak 3D di atas latar hitam) -->
         <div class="brand-logo" id="brandLogoContainer">
-          <!-- Logo Rasmi Vektor Tiga Lapis Perak -->
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 62 C 35 63, 65 52, 90 28 C 65 44, 35 56, 10 62 Z" fill="#ffffff" />
-            <path d="M15 62 C 40 60, 68 50, 83 40 C 62 48, 38 58, 15 62 Z" fill="#e2e8f0" />
-            <path d="M55 58 C 70 56, 85 58, 92 62 C 82 58, 70 57, 55 58 Z" fill="#cbd5e1" />
+          <svg viewBox="0 0 1000 600" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bladeTop" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#94a3b8"/>
+                <stop offset="30%" stop-color="#cbd5e1"/>
+                <stop offset="70%" stop-color="#f8fafc"/>
+                <stop offset="100%" stop-color="#ffffff"/>
+              </linearGradient>
+              <linearGradient id="bladeMid" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#64748b"/>
+                <stop offset="40%" stop-color="#94a3b8"/>
+                <stop offset="80%" stop-color="#e2e8f0"/>
+                <stop offset="100%" stop-color="#f8fafc"/>
+              </linearGradient>
+              <linearGradient id="bladeBot" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#475569"/>
+                <stop offset="50%" stop-color="#94a3b8"/>
+                <stop offset="100%" stop-color="#cbd5e1"/>
+              </linearGradient>
+              <filter id="shadow3d" x="-10%" y="-10%" width="130%" height="130%">
+                <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.6"/>
+              </filter>
+            </defs>
+            <rect width="1000" height="600" fill="#000000"/>
+            <!-- Bilah Bawah (Kecil Kanan) -->
+            <path d="M 540 375 C 650 340, 780 345, 930 380 C 830 350, 720 350, 605 385 Z" fill="url(#bladeBot)" filter="url(#shadow3d)"/>
+            <!-- Bilah Tengah (Sederhana Runcing) -->
+            <path d="M 280 375 C 470 330, 690 260, 830 230 C 720 290, 540 350, 360 388 Z" fill="url(#bladeMid)" filter="url(#shadow3d)"/>
+            <!-- Bilah Utama (Besar Melengkung ke Atas) -->
+            <path d="M 90 380 C 350 385, 620 270, 795 155 C 620 280, 380 355, 140 375 Z" fill="url(#bladeTop)" filter="url(#shadow3d)"/>
           </svg>
         </div>
         <div>
@@ -1017,19 +1044,19 @@
     });
 
     /* ========================================================
-       PWA INSTALLATION SETUP
+       PWA INSTALLATION SETUP (LOGO RASMI AZ ZUHA)
        ======================================================== */
     function initPWA() {
-      // Manifest dengan logo rasmi perak/hitam
-      const logoSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='#000000'/><path d='M10 62 C 35 63, 65 52, 90 28 C 65 44, 35 56, 10 62 Z' fill='#ffffff'/><path d='M15 62 C 40 60, 68 50, 83 40 C 62 48, 38 58, 15 62 Z' fill='#e2e8f0'/><path d='M55 58 C 70 56, 85 58, 92 62 C 82 58, 70 57, 55 58 Z' fill='#94a3b8'/></svg>`;
-      const iconUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(logoSvg);
+      // Data SVG Logo Rasmi untuk PWA & Browser
+      const azzuhaSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 600'><defs><linearGradient id='t' x1='0%' y1='0%' x2='100%' y2='0%'><stop offset='0%' stop-color='#94a3b8'/><stop offset='50%' stop-color='#cbd5e1'/><stop offset='100%' stop-color='#ffffff'/></linearGradient><linearGradient id='m' x1='0%' y1='0%' x2='100%' y2='0%'><stop offset='0%' stop-color='#64748b'/><stop offset='50%' stop-color='#94a3b8'/><stop offset='100%' stop-color='#e2e8f0'/></linearGradient><linearGradient id='b' x1='0%' y1='0%' x2='100%' y2='0%'><stop offset='0%' stop-color='#475569'/><stop offset='100%' stop-color='#94a3b8'/></linearGradient></defs><rect width='1000' height='600' fill='#000000'/><path d='M 540 375 C 650 340, 780 345, 930 380 C 830 350, 720 350, 605 385 Z' fill='url(#b)'/><path d='M 280 375 C 470 330, 690 260, 830 230 C 720 290, 540 350, 360 388 Z' fill='url(#m)'/><path d='M 90 380 C 350 385, 620 270, 795 155 C 620 280, 380 355, 140 375 Z' fill='url(#t)'/></svg>`;
+      const iconUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(azzuhaSvg);
 
       const manifest = {
         name: "e-AzzuhaTRG Tracker",
         short_name: "e-Azzuha",
         start_url: window.location.href,
         display: "standalone",
-        background_color: "#064e3b",
+        background_color: "#000000",
         theme_color: "#064e3b",
         icons: [{ src: iconUrl, sizes: "192x192 512x512", type: "image/svg+xml" }]
       };
@@ -1243,7 +1270,7 @@
       div.innerHTML = `
         <div style="min-width: 0;">
           <select class="batch-item" onchange="updateRowHint(this)" required></select>
-          <div class="row-hint" style="font-size:11px; margin-top:2px; color:#047857; font-weight:700;"></div>
+          <div class="row-hint" style="font-size:11px; margin-top:3px; color:#047857; font-weight:700;"></div>
         </div>
         <div class="stepper">
           <button type="button" class="stepper-btn" onclick="stepQty(this, -1)">-</button>
@@ -1435,7 +1462,6 @@
           </td>
           <td>${i.category}</td>
           <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
-          <td style="text-align:right; color:#64748b;">${i.minimum}</td>
           <td><span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span></td>
           <td>${i.location}</td>
           <td style="text-align:center;">
