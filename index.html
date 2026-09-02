@@ -1429,6 +1429,7 @@
         items: items
       };
 
+      // Tunjukkan status proses pantas
       showLoading(true, 'Menyimpan transaksi...');
 
       fetch(SCRIPT_URL, {
@@ -1444,11 +1445,16 @@
       .then(res => {
         showLoading(false);
         if (!res.ok) throw new Error(res.message);
+        
         showToast(res.message);
-        appState.data = res.data;
-        renderDashboard();
-        renderLogs();
-        renderItems();
+        if (res.data) {
+          appState.data = res.data;
+          renderDashboard();
+          renderLogs();
+          renderItems();
+        }
+        
+        // Reset borang serta-merta
         document.getElementById('txNote').value = '';
         document.getElementById('batchContainer').innerHTML = '';
         addBatchRow();
