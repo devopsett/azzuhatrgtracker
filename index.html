@@ -13,8 +13,9 @@
   <meta name="apple-mobile-web-app-title" content="e-Azzuha">
   <meta name="theme-color" content="#0b3818">
 
-  <link rel="icon" type="image/jpeg" href="Logo%20Azzuha.jpg">
-  <link rel="apple-touch-icon" href="Logo%20Azzuha.jpg">
+  <!-- Ikon Menggunakan Format PNG -->
+  <link rel="icon" type="image/png" href="Logo%20Azzuha.png">
+  <link rel="apple-touch-icon" href="Logo%20Azzuha.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -401,7 +402,7 @@
       margin-bottom: 10px;
       width: 100%;
       max-width: 100%;
-      overflow: hidden; /* Mengunci saiz container */
+      overflow: hidden;
     }
 
     .batch-item-row {
@@ -421,11 +422,11 @@
       padding-bottom: 0;
     }
 
-    /* Baris Atas: Dropdown Nama Item Lebar 100% Dikawal */
+    /* Baris Atas: Dropdown Nama Item Lebar Penuh */
     .item-select-col {
       width: 100%;
       max-width: 100%;
-      min-width: 0; /* Menghalang flex item daripada tolak lebar */
+      min-width: 0;
     }
 
     .item-select-col select {
@@ -798,7 +799,7 @@
 
       .toast { left: 14px; right: 14px; bottom: 74px; text-align: center; }
 
-      /* KAWALAN KETAT MODAL POPUP DI TELEFON */
+      /* Kawalan Ketat Modal Popup di Telefon */
       .modal-overlay {
         padding: 12px;
       }
@@ -978,7 +979,8 @@
     <!-- Desktop Sidebar -->
     <aside class="sidebar">
       <div class="brand-box">
-        <img class="brand-logo-img" src="Logo%20Azzuha.jpg" alt="Logo Az Zuha">
+        <!-- Logo PNG Rasmi -->
+        <img class="brand-logo-img" src="Logo%20Azzuha.png" alt="Logo Az Zuha">
         <div>
           <div class="brand-title">e-AzzuhaTRG</div>
           <div class="brand-sub">Sistem Pengurusan Stok</div>
@@ -1015,7 +1017,8 @@
     <main>
       <div class="topbar">
         <div class="topbar-left">
-          <img class="topbar-mobile-logo" src="Logo%20Azzuha.jpg" alt="Logo Az Zuha">
+          <!-- Logo Header Mobile PNG -->
+          <img class="topbar-mobile-logo" src="Logo%20Azzuha.png" alt="Logo Az Zuha">
           <div class="topbar-title">
             <h2 id="viewTitle">Dashboard Stok</h2>
             <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
@@ -1167,7 +1170,7 @@
     });
 
     /* ========================================================
-       PEMASANGAN APLIKASI (PWA DENGAN WARNA STARTUP #0b3818)
+       PEMASANGAN APLIKASI (PWA DENGAN FAIL LOGO AZZUHA.PNG)
        ======================================================== */
     function initPWA() {
       const manifest = {
@@ -1179,9 +1182,9 @@
         theme_color: "#0b3818",
         icons: [
           {
-            src: "Logo%20Azzuha.jpg",
+            src: "Logo%20Azzuha.png",
             sizes: "192x192 512x512",
-            type: "image/jpeg"
+            type: "image/png"
           }
         ]
       };
@@ -1386,7 +1389,7 @@
       updateBatchOptions();
     }
 
-    /* BARIS ITEM: DROPDOWN ATAS, BADGE BAKI + STEPPER DI BAWAH */
+    /* BARIS ITEM: DROPDOWN ATAS (LEBAR PENUH), BADGE BAKI + STEPPER DI BAWAH */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
