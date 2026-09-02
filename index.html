@@ -3,7 +3,7 @@
 <head>
   <base target="_top">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>e-AzzuhaTRG Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,7 @@
       --radius: 12px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
@@ -53,7 +53,7 @@
       min-height: 100vh;
     }
 
-    /* Sidebar */
+    /* Sidebar Desktop */
     .sidebar {
       background: linear-gradient(180deg, var(--primary), var(--primary-dark));
       color: white;
@@ -63,6 +63,7 @@
       position: sticky;
       top: 0;
       height: 100vh;
+      z-index: 20;
     }
 
     .brand-box {
@@ -94,7 +95,7 @@
       border: none;
       background: transparent;
       color: rgba(255,255,255,0.85);
-      padding: 11px 16px;
+      padding: 12px 16px;
       border-radius: 10px;
       font-family: inherit;
       font-size: 13px;
@@ -123,6 +124,44 @@
       padding-top: 16px;
     }
 
+    /* Bottom Navigation Khusus Mobile */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 62px;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      z-index: 50;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+      grid-template-columns: repeat(3, 1fr);
+      padding: 4px 8px;
+    }
+
+    .m-nav-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .m-nav-btn.active {
+      color: var(--primary);
+      font-weight: 800;
+      background: var(--primary-light);
+    }
+
     /* Main Area */
     main { padding: 28px; overflow-y: auto; }
     .header-bar {
@@ -130,11 +169,13 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .header-title h2 { font-size: 22px; font-weight: 800; color: var(--text); }
     .header-title p { color: var(--text-muted); font-size: 12.5px; margin-top: 2px; }
-    .header-actions { display: flex; gap: 10px; }
+    .header-actions { display: flex; gap: 8px; }
 
     /* Buttons */
     .btn {
@@ -144,7 +185,8 @@
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
-      padding: 9px 16px;
+      padding: 10px 16px;
+      min-height: 42px;
       border-radius: 10px;
       border: 1px solid transparent;
       cursor: pointer;
@@ -174,7 +216,8 @@
 
     .type-btn {
       border: none;
-      padding: 9px 12px;
+      padding: 11px 12px;
+      min-height: 42px;
       border-radius: 7px;
       font-family: inherit;
       font-size: 13px;
@@ -193,7 +236,7 @@
       font-weight: 700;
     }
 
-    /* Cards */
+    /* Metrics Grid */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -214,7 +257,7 @@
     .metric-val { font-size: 24px; font-weight: 800; color: var(--primary-dark); margin: 4px 0; }
     .metric-sub { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* Panels & 50/50 Layout */
+    /* Panels & 50/50 Desktop Layout */
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -232,6 +275,8 @@
       justify-content: space-between;
       align-items: center;
       background: #fafafa;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .panel-header h3 { font-size: 15px; font-weight: 700; }
@@ -251,11 +296,12 @@
     
     input, select, textarea {
       width: 100%;
-      padding: 9px 12px;
+      min-height: 42px;
+      padding: 10px 12px;
       border: 1px solid var(--border);
       border-radius: 8px;
       font-family: inherit;
-      font-size: 13px;
+      font-size: 14px;
       background: #fff;
       outline: none;
       transition: border 0.15s;
@@ -266,7 +312,7 @@
       box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
     }
 
-    textarea { resize: vertical; min-height: 70px; }
+    textarea { resize: vertical; min-height: 75px; }
 
     /* Data Tables */
     .table-container {
@@ -274,6 +320,7 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       background: #fff;
+      -webkit-overflow-scrolling: touch;
     }
 
     table {
@@ -290,13 +337,13 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 10px 12px;
+      padding: 11px 12px;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
     td {
-      padding: 10px 12px;
+      padding: 11px 12px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
     }
@@ -361,12 +408,12 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(15, 23, 42, 0.8);
       backdrop-filter: blur(4px);
       display: grid;
       place-items: center;
       z-index: 110;
-      padding: 16px;
+      padding: 14px;
     }
 
     .scanner-dialog {
@@ -411,13 +458,12 @@
       width: 100%;
     }
 
-    /* Popup Status Tepat Atas Kamera (Scanner HUD) */
     .scanner-overlay-toast {
       position: absolute;
       top: 14px;
       left: 12px;
       right: 12px;
-      background: rgba(4, 120, 87, 0.92);
+      background: rgba(4, 120, 87, 0.94);
       color: #ffffff;
       padding: 10px 14px;
       border-radius: 8px;
@@ -470,16 +516,80 @@
 
     .hidden { display: none !important; }
 
+    /* ========================================================
+       MEDIA QUERIES (RESPONSIF TELEFON & TABLET)
+       ======================================================== */
     @media (max-width: 1100px) {
       .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .two-col-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
-      .app-container { grid-template-columns: 1fr; }
-      .sidebar { height: auto; position: static; }
-      .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .batch-item-row { grid-template-columns: 1fr; }
+      .app-container {
+        grid-template-columns: 1fr;
+        padding-bottom: 70px; /* Ruang untuk Bottom Nav */
+      }
+
+      .sidebar { display: none; }
+      .mobile-bottom-nav { display: grid; }
+
+      main { padding: 16px; }
+
+      .header-bar {
+        margin-bottom: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-actions {
+        width: 100%;
+      }
+
+      .header-actions .btn {
+        flex: 1;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .metric-card {
+        padding: 12px;
+      }
+
+      .metric-val {
+        font-size: 20px;
+      }
+
+      .panel-body {
+        padding: 14px;
+      }
+
+      .input-row {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .batch-item-row {
+        grid-template-columns: 1fr;
+        background: #f8fafc;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+
+      .batch-item-row .btn-secondary {
+        width: 100%;
+      }
+
+      .toast {
+        left: 16px;
+        right: 16px;
+        bottom: 80px;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -501,11 +611,10 @@
     <div class="scanner-dialog">
       <div class="scanner-header">
         <h4>Imbas Kod Bar / QR</h4>
-        <button type="button" class="btn btn-secondary" style="padding: 4px 10px;" onclick="closeScannerModal()">Tutup</button>
+        <button type="button" class="btn btn-secondary" style="padding: 4px 10px; min-height: 32px;" onclick="closeScannerModal()">Tutup</button>
       </div>
       <div class="scanner-body">
         <div class="scanner-camera-wrapper">
-          <!-- Popup Status Di Atas Kamera Langsung -->
           <div id="scannerOverlayToast" class="scanner-overlay-toast">Item Berjaya Diimbas</div>
           <div id="scannerReader"></div>
         </div>
@@ -515,7 +624,7 @@
   </div>
 
   <div class="app-container">
-    <!-- Sidebar -->
+    <!-- Sidebar Desktop -->
     <aside class="sidebar">
       <div class="brand-box">
         <div class="brand-badge">A</div>
@@ -623,8 +732,8 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap: 8px; flex-wrap: wrap;">
                       <span style="font-weight:700; font-size:12px;" id="batchCardLabel">Senarai Item Stok Keluar</span>
                       <div style="display:flex; gap: 6px;">
-                        <button type="button" class="btn btn-primary" style="padding:5px 10px; font-size:11.5px;" onclick="openScannerModal()">Imbas Kod</button>
-                        <button type="button" class="btn btn-secondary" style="padding:5px 10px; font-size:11.5px;" onclick="addBatchRow()">+ Tambah Item</button>
+                        <button type="button" class="btn btn-primary" style="padding:6px 10px; font-size:11.5px; min-height:34px;" onclick="openScannerModal()">Imbas Kod</button>
+                        <button type="button" class="btn btn-secondary" style="padding:6px 10px; font-size:11.5px; min-height:34px;" onclick="addBatchRow()">+ Tambah Item</button>
                       </div>
                     </div>
                     <div id="batchContainer"></div>
@@ -732,7 +841,7 @@
           <div class="panel">
             <div class="panel-header">
               <h3>Senarai Katalog Item</h3>
-              <input type="text" id="tableSearch" placeholder="Cari item..." style="width:160px; padding:4px 8px; font-size:12px;" oninput="filterItemsTable()">
+              <input type="text" id="tableSearch" placeholder="Cari item..." style="width:140px; padding:6px 10px; font-size:12px; min-height:36px;" oninput="filterItemsTable()">
             </div>
             <div class="panel-body">
               <div class="table-container">
@@ -755,10 +864,23 @@
         </div>
       </section>
     </main>
+
+    <!-- Navigasi Bawah Telefon (Mobile Navigation Bar) -->
+    <nav class="mobile-bottom-nav">
+      <button class="m-nav-btn active" onclick="switchTab('dashboard')">
+        <span>Dashboard</span>
+      </button>
+      <button class="m-nav-btn" onclick="switchTab('transactions')">
+        <span>Transaksi</span>
+      </button>
+      <button class="m-nav-btn" onclick="switchTab('items')">
+        <span>Data Induk</span>
+      </button>
+    </nav>
   </div>
 
   <script>
-    // URL Web App deployment anda
+    // URL Web App deployment aktif anda
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
 
     let appState = {
@@ -801,7 +923,14 @@
 
     function switchTab(tab) {
       appState.activeTab = tab;
+      
+      // Kemas kini butang desktop
       document.querySelectorAll('.nav-btn').forEach((b, idx) => {
+        b.classList.toggle('active', ['dashboard', 'transactions', 'items'][idx] === tab);
+      });
+
+      // Kemas kini butang mobile
+      document.querySelectorAll('.m-nav-btn').forEach((b, idx) => {
         b.classList.toggle('active', ['dashboard', 'transactions', 'items'][idx] === tab);
       });
 
@@ -816,6 +945,8 @@
       };
       document.getElementById('viewTitle').textContent = titles[tab][0];
       document.getElementById('viewSubtitle').textContent = titles[tab][1];
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function showLoading(show, msg = 'Memuatkan sistem...') {
@@ -843,7 +974,7 @@
       }, 2200);
     }
 
-    // Panggilan GET dengan redirect: 'follow' untuk melepasi sekatan Google 302
+    // Panggilan GET dengan redirect: 'follow'
     function loadData() {
       showLoading(true, 'Mengemaskini data...');
       
@@ -973,7 +1104,7 @@
         html5QrCodeScanner = new Html5Qrcode("scannerReader");
       }
 
-      const config = { fps: 12, qrbox: { width: 250, height: 250 } };
+      const config = { fps: 12, qrbox: { width: 220, height: 220 } };
       
       html5QrCodeScanner.start(
         { facingMode: "environment" }, 
@@ -1095,7 +1226,7 @@
           <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
           <td><span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span></td>
           <td style="text-align:center;">
-            <button class="btn btn-secondary" style="padding:3px 8px; font-size:11px;" onclick='populateEditItem(${JSON.stringify(i).replace(/'/g, "&apos;")})'>Edit</button>
+            <button class="btn btn-secondary" style="padding:3px 8px; font-size:11px; min-height:30px;" onclick='populateEditItem(${JSON.stringify(i).replace(/'/g, "&apos;")})'>Edit</button>
           </td>
         </tr>
       `).join('');
@@ -1108,7 +1239,6 @@
       });
     }
 
-    // PANGGILAN POST: Bebas sekatan CORS dengan text/plain & redirect follow
     function submitTransaction(e) {
       e.preventDefault();
       const rows = document.querySelectorAll('.batch-item-row');
@@ -1180,6 +1310,7 @@
 
       document.getElementById('itemFormTitle').textContent = `Kemaskini: ${item.itemId}`;
       document.getElementById('btnDeleteItem').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function resetItemForm() {
@@ -1190,7 +1321,6 @@
       document.getElementById('btnDeleteItem').classList.add('hidden');
     }
 
-    // PANGGILAN POST: Tambah atau Kemaskini Item
     function submitItem(e) {
       e.preventDefault();
       const payload = {
@@ -1231,7 +1361,6 @@
       });
     }
 
-    // PANGGILAN POST: Padam Item
     function deleteItemHandler() {
       if (!appState.selectedItem) return;
       if (!confirm(`Adakah anda pasti mahu memadam item ${appState.selectedItem}?`)) return;
