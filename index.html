@@ -13,7 +13,6 @@
   <meta name="apple-mobile-web-app-title" content="e-Azzuha">
   <meta name="theme-color" content="#047857">
 
-  <!-- Ikon Menggunakan Fail JPG Asal -->
   <link rel="icon" type="image/jpeg" href="Logo%20Azzuha.jpg">
   <link rel="apple-touch-icon" href="Logo%20Azzuha.jpg">
 
@@ -183,7 +182,44 @@
     .topbar-title h2 { font-size: 19px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
     .topbar-title p { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
 
-    /* Butang */
+    /* Butang Ikon Segar Semula Bersih */
+    .btn-icon-refresh {
+      width: 40px;
+      height: 40px;
+      min-height: 40px;
+      padding: 0;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn-icon-refresh:hover {
+      background: #f8fafc;
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-icon-refresh:active svg {
+      transform: rotate(180deg);
+    }
+
+    .btn-icon-refresh svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.25s ease;
+    }
+
+    /* Butang Standard */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -343,7 +379,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    /* Baris Item Transaksi: Sebaris */
+    /* BARIS ITEM TRANSAKSI SEBARIS TERATUR (SEKATA & RATA) */
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -353,19 +389,55 @@
     }
 
     .batch-item-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto auto;
-      gap: 10px;
+      display: flex;
       align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
       border-bottom: 1px solid var(--border);
+      flex-wrap: nowrap;
     }
 
     .batch-item-row:last-child {
       border-bottom: none;
       margin-bottom: 0;
       padding-bottom: 0;
+    }
+
+    .item-select-wrap {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+    }
+
+    .item-select-wrap select {
+      padding-right: 76px; /* Ruang supaya teks tidak bertindih dengan badge baki */
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    /* Lencana Baki Terbina Dalam Dropdown (Sebaris Rata) */
+    .row-inline-badge {
+      position: absolute;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 5px;
+      pointer-events: none;
+      white-space: nowrap;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #bbf7d0;
+    }
+
+    .row-inline-badge.low {
+      background: #fef2f2;
+      color: #b91c1c;
+      border-color: #fecaca;
     }
 
     .stepper {
@@ -379,7 +451,7 @@
     }
 
     .stepper-btn {
-      width: 36px;
+      width: 34px;
       height: 42px;
       border: none;
       background: #f8fafc;
@@ -392,7 +464,7 @@
     .stepper-btn:active { background: #e2e8f0; }
 
     .stepper-input {
-      width: 48px !important;
+      width: 44px !important;
       min-height: 42px !important;
       border: none !important;
       border-left: 1px solid var(--border) !important;
@@ -418,6 +490,7 @@
       font-weight: 700;
       font-size: 14px;
       flex-shrink: 0;
+      transition: background 0.15s;
     }
 
     .btn-row-del:active { background: #fee2e2; }
@@ -888,7 +961,6 @@
     <main>
       <div class="topbar">
         <div class="topbar-left">
-          <!-- Logo Header Mobile Menggunakan Fail JPG Asal -->
           <img class="topbar-mobile-logo" src="Logo%20Azzuha.jpg" alt="Logo Az Zuha">
           <div class="topbar-title">
             <h2 id="viewTitle">Dashboard Stok</h2>
@@ -896,7 +968,12 @@
           </div>
         </div>
         <div>
-          <button class="btn btn-secondary" style="min-height: 36px; padding: 6px 14px; font-size: 12px;" onclick="loadData()">Segar Semula</button>
+          <!-- Butang Ikon Segar Semula Minimalis Sahaja -->
+          <button class="btn-icon-refresh" onclick="loadData()" title="Segar Semula">
+            <svg viewBox="0 0 24 24">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -1065,6 +1142,9 @@
       }
     }
 
+    /* ========================================================
+       MODAL CONTROLLERS (TRANSAKSI & ITEM)
+       ======================================================== */
     function openTxModal() {
       document.getElementById('txModal').classList.remove('hidden');
     }
@@ -1252,14 +1332,15 @@
       updateBatchOptions();
     }
 
+    /* Baris Transaksi Sebaris Sempurna: Dropdown + Lencana Baki Di Dalamnya + Stepper + Del */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
       div.className = 'batch-item-row';
       div.innerHTML = `
-        <div style="min-width: 0;">
+        <div class="item-select-wrap">
           <select class="batch-item" onchange="updateRowHint(this)" required></select>
-          <div class="row-hint" style="font-size:11px; margin-top:3px; color:#047857; font-weight:700;"></div>
+          <span class="row-inline-badge hidden"></span>
         </div>
         <div class="stepper">
           <button type="button" class="stepper-btn" onclick="stepQty(this, -1)">-</button>
@@ -1286,14 +1367,16 @@
     }
 
     function updateRowHint(sel) {
-      const hint = sel.closest('.batch-item-row').querySelector('.row-hint');
+      const row = sel.closest('.batch-item-row');
+      const badge = row.querySelector('.row-inline-badge');
       const item = (appState.data?.items || []).find(i => i.itemId === sel.value);
-      if (item) {
+      if (item && sel.value) {
         const isLow = item.currentStock <= item.minimum;
-        hint.innerHTML = `Baki: ${item.currentStock} unit`;
-        hint.style.color = isLow ? '#b91c1c' : '#047857';
+        badge.textContent = `Baki: ${item.currentStock}`;
+        badge.classList.remove('hidden');
+        badge.classList.toggle('low', isLow);
       } else {
-        hint.innerHTML = '';
+        badge.classList.add('hidden');
       }
     }
 
@@ -1315,6 +1398,7 @@
         const cur = sel.value;
         sel.innerHTML = opts;
         sel.value = cur;
+        updateRowHint(sel);
       });
     }
 
