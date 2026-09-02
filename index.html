@@ -402,7 +402,9 @@
     .badge-low { background: #fef3c7; color: #92400e; }
     .badge-empty { background: #fee2e2; color: #991b1b; }
 
-    /* Modal / Form Popups */
+    /* ========================================================
+       MODAL POPUPS & Z-INDEX HIERARCHY
+       ======================================================== */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -423,6 +425,7 @@
       overflow: hidden;
       box-shadow: var(--shadow-lg);
       margin: auto;
+      position: relative;
     }
 
     .modal-header {
@@ -437,12 +440,20 @@
     .modal-header h4 { font-size: 14px; font-weight: 800; color: var(--text); }
     .modal-body { padding: 18px; max-height: calc(85vh - 70px); overflow-y: auto; }
 
-    .scanner-dialog {
+    /* PENGIMBAS KAMERA: Z-INDEX LEBIH TINGGI DARIPADA MODAL LAIN */
+    #scannerModal {
+      z-index: 2000 !important;
+    }
+
+    #scannerModal .scanner-dialog {
+      z-index: 2001 !important;
+      position: relative;
       background: #ffffff;
       border-radius: 14px;
       width: 100%;
       max-width: 400px;
       overflow: hidden;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
     }
 
     .scanner-body { padding: 14px; position: relative; }
@@ -483,7 +494,7 @@
       transform: translateY(100px);
       opacity: 0;
       transition: all 0.2s ease;
-      z-index: 1200;
+      z-index: 2500;
     }
 
     .toast.show { transform: translateY(0); opacity: 1; }
@@ -592,7 +603,6 @@
 
       .toast { left: 14px; right: 14px; bottom: 74px; text-align: center; }
 
-      /* Penyesuaian Modal di Skrin Kecil */
       .modal-dialog {
         max-width: 100%;
         border-radius: 12px;
@@ -616,7 +626,7 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- MODAL 1: PENGIMBAS KAMERA -->
+  <!-- MODAL 1: PENGIMBAS KAMERA (Z-INDEX: 2000) -->
   <div id="scannerModal" class="modal-overlay hidden">
     <div class="scanner-dialog">
       <div class="modal-header">
@@ -839,7 +849,7 @@
         </div>
       </section>
 
-      <!-- TAB 2: TRANSAKSI (PAPARAN PENUH DENGAN MODAL) -->
+      <!-- TAB 2: TRANSAKSI -->
       <section id="tab-transactions" class="hidden">
         <div class="panel">
           <div class="panel-header">
@@ -868,7 +878,7 @@
         </div>
       </section>
 
-      <!-- TAB 3: DATA INDUK (PAPARAN PENUH DENGAN MODAL) -->
+      <!-- TAB 3: DATA INDUK -->
       <section id="tab-items" class="hidden">
         <div class="panel">
           <div class="panel-header">
@@ -997,7 +1007,6 @@
       document.getElementById('viewTitle').textContent = titles[tab][0];
       document.getElementById('viewSubtitle').textContent = titles[tab][1];
 
-      // Kemas kini butang tindakan utama di topbar
       const mainBtn = document.getElementById('btnMainAction');
       if (tab === 'items') {
         mainBtn.textContent = '+ Tambah Item';
@@ -1141,7 +1150,6 @@
       updateBatchOptions();
     }
 
-    /* Baris Transaksi Sebaris Penuh (Select + Stepper + Del) */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
@@ -1334,10 +1342,7 @@
       tbody.innerHTML = items.map(i => `
         <tr>
           <td><strong>${i.itemId}</strong></td>
-          <td>
-            <div>${i.item}</div>
-            <small style="color:#64748b;">${i.sku || '-'}</small>
-          </td>
+          <td>${i.item}</td>
           <td>${i.category}</td>
           <td style="text-align:right; font-weight:700;">${i.currentStock}</td>
           <td style="text-align:right; color:#64748b;">${i.minimum}</td>
