@@ -151,7 +151,7 @@
       padding-top: 16px;
     }
 
-    /* Main Area Desktop & Mobile */
+    /* Main Area */
     main { padding: 26px 32px; overflow-y: auto; width: 100%; min-width: 0; }
     
     .topbar {
@@ -235,13 +235,8 @@
       place-items: center;
     }
 
-    .btn-icon-refresh:active svg {
-      transform: rotate(180deg);
-    }
-
-    .btn-icon-refresh svg {
-      transition: transform 0.25s ease;
-    }
+    .btn-icon-refresh:active svg { transform: rotate(180deg); }
+    .btn-icon-refresh svg { transition: transform 0.25s ease; }
 
     .btn {
       display: inline-flex;
@@ -338,20 +333,8 @@
     .panel-header h3 { font-size: 15px; font-weight: 800; color: var(--text); }
     .panel-body { padding: 20px; }
 
-    .form-group { 
-      display: grid; 
-      gap: 14px; 
-      width: 100%;
-      max-width: 100%;
-    }
-    
-    .input-row { 
-      display: grid; 
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); 
-      gap: 12px; 
-      width: 100%;
-    }
-    
+    .form-group { display: grid; gap: 14px; width: 100%; max-width: 100%; }
+    .input-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; width: 100%; }
     label { font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 5px; }
     
     input, select, textarea {
@@ -376,7 +359,6 @@
 
     textarea { resize: vertical; min-height: 70px; }
 
-    /* Pengalih 3 Jenis Transaksi (Keluar / Masuk / Pelarasan) */
     .type-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr 1.3fr;
@@ -410,10 +392,6 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    .type-btn.active.audit {
-      color: #b45309;
-    }
-
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -442,20 +420,8 @@
       padding-bottom: 0;
     }
 
-    .item-select-col {
-      width: 100%;
-      max-width: 100%;
-      min-width: 0;
-    }
-
-    .item-select-col select {
-      width: 100%;
-      max-width: 100%;
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text);
-      display: block;
-    }
+    .item-select-col { width: 100%; max-width: 100%; min-width: 0; }
+    .item-select-col select { width: 100%; font-size: 13.5px; font-weight: 600; color: var(--text); }
 
     .item-bottom-bar {
       display: flex;
@@ -481,17 +447,8 @@
       text-overflow: ellipsis;
     }
 
-    .item-baki-badge.low {
-      background: #fef2f2;
-      color: #b91c1c;
-      border-color: #fecaca;
-    }
-
-    .item-baki-badge.audit-hint {
-      background: #fffbeb;
-      color: #b45309;
-      border-color: #fde68a;
-    }
+    .item-baki-badge.low { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+    .item-baki-badge.audit-hint { background: #fffbeb; color: #b45309; border-color: #fde68a; }
 
     .item-action-controls {
       display: flex;
@@ -591,6 +548,16 @@
     tr:last-child td { border-bottom: none; }
     tbody tr:hover { background: #f8fafc; }
 
+    /* Gaya Baris Yang Boleh Diklik */
+    .clickable-row {
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .clickable-row:hover {
+      background-color: #f1f5f9 !important;
+    }
+
     .badge {
       display: inline-block;
       padding: 3px 8px;
@@ -603,6 +570,55 @@
     .badge-ok { background: var(--status-ok-bg); color: var(--status-ok-text); }
     .badge-low { background: var(--status-low-bg); color: var(--status-low-text); }
     .badge-empty { background: var(--status-empty-bg); color: var(--status-empty-text); }
+
+    /* GAYA MODAL DETAIL TRANSAKSI */
+    .detail-item-group {
+      display: grid;
+      gap: 12px;
+      padding: 4px 0;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 12px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .detail-item.column {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .detail-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .detail-value {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .detail-note-box {
+      width: 100%;
+      padding: 10px 12px;
+      background: #ffffff;
+      border-radius: 6px;
+      border: 1px dashed var(--border);
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
 
     .loading-overlay {
       position: fixed;
@@ -644,7 +660,7 @@
       background: #ffffff;
       border-radius: 14px;
       width: 100%;
-      max-width: 520px;
+      max-width: 500px;
       overflow: hidden;
       box-shadow: var(--shadow-lg);
       margin: auto;
@@ -858,7 +874,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: POPUP BORANG TRANSAKSI STOK (TERMASUK MOD AUDIT) -->
+  <!-- MODAL 2: POPUP BORANG TRANSAKSI STOK -->
   <div id="txModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'txModal')">
     <div class="modal-dialog">
       <div class="modal-header">
@@ -868,7 +884,6 @@
       <div class="modal-body">
         <form id="txForm" onsubmit="submitTransaction(event)">
           <div class="form-group">
-            <!-- 3 Mod: Keluar / Masuk / Pelarasan -->
             <div class="type-switcher">
               <button type="button" id="btnTypeOut" class="type-btn active" onclick="setGlobalTxType('Keluar')">Stok Keluar</button>
               <button type="button" id="btnTypeIn" class="type-btn" onclick="setGlobalTxType('Masuk')">Stok Masuk</button>
@@ -968,6 +983,64 @@
             </div>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: POPUP PERINCIAN (DETAIL) TRANSAKSI LOG -->
+  <div id="logDetailModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'logDetailModal')">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h4>Perincian Transaksi</h4>
+        <button type="button" class="btn btn-secondary" style="padding: 4px 10px; min-height: 28px; font-size: 12px;" onclick="closeLogDetailModal()">Tutup</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-item-group">
+          <div class="detail-item">
+            <span class="detail-label">Jenis Transaksi</span>
+            <span id="dtlType" class="badge">Keluar</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Nama Item</span>
+            <span id="dtlItem" class="detail-value" style="text-align: right;">-</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Kod SKU</span>
+            <span id="dtlSku" class="detail-value" style="color: var(--primary);">-</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Tarikh</span>
+            <span id="dtlDate" class="detail-value">-</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Kuantiti</span>
+            <span id="dtlQty" class="detail-value" style="font-size: 15px; color: var(--text);">-</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Baki Selepas</span>
+            <span id="dtlBalance" class="detail-value">-</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">PIC Bertanggungjawab</span>
+            <span id="dtlPic" class="detail-value">-</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Lokasi</span>
+            <span id="dtlLocation" class="detail-value">-</span>
+          </div>
+
+          <div class="detail-item column">
+            <span class="detail-label">Catatan / Nota Pelarasan</span>
+            <div id="dtlNote" class="detail-note-box">Tiada catatan</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1074,7 +1147,10 @@
       <section id="tab-transactions" class="hidden">
         <div class="panel">
           <div class="panel-header">
-            <h3>Log 10 Transaksi Terkini</h3>
+            <div>
+              <h3>Log 10 Transaksi Terkini</h3>
+              <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">Tekan mana-mana baris rekod untuk melihat nota & perincian penuh.</p>
+            </div>
           </div>
           <div class="panel-body">
             <div class="table-container desktop-table">
@@ -1328,6 +1404,49 @@
       resetItemForm();
     }
 
+    /* PENGENDALI MODAL PERINCIAN LOG TRANSAKSI */
+    function openLogDetailModal(log) {
+      const typeBadge = document.getElementById('dtlType');
+      typeBadge.textContent = log.type;
+      typeBadge.className = `badge ${log.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}`;
+
+      document.getElementById('dtlItem').textContent = log.item;
+      document.getElementById('dtlSku').textContent = log.sku || '-';
+      document.getElementById('dtlDate').textContent = log.date;
+      document.getElementById('dtlQty').textContent = `${log.qty} unit`;
+      document.getElementById('dtlBalance').textContent = `${log.balanceAfter} unit`;
+      document.getElementById('dtlPic').textContent = log.pic || '-';
+      document.getElementById('dtlLocation').textContent = log.location || '-';
+
+      const noteBox = document.getElementById('dtlNote');
+      if (log.note && log.note.trim()) {
+        noteBox.textContent = log.note;
+        if (log.note.includes('[Audit Fizikal')) {
+          noteBox.style.background = '#fffbeb';
+          noteBox.style.color = '#b45309';
+          noteBox.style.borderColor = '#fde68a';
+          noteBox.style.fontWeight = '700';
+        } else {
+          noteBox.style.background = '#ffffff';
+          noteBox.style.color = '#0f172a';
+          noteBox.style.borderColor = '#e2e8f0';
+          noteBox.style.fontWeight = '500';
+        }
+      } else {
+        noteBox.textContent = 'Tiada catatan.';
+        noteBox.style.background = '#f8fafc';
+        noteBox.style.color = '#64748b';
+        noteBox.style.borderColor = '#e2e8f0';
+        noteBox.style.fontWeight = 'normal';
+      }
+
+      document.getElementById('logDetailModal').classList.remove('hidden');
+    }
+
+    function closeLogDetailModal() {
+      document.getElementById('logDetailModal').classList.add('hidden');
+    }
+
     function closeModalOnBackdrop(e, modalId) {
       if (e.target.id === modalId) {
         document.getElementById(modalId).classList.add('hidden');
@@ -1335,7 +1454,6 @@
       }
     }
 
-    /* Pengendali Pertukaran Mod (Keluar / Masuk / Pelarasan) */
     function setGlobalTxType(type) {
       appState.globalTxType = type;
       document.getElementById('btnTypeOut').classList.toggle('active', type === 'Keluar');
@@ -1353,7 +1471,6 @@
         submitBtn.textContent = `Simpan Transaksi (${type})`;
       }
 
-      // Kemas kini paparan hint baki pada setiap baris item
       document.querySelectorAll('.batch-item').forEach(sel => updateRowHint(sel));
     }
 
@@ -1511,7 +1628,6 @@
       updateBatchOptions();
     }
 
-    /* Baris Item Transaksi */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
@@ -1686,6 +1802,7 @@
       }
     }
 
+    /* PAPARAN 10 LOG TERKINI BERSIH & KLIK UNTUK LIHAT PERINCIAN */
     function renderLogs() {
       const logs = (appState.data?.logs || []).slice(0, 10);
       const tbody = document.getElementById('logsTbody');
@@ -1697,34 +1814,44 @@
         return;
       }
 
-      tbody.innerHTML = logs.map(l => `
-        <tr>
-          <td>${l.date}</td>
-          <td><strong>${l.sku || ''}</strong></td>
-          <td>${l.item}</td>
-          <td><span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span></td>
-          <td style="text-align:right; font-weight:800;">${l.qty}</td>
-          <td style="text-align:right;">${l.balanceAfter}</td>
-          <td>${l.pic}</td>
-          <td>${l.location}</td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = logs.map((l, index) => {
+        const isAudit = l.note && l.note.includes('[Audit Fizikal');
+        const auditIndicator = isAudit ? `<span style="font-size:10px; color:#b45309; font-weight:800; margin-left:4px;">● Audit</span>` : '';
 
-      mCards.innerHTML = logs.map(l => `
-        <div class="card-row">
-          <div class="card-row-top">
-            <div>
-              <div class="card-title">${l.item}</div>
-              <div class="card-sub">${l.sku ? l.sku + ' • ' : ''}${l.date} • ${l.pic} • ${l.location}</div>
+        return `
+          <tr class="clickable-row" onclick='openLogDetailModal(${JSON.stringify(l).replace(/'/g, "&apos;")})' title="Tekan untuk lihat perincian penuh">
+            <td>${l.date}</td>
+            <td><strong>${l.sku || ''}</strong></td>
+            <td>${l.item} ${auditIndicator}</td>
+            <td><span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span></td>
+            <td style="text-align:right; font-weight:800;">${l.qty}</td>
+            <td style="text-align:right;">${l.balanceAfter}</td>
+            <td>${l.pic}</td>
+            <td>${l.location}</td>
+          </tr>
+        `;
+      }).join('');
+
+      mCards.innerHTML = logs.map(l => {
+        const isAudit = l.note && l.note.includes('[Audit Fizikal');
+        const auditIndicator = isAudit ? `<span style="font-size:10px; color:#b45309; font-weight:800; background:#fef3c7; padding:1px 6px; border-radius:4px; margin-left:4px;">Audit</span>` : '';
+
+        return `
+          <div class="card-row clickable-row" onclick='openLogDetailModal(${JSON.stringify(l).replace(/'/g, "&apos;")})' title="Tekan untuk perincian">
+            <div class="card-row-top">
+              <div>
+                <div class="card-title">${l.item} ${auditIndicator}</div>
+                <div class="card-sub">${l.sku ? l.sku + ' • ' : ''}${l.date} • ${l.pic}</div>
+              </div>
+              <span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span>
             </div>
-            <span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span>
+            <div class="card-row-bottom">
+              <span>Kuantiti: <strong>${l.qty} unit</strong></span>
+              <span style="color:#64748b;">Baki: ${l.balanceAfter} &nbsp;<span style="color:var(--primary); font-weight:700;">➔</span></span>
+            </div>
           </div>
-          <div class="card-row-bottom">
-            <span>Kuantiti: <strong>${l.qty} unit</strong></span>
-            <span style="color:#64748b;">Baki Selepas: ${l.balanceAfter}</span>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderItems() {
