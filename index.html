@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-title" content="e-Azzuha">
   <meta name="theme-color" content="#0b3818">
 
-  <!-- Ikon Rasmi PNG -->
+  <!-- Ikon Rasmi Format PNG -->
   <link rel="icon" type="image/png" href="Logo%20Azzuha.png">
   <link rel="apple-touch-icon" href="Logo%20Azzuha.png">
 
@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Pengimbas Kamera -->
+  <!-- Pengimbas Kamera (HTML5 QR Code) -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <!-- Generator PDF (jsPDF) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1076,11 +1076,11 @@
         </div>
       </section>
 
-      <!-- TAB 2: TRANSAKSI (LOG TERKINI) -->
+      <!-- TAB 2: TRANSAKSI (LOG 10 TRANSAKSI TERKINI) -->
       <section id="tab-transactions" class="hidden">
         <div class="panel">
           <div class="panel-header">
-            <h3>10 Transaksi Terkini</h3>
+            <h3>Log 10 Transaksi Terkini</h3>
           </div>
           <div class="panel-body">
             <div class="table-container desktop-table">
@@ -1226,16 +1226,15 @@
 
       try {
         const { jsPDF } = window.jspdf;
-        // Dokumen format A4 Potret (210mm x 297mm)
         const doc = new jsPDF('p', 'mm', 'a4');
         const pageWidth = 210;
         const pageHeight = 297;
         const margin = 10;
 
-        // Tajuk Atas Lembaran PDF
+        // Header Dokumen
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(14);
-        doc.setTextColor(11, 56, 24); // Hijau Az Zuha
+        doc.setTextColor(11, 56, 24);
         doc.text('LABEL KOD QR PRODUK - AZ ZUHA TRAVEL & TOURS TRG', pageWidth / 2, 14, { align: 'center' });
         
         doc.setFont('helvetica', 'normal');
@@ -1244,21 +1243,17 @@
         const todayStr = new Date().toLocaleDateString('ms-MY', { day: '2-digit', month: 'short', year: 'numeric' });
         doc.text(`Jumlah Item: ${items.length} | Tarikh Cetakan: ${todayStr}`, pageWidth / 2, 19, { align: 'center' });
 
-        // Garis Pembahagi Atas
         doc.setDrawColor(226, 232, 240);
         doc.setLineWidth(0.4);
         doc.line(margin, 22, pageWidth - margin, 22);
 
-        // Susun Atur Grid 3 Lajur (Menampung hingga 21-27 item dalam 1 Muka Surat)
+        // Grid 3 Lajur (Padat 1 Muka Surat)
         const cols = 3;
-        const colWidth = (pageWidth - (margin * 2) - ((cols - 1) * 4)) / cols; // ~60mm setiap kad
+        const colWidth = (pageWidth - (margin * 2) - ((cols - 1) * 4)) / cols;
         const availableHeight = pageHeight - 26 - margin;
         
-        // Anggarkan baris automatik
         const totalRows = Math.ceil(items.length / cols);
         const cardHeight = Math.min(33, (availableHeight - ((totalRows - 1) * 3)) / totalRows); 
-
-        // Pra-muat imej kod QR menggunakan perkhidmatan API QR standard pantas
         const qrSize = Math.min(22, cardHeight - 10);
 
         for (let idx = 0; idx < items.length; idx++) {
@@ -1269,12 +1264,11 @@
           const x = margin + (colIdx * (colWidth + 4));
           const y = 26 + (rowIdx * (cardHeight + 3));
 
-          // Kotak Kad Label
+          // Kotak Kad
           doc.setFillColor(255, 255, 255);
           doc.setDrawColor(203, 213, 225);
           doc.roundedRect(x, y, colWidth, cardHeight, 2, 2, 'FD');
 
-          // Dapatkan QR Code Base64
           const qrDataText = encodeURIComponent(itm.sku || itm.itemId);
           const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${qrDataText}`;
           
@@ -1285,7 +1279,6 @@
             doc.addImage(imgData, 'PNG', qrX, qrY, qrSize, qrSize);
           } catch (e) {}
 
-          // Teks Nama Item & Kod SKU
           const textX = x + qrSize + 5;
           const textWidth = colWidth - qrSize - 7;
           
@@ -1293,34 +1286,29 @@
           doc.setFontSize(8);
           doc.setTextColor(15, 23, 42);
           
-          // Potong nama item jika terlalu panjang
           const splitItemName = doc.splitTextToSize(itm.item, textWidth);
           doc.text(splitItemName.slice(0, 2), textX, y + 8);
 
-          // Kod SKU
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(7.5);
-          doc.setTextColor(4, 120, 87); // Hijau
+          doc.setTextColor(4, 120, 87);
           doc.text(itm.sku || itm.itemId, textX, y + cardHeight - 7);
 
-          // Kategori
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(6.5);
           doc.setTextColor(100, 116, 139);
           doc.text(itm.category || 'Item', textX, y + cardHeight - 3);
         }
 
-        // Simpan & Muat Turun Fail PDF Terus
         doc.save(`Azzuha_QR_Labels_${new Date().toISOString().slice(0,10)}.pdf`);
         showLoading(false);
-        showToast('PDF Kod QR 1 muka surat berjaya dijana!');
+        showToast('PDF Kod QR 1 muka surat berjaya dimuat turun!');
       } catch (err) {
         showLoading(false);
         showToast('Gagal menjana PDF: ' + err.message, true);
       }
     }
 
-    // Fungsi Pembantu Tukar Imej ke Base64
     function fetchImageAsBase64(url) {
       return new Promise((resolve, reject) => {
         const img = new Image();
@@ -1528,7 +1516,7 @@
       updateBatchOptions();
     }
 
-    /* Baris Item Transaksi: Dropdown Atas (Lebar Penuh), Badge Baki + Stepper di Bawah */
+    /* Baris Item Transaksi: Dropdown Atas, Badge Baki + Stepper di Bawah */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
@@ -1688,46 +1676,47 @@
       }
     }
 
-    ffunction renderLogs() {
-  const logs = (appState.data.logs || []).slice(0, 10); // Hadkan 10 transaksi sahaja
-  const tbody = document.getElementById('logsTbody');
-  const mCards = document.getElementById('logsMobileCards');
+    /* Papar 10 Log Transaksi Sahaja */
+    function renderLogs() {
+      const logs = (appState.data?.logs || []).slice(0, 10);
+      const tbody = document.getElementById('logsTbody');
+      const mCards = document.getElementById('logsMobileCards');
 
-  if (!logs.length) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:18px; color:#64748b;">Tiada rekod transaksi ditemui.</td></tr>`;
-    mCards.innerHTML = `<div style="text-align:center; padding:16px; color:#64748b; font-size:12px;">Tiada rekod transaksi ditemui.</div>`;
-    return;
-  }
+      if (!logs.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:18px; color:#64748b;">Tiada rekod transaksi ditemui.</td></tr>`;
+        mCards.innerHTML = `<div style="text-align:center; padding:16px; color:#64748b; font-size:12px;">Tiada rekod transaksi ditemui.</div>`;
+        return;
+      }
 
-  tbody.innerHTML = logs.map(l => `
-    <tr>
-      <td>${l.date}</td>
-      <td><strong>${l.sku || ''}</strong></td>
-      <td>${l.item}</td>
-      <td><span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span></td>
-      <td style="text-align:right; font-weight:800;">${l.qty}</td>
-      <td style="text-align:right;">${l.balanceAfter}</td>
-      <td>${l.pic}</td>
-      <td>${l.location}</td>
-    </tr>
-  `).join('');
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td>${l.date}</td>
+          <td><strong>${l.sku || ''}</strong></td>
+          <td>${l.item}</td>
+          <td><span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span></td>
+          <td style="text-align:right; font-weight:800;">${l.qty}</td>
+          <td style="text-align:right;">${l.balanceAfter}</td>
+          <td>${l.pic}</td>
+          <td>${l.location}</td>
+        </tr>
+      `).join('');
 
-  mCards.innerHTML = logs.map(l => `
-    <div class="card-row">
-      <div class="card-row-top">
-        <div>
-          <div class="card-title">${l.item}</div>
-          <div class="card-sub">${l.sku ? l.sku + ' • ' : ''}${l.date} • ${l.pic} • ${l.location}</div>
+      mCards.innerHTML = logs.map(l => `
+        <div class="card-row">
+          <div class="card-row-top">
+            <div>
+              <div class="card-title">${l.item}</div>
+              <div class="card-sub">${l.sku ? l.sku + ' • ' : ''}${l.date} • ${l.pic} • ${l.location}</div>
+            </div>
+            <span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span>
+          </div>
+          <div class="card-row-bottom">
+            <span>Kuantiti: <strong>${l.qty} unit</strong></span>
+            <span style="color:#64748b;">Baki Selepas: ${l.balanceAfter}</span>
+          </div>
         </div>
-        <span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span>
-      </div>
-      <div class="card-row-bottom">
-        <span>Kuantiti: <strong>${l.qty} unit</strong></span>
-        <span style="color:#64748b;">Baki Selepas: ${l.balanceAfter}</span>
-      </div>
-    </div>
-  `).join('');
-}
+      `).join('');
+    }
 
     function renderItems() {
       const items = appState.data.items;
