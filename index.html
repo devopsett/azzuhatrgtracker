@@ -6,14 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>e-AzzuhaTRG Tracker</title>
   
-  <!-- PWA Meta Tags (Warna Latar Startup #0b3818) -->
+  <!-- PWA Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="e-Azzuha">
   <meta name="theme-color" content="#0b3818">
 
-  <!-- Ikon Menggunakan Format PNG Rasmi -->
+  <!-- Ikon Rasmi PNG -->
   <link rel="icon" type="image/png" href="Logo%20Azzuha.png">
   <link rel="apple-touch-icon" href="Logo%20Azzuha.png">
 
@@ -21,7 +21,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
+  <!-- Pengimbas Kamera -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <!-- Generator PDF (jsPDF) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
     :root {
@@ -187,26 +190,52 @@
     .topbar-title h2 { font-size: 19px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
     .topbar-title p { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
 
-    /* Butang Ikon Segar Semula Minimalis */
-    .btn-icon-refresh {
-      width: 40px;
+    /* Butang Ikon Minimalis di Topbar */
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-icon-action {
       height: 40px;
-      min-height: 40px;
-      padding: 0;
+      padding: 0 12px;
       border-radius: 10px;
       border: 1px solid var(--border);
       background: #ffffff;
       color: var(--text);
-      display: grid;
-      place-items: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
       cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
       transition: all 0.18s ease;
+      white-space: nowrap;
     }
 
-    .btn-icon-refresh:hover {
+    .btn-icon-action:hover {
       background: #f8fafc;
       color: var(--primary);
       border-color: var(--primary);
+    }
+
+    .btn-icon-action svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn-icon-refresh {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: grid;
+      place-items: center;
     }
 
     .btn-icon-refresh:active svg {
@@ -214,13 +243,6 @@
     }
 
     .btn-icon-refresh svg {
-      width: 18px;
-      height: 18px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2.3;
-      stroke-linecap: round;
-      stroke-linejoin: round;
       transition: transform 0.25s ease;
     }
 
@@ -393,7 +415,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    /* KOTAK ITEM TRANSAKSI: KEKAL PADAT & TIDAK MELEBARKAN SKRIN */
+    /* KOTAK ITEM TRANSAKSI */
     .batch-card {
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -422,7 +444,6 @@
       padding-bottom: 0;
     }
 
-    /* Baris Atas: Dropdown Nama Item Lebar 100% */
     .item-select-col {
       width: 100%;
       max-width: 100%;
@@ -438,7 +459,6 @@
       display: block;
     }
 
-    /* Baris Bawah: Lencana Baki + Stepper + Butang Padam */
     .item-bottom-bar {
       display: flex;
       justify-content: space-between;
@@ -1002,8 +1022,22 @@
             <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
           </div>
         </div>
-        <div>
-          <button class="btn-icon-refresh" onclick="loadData()" title="Segar Semula">
+        <div class="topbar-actions">
+          <!-- Butang Minimalis Jana Kod QR (PDF) -->
+          <button type="button" class="btn-icon-action" onclick="generateQRPdf1Page()" title="Jana Kod QR Semua Produk (PDF 1 Muka Surat)">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+              <path d="M14 14h3v3h-3z"></path>
+              <path d="M20 14v3"></path>
+              <path d="M14 20h7"></path>
+            </svg>
+            <span>Cetak QR</span>
+          </button>
+          
+          <!-- Butang Segar Semula -->
+          <button class="btn-icon-action btn-icon-refresh" onclick="loadData()" title="Segar Semula">
             <svg viewBox="0 0 24 24">
               <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
             </svg>
@@ -1178,6 +1212,135 @@
       }
     }
 
+    /* ========================================================
+       FUNGSI JANA PDF KOD QR DARI SKU (1 MUKA SURAT A4)
+       ======================================================== */
+    async function generateQRPdf1Page() {
+      const items = appState.data?.items || [];
+      if (!items.length) {
+        showToast('Tiada item inventori ditemui untuk dijana.', true);
+        return;
+      }
+
+      showLoading(true, 'Menjana PDF Kod QR...');
+
+      try {
+        const { jsPDF } = window.jspdf;
+        // Dokumen format A4 Potret (210mm x 297mm)
+        const doc = new jsPDF('p', 'mm', 'a4');
+        const pageWidth = 210;
+        const pageHeight = 297;
+        const margin = 10;
+
+        // Tajuk Atas Lembaran PDF
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(14);
+        doc.setTextColor(11, 56, 24); // Hijau Az Zuha
+        doc.text('LABEL KOD QR PRODUK - AZ ZUHA TRAVEL & TOURS TRG', pageWidth / 2, 14, { align: 'center' });
+        
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(100, 116, 139);
+        const todayStr = new Date().toLocaleDateString('ms-MY', { day: '2-digit', month: 'short', year: 'numeric' });
+        doc.text(`Jumlah Item: ${items.length} | Tarikh Cetakan: ${todayStr}`, pageWidth / 2, 19, { align: 'center' });
+
+        // Garis Pembahagi Atas
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(0.4);
+        doc.line(margin, 22, pageWidth - margin, 22);
+
+        // Susun Atur Grid 3 Lajur (Menampung hingga 21-27 item dalam 1 Muka Surat)
+        const cols = 3;
+        const colWidth = (pageWidth - (margin * 2) - ((cols - 1) * 4)) / cols; // ~60mm setiap kad
+        const availableHeight = pageHeight - 26 - margin;
+        
+        // Anggarkan baris automatik
+        const totalRows = Math.ceil(items.length / cols);
+        const cardHeight = Math.min(33, (availableHeight - ((totalRows - 1) * 3)) / totalRows); 
+
+        // Pra-muat imej kod QR menggunakan perkhidmatan API QR standard pantas
+        const qrSize = Math.min(22, cardHeight - 10);
+
+        for (let idx = 0; idx < items.length; idx++) {
+          const itm = items[idx];
+          const colIdx = idx % cols;
+          const rowIdx = Math.floor(idx / cols);
+
+          const x = margin + (colIdx * (colWidth + 4));
+          const y = 26 + (rowIdx * (cardHeight + 3));
+
+          // Kotak Kad Label
+          doc.setFillColor(255, 255, 255);
+          doc.setDrawColor(203, 213, 225);
+          doc.roundedRect(x, y, colWidth, cardHeight, 2, 2, 'FD');
+
+          // Dapatkan QR Code Base64
+          const qrDataText = encodeURIComponent(itm.sku || itm.itemId);
+          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${qrDataText}`;
+          
+          try {
+            const imgData = await fetchImageAsBase64(qrUrl);
+            const qrX = x + 2.5;
+            const qrY = y + (cardHeight - qrSize) / 2;
+            doc.addImage(imgData, 'PNG', qrX, qrY, qrSize, qrSize);
+          } catch (e) {}
+
+          // Teks Nama Item & Kod SKU
+          const textX = x + qrSize + 5;
+          const textWidth = colWidth - qrSize - 7;
+          
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8);
+          doc.setTextColor(15, 23, 42);
+          
+          // Potong nama item jika terlalu panjang
+          const splitItemName = doc.splitTextToSize(itm.item, textWidth);
+          doc.text(splitItemName.slice(0, 2), textX, y + 8);
+
+          // Kod SKU
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7.5);
+          doc.setTextColor(4, 120, 87); // Hijau
+          doc.text(itm.sku || itm.itemId, textX, y + cardHeight - 7);
+
+          // Kategori
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(6.5);
+          doc.setTextColor(100, 116, 139);
+          doc.text(itm.category || 'Item', textX, y + cardHeight - 3);
+        }
+
+        // Simpan & Muat Turun Fail PDF Terus
+        doc.save(`Azzuha_QR_Labels_${new Date().toISOString().slice(0,10)}.pdf`);
+        showLoading(false);
+        showToast('PDF Kod QR 1 muka surat berjaya dijana!');
+      } catch (err) {
+        showLoading(false);
+        showToast('Gagal menjana PDF: ' + err.message, true);
+      }
+    }
+
+    // Fungsi Pembantu Tukar Imej ke Base64
+    function fetchImageAsBase64(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas.toDataURL('image/png'));
+        };
+        img.onerror = () => reject(new Error('Gagal memuat turun imej QR'));
+        img.src = url;
+      });
+    }
+
+    /* ========================================================
+       MODAL CONTROLLERS (TRANSAKSI & ITEM)
+       ======================================================== */
     function openTxModal() {
       document.getElementById('txModal').classList.remove('hidden');
     }
@@ -1365,7 +1528,7 @@
       updateBatchOptions();
     }
 
-    /* Baris Item Transaksi */
+    /* Baris Item Transaksi: Dropdown Atas (Lebar Penuh), Badge Baki + Stepper di Bawah */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
@@ -1730,7 +1893,7 @@
 
     function deleteItemHandler() {
       if (!appState.selectedItem) return;
-      if (!confirm(`Padam item ${appState.selectedItem}?`)) return;
+      if (!confirm(`Adakah anda pasti mahu memadam item ${appState.selectedItem}?`)) return;
 
       showLoading(true, 'Memadam item...');
       fetch(SCRIPT_URL, {
