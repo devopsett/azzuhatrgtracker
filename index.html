@@ -10,7 +10,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="AzzuhaTRG">
+  <meta name="apple-mobile-web-app-title" content="e-Azzuha">
   <meta name="theme-color" content="#0b3818">
 
   <!-- Ikon Rasmi Format PNG -->
@@ -67,6 +67,13 @@
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+    }
+
+    /* Kunci scroll body bila modal aktif */
+    body.modal-open {
+      overflow: hidden !important;
+      height: 100vh !important;
+      touch-action: none !important;
     }
 
     .app-layout {
@@ -359,6 +366,7 @@
 
     textarea { resize: vertical; min-height: 70px; }
 
+    /* Switcher Jenis Transaksi */
     .type-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr 1.3fr;
@@ -548,7 +556,6 @@
     tr:last-child td { border-bottom: none; }
     tbody tr:hover { background: #f8fafc; }
 
-    /* Gaya Baris Yang Boleh Diklik */
     .clickable-row {
       cursor: pointer;
       transition: background-color 0.15s ease;
@@ -571,7 +578,7 @@
     .badge-low { background: var(--status-low-bg); color: var(--status-low-text); }
     .badge-empty { background: var(--status-empty-bg); color: var(--status-empty-text); }
 
-    /* GAYA MODAL DETAIL TRANSAKSI */
+    /* Modal Perincian Transaksi */
     .detail-item-group {
       display: grid;
       gap: 12px;
@@ -839,7 +846,7 @@
 </head>
 <body>
 
-  <!-- Loading State -->
+  <!-- Loading Overlay -->
   <div id="loading" class="loading-overlay hidden">
     <div style="text-align: center;">
       <div class="spinner" style="margin: 0 auto 10px;"></div>
@@ -849,7 +856,7 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- BUTANG BULAT TERAPUNG (FAB) - TAMBAH TRANSAKSI -->
+  <!-- BUTANG BULAT TERAPUNG (FAB) - REKOD TRANSAKSI -->
   <button type="button" class="fab-btn" onclick="openTxModal()" title="Rekod Transaksi">
     <svg viewBox="0 0 24 24">
       <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -874,7 +881,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: POPUP BORANG TRANSAKSI STOK -->
+  <!-- MODAL 2: POPUP BORANG TRANSAKSI STOK (TERMASUK MOD PELARASAN) -->
   <div id="txModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'txModal')">
     <div class="modal-dialog">
       <div class="modal-header">
@@ -987,7 +994,7 @@
     </div>
   </div>
 
-  <!-- MODAL 4: POPUP PERINCIAN (DETAIL) TRANSAKSI LOG -->
+  <!-- MODAL 4: POPUP PERINCIAN LOG TRANSAKSI -->
   <div id="logDetailModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'logDetailModal')">
     <div class="modal-dialog">
       <div class="modal-header">
@@ -1248,10 +1255,22 @@
       initPWA();
     });
 
+    /* FUNGSI KUNCI & BUKA KUNCI SCROLL BODY */
+    function lockBodyScroll() {
+      document.body.classList.add('modal-open');
+    }
+
+    function unlockBodyScroll() {
+      const openModals = document.querySelectorAll('.modal-overlay:not(.hidden)');
+      if (openModals.length === 0) {
+        document.body.classList.remove('modal-open');
+      }
+    }
+
     function initPWA() {
       const manifest = {
         name: "e-AzzuhaTRG Tracker",
-        short_name: "AzzuhaTRG",
+        short_name: "e-Azzuha",
         start_url: window.location.href,
         display: "standalone",
         background_color: "#0b3818",
@@ -1386,25 +1405,29 @@
       });
     }
 
+    /* PENGENDALI MODAL BERSERTA KUNCI SCROLL */
     function openTxModal() {
       document.getElementById('txModal').classList.remove('hidden');
+      lockBodyScroll();
     }
 
     function closeTxModal() {
       document.getElementById('txModal').classList.add('hidden');
+      unlockBodyScroll();
     }
 
     function openItemModal() {
       resetItemForm();
       document.getElementById('itemModal').classList.remove('hidden');
+      lockBodyScroll();
     }
 
     function closeItemModal() {
       document.getElementById('itemModal').classList.add('hidden');
       resetItemForm();
+      unlockBodyScroll();
     }
 
-    /* PENGENDALI MODAL PERINCIAN LOG TRANSAKSI */
     function openLogDetailModal(log) {
       const typeBadge = document.getElementById('dtlType');
       typeBadge.textContent = log.type;
@@ -1441,16 +1464,19 @@
       }
 
       document.getElementById('logDetailModal').classList.remove('hidden');
+      lockBodyScroll();
     }
 
     function closeLogDetailModal() {
       document.getElementById('logDetailModal').classList.add('hidden');
+      unlockBodyScroll();
     }
 
     function closeModalOnBackdrop(e, modalId) {
       if (e.target.id === modalId) {
         document.getElementById(modalId).classList.add('hidden');
         if (modalId === 'itemModal') resetItemForm();
+        unlockBodyScroll();
       }
     }
 
@@ -1717,6 +1743,7 @@
 
     function openScannerModal() {
       document.getElementById('scannerModal').classList.remove('hidden');
+      lockBodyScroll();
       if (!html5QrCodeScanner) {
         html5QrCodeScanner = new Html5Qrcode("scannerReader");
       }
@@ -1731,14 +1758,18 @@
     }
 
     function closeScannerModal() {
+      const modal = document.getElementById('scannerModal');
       if (html5QrCodeScanner && html5QrCodeScanner.isScanning) {
         html5QrCodeScanner.stop().then(() => {
-          document.getElementById('scannerModal').classList.add('hidden');
+          modal.classList.add('hidden');
+          unlockBodyScroll();
         }).catch(() => {
-          document.getElementById('scannerModal').classList.add('hidden');
+          modal.classList.add('hidden');
+          unlockBodyScroll();
         });
       } else {
-        document.getElementById('scannerModal').classList.add('hidden');
+        modal.classList.add('hidden');
+        unlockBodyScroll();
       }
     }
 
@@ -1802,7 +1833,6 @@
       }
     }
 
-    /* PAPARAN 10 LOG TERKINI BERSIH & KLIK UNTUK LIHAT PERINCIAN */
     function renderLogs() {
       const logs = (appState.data?.logs || []).slice(0, 10);
       const tbody = document.getElementById('logsTbody');
@@ -1971,6 +2001,7 @@
       document.getElementById('itemFormTitle').textContent = `Kemaskini: ${item.sku || item.itemId}`;
       document.getElementById('btnDeleteItem').classList.remove('hidden');
       document.getElementById('itemModal').classList.remove('hidden');
+      lockBodyScroll();
     }
 
     function resetItemForm() {
