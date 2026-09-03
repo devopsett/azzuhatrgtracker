@@ -6,14 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>e-AzzuhaTRG Tracker</title>
   
-  <!-- PWA Meta Tags -->
+  <!-- PWA Meta Tags (Warna Latar Startup #0b3818) -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="e-Azzuha">
   <meta name="theme-color" content="#0b3818">
 
-  <!-- Ikon Menggunakan Format PNG -->
+  <!-- Ikon Menggunakan Format PNG Rasmi -->
   <link rel="icon" type="image/png" href="Logo%20Azzuha.png">
   <link rel="apple-touch-icon" href="Logo%20Azzuha.png">
 
@@ -187,7 +187,7 @@
     .topbar-title h2 { font-size: 19px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
     .topbar-title p { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
 
-    /* Butang Ikon Segar Semula Minimalis */
+    /* Butang Ikon Segar Semula */
     .btn-icon-refresh {
       width: 40px;
       height: 40px;
@@ -422,7 +422,7 @@
       padding-bottom: 0;
     }
 
-    /* Baris Atas: Dropdown Nama Item Lebar Penuh */
+    /* Baris Atas: Dropdown Nama Item Lebar 100% Dikawal */
     .item-select-col {
       width: 100%;
       max-width: 100%;
@@ -799,23 +799,9 @@
 
       .toast { left: 14px; right: 14px; bottom: 74px; text-align: center; }
 
-      /* Kawalan Ketat Modal Popup di Telefon */
-      .modal-overlay {
-        padding: 12px;
-      }
-
-      .modal-dialog { 
-        width: 100% !important;
-        max-width: 100% !important; 
-        border-radius: 12px; 
-        margin: 0;
-      }
-      
-      .modal-body { 
-        max-height: calc(85vh - 60px); 
-        padding: 14px; 
-        overflow-x: hidden;
-      }
+      .modal-overlay { padding: 12px; }
+      .modal-dialog { width: 100% !important; max-width: 100% !important; border-radius: 12px; margin: 0; }
+      .modal-body { max-height: calc(85vh - 60px); padding: 14px; overflow-x: hidden; }
     }
   </style>
 </head>
@@ -831,7 +817,7 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- BUTANG BULAT TERAPUNG (FAB) - TAMBAH TRANSAKSI -->
+  <!-- BUTANG BULAT TERAPUNG (FAB) -->
   <button type="button" class="fab-btn" onclick="openTxModal()" title="Rekod Transaksi">
     <svg viewBox="0 0 24 24">
       <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -877,13 +863,13 @@
                 <input type="date" id="txDate" required>
               </div>
               <div>
-                <label>PIC</label>
+                <label>PIC Bertanggungjawab</label>
                 <select id="txPic" required></select>
               </div>
             </div>
 
             <div>
-              <label>Lokasi</label>
+              <label>Lokasi Transaksi</label>
               <select id="txLocation" required></select>
             </div>
 
@@ -899,8 +885,8 @@
             </div>
 
             <div>
-              <label>Catatan</label>
-              <textarea id="txNote" placeholder="Tujuan / No. Rujukan"></textarea>
+              <label>Catatan / Rujukan</label>
+              <textarea id="txNote" placeholder="Tujuan / No. Resit / Program"></textarea>
             </div>
 
             <button type="submit" id="btnSubmitTx" class="btn btn-primary" style="width: 100%;">Simpan Transaksi</button>
@@ -922,29 +908,18 @@
           <div class="form-group">
             <div class="input-row">
               <div>
-                <label>Item ID</label>
-                <input type="text" id="itId" placeholder="AZZ-001">
+                <label>SKU / Kod Item</label>
+                <input type="text" id="itSku" required placeholder="Contoh: AZZ-BEG-FSC24">
               </div>
-              <div>
-                <label>SKU</label>
-                <input type="text" id="itSku" placeholder="Kod Bar / SKU">
-              </div>
-            </div>
-
-            <div>
-              <label>Nama Item</label>
-              <input type="text" id="itName" required placeholder="Nama penuh item">
-            </div>
-
-            <div class="input-row">
               <div>
                 <label>Kategori</label>
                 <select id="itCategory" required></select>
               </div>
-              <div>
-                <label>Lokasi</label>
-                <select id="itLocation" required></select>
-              </div>
+            </div>
+
+            <div>
+              <label>Nama Penuh Item</label>
+              <input type="text" id="itName" required placeholder="Nama item seperti dalam tracker">
             </div>
 
             <div class="input-row">
@@ -953,14 +928,19 @@
                 <input type="number" id="itOpening" min="0" value="0" required>
               </div>
               <div>
-                <label>Paras Min</label>
+                <label>Paras Minima</label>
                 <input type="number" id="itMin" min="0" value="10" required>
               </div>
             </div>
 
             <div>
-              <label>Catatan</label>
-              <textarea id="itNote" placeholder="Maklumat tambahan"></textarea>
+              <label>Lokasi Simpanan</label>
+              <select id="itLocation" required></select>
+            </div>
+
+            <div>
+              <label>Catatan Tambahan</label>
+              <textarea id="itNote" placeholder="Catatan spesifikasi item"></textarea>
             </div>
 
             <div style="display: flex; gap: 8px; margin-top: 4px;">
@@ -979,7 +959,6 @@
     <!-- Desktop Sidebar -->
     <aside class="sidebar">
       <div class="brand-box">
-        <!-- Logo PNG Rasmi -->
         <img class="brand-logo-img" src="Logo%20Azzuha.png" alt="Logo Az Zuha">
         <div>
           <div class="brand-title">e-AzzuhaTRG</div>
@@ -1017,7 +996,6 @@
     <main>
       <div class="topbar">
         <div class="topbar-left">
-          <!-- Logo Header Mobile PNG -->
           <img class="topbar-mobile-logo" src="Logo%20Azzuha.png" alt="Logo Az Zuha">
           <div class="topbar-title">
             <h2 id="viewTitle">Dashboard Stok</h2>
@@ -1025,7 +1003,6 @@
           </div>
         </div>
         <div>
-          <!-- Butang Ikon Segar Semula Minimalis -->
           <button class="btn-icon-refresh" onclick="loadData()" title="Segar Semula">
             <svg viewBox="0 0 24 24">
               <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
@@ -1044,12 +1021,11 @@
             <button class="btn btn-secondary hidden" id="btnClearFilter" style="padding: 3px 8px; font-size: 11px; min-height: 26px;" onclick="resetDashboardFilter()">Reset Tapisan</button>
           </div>
           <div class="panel-body">
-            <!-- Desktop Table -->
             <div class="table-container desktop-table">
               <table>
                 <thead>
                   <tr>
-                    <th>Item ID</th>
+                    <th>SKU</th>
                     <th>Item</th>
                     <th>Kategori</th>
                     <th style="text-align: right;">Baki Semasa</th>
@@ -1061,13 +1037,12 @@
                 <tbody id="attentionTbody"></tbody>
               </table>
             </div>
-            <!-- Mobile Cards View -->
             <div class="mobile-cards" id="attentionMobileCards"></div>
           </div>
         </div>
       </section>
 
-      <!-- TAB 2: TRANSAKSI (LOG) -->
+      <!-- TAB 2: TRANSAKSI (LOG TERKINI) -->
       <section id="tab-transactions" class="hidden">
         <div class="panel">
           <div class="panel-header">
@@ -1079,6 +1054,7 @@
                 <thead>
                   <tr>
                     <th>Tarikh</th>
+                    <th>SKU</th>
                     <th>Item</th>
                     <th>Jenis</th>
                     <th style="text-align: right;">Qty</th>
@@ -1095,11 +1071,11 @@
         </div>
       </section>
 
-      <!-- TAB 3: DATA INDUK (KATALOG) -->
+      <!-- TAB 3: DATA INDUK (KATALOG ITEM) -->
       <section id="tab-items" class="hidden">
         <div class="panel">
           <div class="panel-header">
-            <h3>Senarai Semua Item</h3>
+            <h3>Senarai Data Induk Item</h3>
             <div style="display: flex; gap: 8px; align-items: center;">
               <input type="text" id="tableSearch" placeholder="Cari item..." style="width: 140px; min-height: 34px; padding: 4px 8px; font-size: 12px;" oninput="filterItemsTable()">
               <button class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; min-height: 34px;" onclick="openItemModal()">+ Tambah Item</button>
@@ -1110,7 +1086,7 @@
               <table>
                 <thead>
                   <tr>
-                    <th>ID</th>
+                    <th>SKU</th>
                     <th>Item</th>
                     <th>Kategori</th>
                     <th style="text-align: right;">Baki Semasa</th>
@@ -1349,7 +1325,7 @@
       } else {
         tbody.innerHTML = items.map(i => `
           <tr>
-            <td><strong>${i.itemId}</strong></td>
+            <td><strong>${i.sku || i.itemId}</strong></td>
             <td><strong>${i.item}</strong></td>
             <td>${i.category}</td>
             <td style="text-align:right; font-weight:800; color:var(--primary); font-size:13.5px;">${i.currentStock}</td>
@@ -1364,7 +1340,7 @@
             <div class="card-row-top">
               <div>
                 <div class="card-title">${i.item}</div>
-                <div class="card-sub">${i.itemId} • ${i.category}</div>
+                <div class="card-sub">${i.sku || i.itemId} • ${i.category}</div>
               </div>
               <span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span>
             </div>
@@ -1389,7 +1365,7 @@
       updateBatchOptions();
     }
 
-    /* BARIS ITEM: DROPDOWN ATAS (LEBAR PENUH), BADGE BAKI + STEPPER DI BAWAH */
+    /* Baris Item Transaksi: Dropdown Atas (Lebar Penuh), Badge Baki + Stepper di Bawah */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
@@ -1430,7 +1406,7 @@
     function updateRowHint(sel) {
       const row = sel.closest('.batch-item-row');
       const badge = row.querySelector('.item-baki-badge');
-      const item = (appState.data?.items || []).find(i => i.itemId === sel.value);
+      const item = (appState.data?.items || []).find(i => (i.sku || i.itemId) === sel.value);
       if (item && sel.value) {
         const isLow = item.currentStock <= item.minimum;
         badge.textContent = `Baki Semasa: ${item.currentStock} unit`;
@@ -1453,7 +1429,7 @@
     function updateBatchOptions() {
       const items = appState.data?.items || [];
       const opts = `<option value="">Pilih Item...</option>` + items.map(i => `
-        <option value="${i.itemId}">${i.itemId} — ${i.item}</option>
+        <option value="${i.sku || i.itemId}">${i.sku || i.itemId} — ${i.item}</option>
       `).join('');
       document.querySelectorAll('.batch-item').forEach(sel => {
         const cur = sel.value;
@@ -1514,8 +1490,8 @@
       const items = appState.data?.items || [];
       const clean = decodedText.trim().toLowerCase();
       const matched = items.find(i => 
-        (i.itemId && i.itemId.toLowerCase() === clean) ||
-        (i.sku && i.sku.toLowerCase() === clean)
+        (i.sku && i.sku.toLowerCase() === clean) ||
+        (i.itemId && i.itemId.toLowerCase() === clean)
       );
 
       if (!matched) {
@@ -1525,10 +1501,11 @@
       }
 
       playFeedback();
+      const targetCode = matched.sku || matched.itemId;
 
       let existing = null;
       document.querySelectorAll('.batch-item-row').forEach(row => {
-        if (row.querySelector('.batch-item').value === matched.itemId) existing = row;
+        if (row.querySelector('.batch-item').value === targetCode) existing = row;
       });
 
       if (existing) {
@@ -1538,11 +1515,11 @@
       } else {
         const emptyRow = Array.from(document.querySelectorAll('.batch-item-row')).find(r => !r.querySelector('.batch-item').value);
         if (emptyRow) {
-          emptyRow.querySelector('.batch-item').value = matched.itemId;
+          emptyRow.querySelector('.batch-item').value = targetCode;
           emptyRow.querySelector('.batch-qty').value = 1;
           updateRowHint(emptyRow.querySelector('.batch-item'));
         } else {
-          addBatchRow(matched.itemId, 1);
+          addBatchRow(targetCode, 1);
         }
         showScannerOverlay(`Ditambah: ${matched.item}`);
       }
@@ -1556,7 +1533,8 @@
       tbody.innerHTML = logs.map(l => `
         <tr>
           <td>${l.date}</td>
-          <td><strong>${l.item}</strong></td>
+          <td><strong>${l.sku || ''}</strong></td>
+          <td>${l.item}</td>
           <td><span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span></td>
           <td style="text-align:right; font-weight:800;">${l.qty}</td>
           <td style="text-align:right;">${l.balanceAfter}</td>
@@ -1570,7 +1548,7 @@
           <div class="card-row-top">
             <div>
               <div class="card-title">${l.item}</div>
-              <div class="card-sub">${l.date} • ${l.pic} • ${l.location}</div>
+              <div class="card-sub">${l.sku ? l.sku + ' • ' : ''}${l.date} • ${l.pic} • ${l.location}</div>
             </div>
             <span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span>
           </div>
@@ -1589,7 +1567,7 @@
 
       tbody.innerHTML = items.map(i => `
         <tr>
-          <td><strong>${i.itemId}</strong></td>
+          <td><strong>${i.sku || i.itemId}</strong></td>
           <td><strong>${i.item}</strong></td>
           <td>${i.category}</td>
           <td style="text-align:right; font-weight:800; color:var(--primary); font-size:13.5px;">${i.currentStock}</td>
@@ -1607,7 +1585,7 @@
           <div class="card-row-top">
             <div>
               <div class="card-title">${i.item}</div>
-              <div class="card-sub">${i.itemId} • SKU: ${i.sku || '-'} • ${i.category}</div>
+              <div class="card-sub">${i.sku || i.itemId} • ${i.category}</div>
             </div>
             <span class="badge badge-${i.status === 'OK' ? 'ok' : (i.status === 'HABIS' ? 'empty' : 'low')}">${i.status}</span>
           </div>
@@ -1686,18 +1664,17 @@
     }
 
     function populateEditItem(item) {
-      appState.selectedItem = item.itemId;
-      document.getElementById('itId').value = item.itemId;
-      document.getElementById('itId').readOnly = true;
-      document.getElementById('itSku').value = item.sku;
+      appState.selectedItem = item.sku || item.itemId;
+      document.getElementById('itSku').value = item.sku || item.itemId;
+      document.getElementById('itSku').readOnly = true;
       document.getElementById('itName').value = item.item;
       document.getElementById('itCategory').value = item.category;
       document.getElementById('itLocation').value = item.location;
       document.getElementById('itOpening').value = item.openingStock;
       document.getElementById('itMin').value = item.minimum;
-      document.getElementById('itNote').value = item.note;
+      document.getElementById('itNote').value = item.note || '';
 
-      document.getElementById('itemFormTitle').textContent = `Kemaskini: ${item.itemId}`;
+      document.getElementById('itemFormTitle').textContent = `Kemaskini: ${item.sku || item.itemId}`;
       document.getElementById('btnDeleteItem').classList.remove('hidden');
       document.getElementById('itemModal').classList.remove('hidden');
     }
@@ -1705,7 +1682,7 @@
     function resetItemForm() {
       appState.selectedItem = null;
       document.getElementById('itemForm').reset();
-      document.getElementById('itId').readOnly = false;
+      document.getElementById('itSku').readOnly = false;
       document.getElementById('itemFormTitle').textContent = 'Daftar Item Baharu';
       document.getElementById('btnDeleteItem').classList.add('hidden');
     }
@@ -1714,6 +1691,8 @@
       e.preventDefault();
       showLoading(true, 'Menyimpan item...');
 
+      const skuVal = document.getElementById('itSku').value.trim();
+
       fetch(SCRIPT_URL, {
         method: 'POST',
         redirect: 'follow',
@@ -1721,8 +1700,8 @@
         body: JSON.stringify({
           action: 'addOrUpdateItem',
           data: {
-            itemId: document.getElementById('itId').value,
-            sku: document.getElementById('itSku').value,
+            sku: skuVal,
+            itemId: skuVal,
             item: document.getElementById('itName').value,
             category: document.getElementById('itCategory').value,
             location: document.getElementById('itLocation').value,
@@ -1751,7 +1730,7 @@
 
     function deleteItemHandler() {
       if (!appState.selectedItem) return;
-      if (!confirm(`Padam item ${appState.selectedItem}?`)) return;
+      if (!confirm(`Adakah anda pasti mahu memadam item ${appState.selectedItem}?`)) return;
 
       showLoading(true, 'Memadam item...');
       fetch(SCRIPT_URL, {
