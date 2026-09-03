@@ -1080,7 +1080,7 @@
       <section id="tab-transactions" class="hidden">
         <div class="panel">
           <div class="panel-header">
-            <h3>Log Transaksi Terkini</h3>
+            <h3>10 Transaksi Terkini</h3>
           </div>
           <div class="panel-body">
             <div class="table-container desktop-table">
@@ -1688,40 +1688,46 @@
       }
     }
 
-    function renderLogs() {
-      const logs = appState.data.logs;
-      const tbody = document.getElementById('logsTbody');
-      const mCards = document.getElementById('logsMobileCards');
+    ffunction renderLogs() {
+  const logs = (appState.data.logs || []).slice(0, 10); // Hadkan 10 transaksi sahaja
+  const tbody = document.getElementById('logsTbody');
+  const mCards = document.getElementById('logsMobileCards');
 
-      tbody.innerHTML = logs.map(l => `
-        <tr>
-          <td>${l.date}</td>
-          <td><strong>${l.sku || ''}</strong></td>
-          <td>${l.item}</td>
-          <td><span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span></td>
-          <td style="text-align:right; font-weight:800;">${l.qty}</td>
-          <td style="text-align:right;">${l.balanceAfter}</td>
-          <td>${l.pic}</td>
-          <td>${l.location}</td>
-        </tr>
-      `).join('');
+  if (!logs.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:18px; color:#64748b;">Tiada rekod transaksi ditemui.</td></tr>`;
+    mCards.innerHTML = `<div style="text-align:center; padding:16px; color:#64748b; font-size:12px;">Tiada rekod transaksi ditemui.</div>`;
+    return;
+  }
 
-      mCards.innerHTML = logs.map(l => `
-        <div class="card-row">
-          <div class="card-row-top">
-            <div>
-              <div class="card-title">${l.item}</div>
-              <div class="card-sub">${l.sku ? l.sku + ' • ' : ''}${l.date} • ${l.pic} • ${l.location}</div>
-            </div>
-            <span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span>
-          </div>
-          <div class="card-row-bottom">
-            <span>Kuantiti: <strong>${l.qty} unit</strong></span>
-            <span style="color:#64748b;">Baki: ${l.balanceAfter}</span>
-          </div>
+  tbody.innerHTML = logs.map(l => `
+    <tr>
+      <td>${l.date}</td>
+      <td><strong>${l.sku || ''}</strong></td>
+      <td>${l.item}</td>
+      <td><span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span></td>
+      <td style="text-align:right; font-weight:800;">${l.qty}</td>
+      <td style="text-align:right;">${l.balanceAfter}</td>
+      <td>${l.pic}</td>
+      <td>${l.location}</td>
+    </tr>
+  `).join('');
+
+  mCards.innerHTML = logs.map(l => `
+    <div class="card-row">
+      <div class="card-row-top">
+        <div>
+          <div class="card-title">${l.item}</div>
+          <div class="card-sub">${l.sku ? l.sku + ' • ' : ''}${l.date} • ${l.pic} • ${l.location}</div>
         </div>
-      `).join('');
-    }
+        <span class="badge ${l.type === 'Masuk' ? 'badge-ok' : 'badge-empty'}">${l.type}</span>
+      </div>
+      <div class="card-row-bottom">
+        <span>Kuantiti: <strong>${l.qty} unit</strong></span>
+        <span style="color:#64748b;">Baki Selepas: ${l.balanceAfter}</span>
+      </div>
+    </div>
+  `).join('');
+}
 
     function renderItems() {
       const items = appState.data.items;
