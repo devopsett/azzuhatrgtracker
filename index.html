@@ -187,7 +187,7 @@
     .topbar-title h2 { font-size: 19px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
     .topbar-title p { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
 
-    /* Butang Ikon Segar Semula */
+    /* Butang Ikon Segar Semula Minimalis */
     .btn-icon-refresh {
       width: 40px;
       height: 40px;
@@ -422,7 +422,7 @@
       padding-bottom: 0;
     }
 
-    /* Baris Atas: Dropdown Nama Item Lebar 100% Dikawal */
+    /* Baris Atas: Dropdown Nama Item Lebar 100% */
     .item-select-col {
       width: 100%;
       max-width: 100%;
@@ -817,7 +817,7 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- BUTANG BULAT TERAPUNG (FAB) -->
+  <!-- BUTANG BULAT TERAPUNG (FAB) - TAMBAH TRANSAKSI -->
   <button type="button" class="fab-btn" onclick="openTxModal()" title="Rekod Transaksi">
     <svg viewBox="0 0 24 24">
       <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -1365,7 +1365,7 @@
       updateBatchOptions();
     }
 
-    /* Baris Item Transaksi: Dropdown Atas (Lebar Penuh), Badge Baki + Stepper di Bawah */
+    /* Baris Item Transaksi */
     function addBatchRow(prefillId = '', prefillQty = 1) {
       const container = document.getElementById('batchContainer');
       const div = document.createElement('div');
@@ -1730,7 +1730,7 @@
 
     function deleteItemHandler() {
       if (!appState.selectedItem) return;
-      if (!confirm(`Adakah anda pasti mahu memadam item ${appState.selectedItem}?`)) return;
+      if (!confirm(`Padam item ${appState.selectedItem}?`)) return;
 
       showLoading(true, 'Memadam item...');
       fetch(SCRIPT_URL, {
