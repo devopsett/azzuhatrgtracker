@@ -6,16 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>e-ASTRA</title>
   
-  <!-- PWA Meta Tags -->
+  <!-- PWA Manifest Statik (Wajib untuk kestabilan icon semua telefon) -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- PWA Meta Tags iOS & Android -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="e-ASTRA">
   <meta name="theme-color" content="#0b3818">
 
-  <!-- Ikon Rasmi Format PNG -->
+  <!-- Ikon Rasmi iOS & Browser -->
   <link rel="icon" type="image/png" href="Logo%20Azzuha.png">
   <link rel="apple-touch-icon" href="Logo%20Azzuha.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="Logo%20Azzuha.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="Logo%20Azzuha.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1423,7 +1428,7 @@
       document.getElementById('txDate').valueAsDate = new Date();
       addBatchRow();
       loadData();
-      initPWA();
+      initServiceWorker();
       setTimeout(checkAutoSystemUpdate, 2000);
     });
 
@@ -1431,14 +1436,20 @@
       checkAutoSystemUpdate();
     });
 
+    function initServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        const swCode = `self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));`;
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+      }
+    }
+
     /* ========================================================
-       100% AUTOMATIK: SEMAKAN GITHUB COMMIT & AUTOPARSE WHAT'S NEW
+       100% AUTOMATIK: SEMAKAN GITHUB COMMIT & WHAT'S NEW
        ======================================================== */
     async function checkAutoSystemUpdate() {
       try {
-        // Panggil GitHub API terus dengan no-cache
         const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/commits?per_page=1&_nocache=${Date.now()}`);
-        
         if (!res.ok) return;
 
         const commits = await res.json();
@@ -1448,19 +1459,16 @@
         const latestCommitSha = latestCommit.sha;
         const currentSavedSha = localStorage.getItem('eastra_current_commit_sha');
 
-        // Jika baru pertama kali sistem dipasang pada peranti ini
         if (!currentSavedSha) {
           localStorage.setItem('eastra_current_commit_sha', latestCommitSha);
           return;
         }
 
-        // Jika terdapat komit baharu dikesan di GitHub
         if (currentSavedSha !== latestCommitSha) {
           window.pendingCommitSha = latestCommitSha;
           
-          // Ambil mesej commit sebenar yang ditaip di GitHub
           let commitMsg = (latestCommit.commit && latestCommit.commit.message) ? latestCommit.commit.message.trim() : '';
-          commitMsg = commitMsg.split('\n')[0]; // Ambil baris pertama
+          commitMsg = commitMsg.split('\n')[0];
 
           let friendlyMsg = commitMsg;
           if (!friendlyMsg || friendlyMsg.toLowerCase().startsWith('update index.html')) {
@@ -1481,7 +1489,6 @@
       if (banner) banner.classList.add('hidden');
     }
 
-    /* Melakukan kemas kini dengan paparan logo beranimasi */
     async function applySystemUpdate() {
       dismissUpdateBanner();
       
@@ -1491,13 +1498,11 @@
         localStorage.setItem('eastra_current_commit_sha', window.pendingCommitSha);
       }
 
-      // Kosongkan simpanan cache pelayar lama
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
       }
 
-      // Beri jeda 1.2 saat supaya animasi logo kemas kini sempat dilihat
       setTimeout(() => {
         window.location.reload(true);
       }, 1200);
@@ -1514,36 +1519,6 @@
       const openModals = document.querySelectorAll('.modal-overlay:not(.hidden)');
       if (openModals.length === 0) {
         document.body.classList.remove('modal-open');
-      }
-    }
-
-    function initPWA() {
-      const manifest = {
-        name: "e-ASTRA",
-        short_name: "e-ASTRA",
-        start_url: window.location.href,
-        display: "standalone",
-        background_color: "#0b3818",
-        theme_color: "#0b3818",
-        icons: [
-          {
-            src: "Logo%20Azzuha.png",
-            sizes: "192x192 512x512",
-            type: "image/png"
-          }
-        ]
-      };
-      
-      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-      let manifestLink = document.createElement('link');
-      manifestLink.rel = 'manifest';
-      manifestLink.href = URL.createObjectURL(blob);
-      document.head.appendChild(manifestLink);
-
-      if ('serviceWorker' in navigator) {
-        const swCode = `self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));`;
-        const swBlob = new Blob([swCode], { type: 'application/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
       }
     }
 
@@ -2090,10 +2065,7 @@
     function onScanSuccess(decodedText) {
       const now = Date.now();
       
-      // Jeda bertenang 2.0 saat untuk sebarang imbasan
       if (isProcessingScan || (now - lastScanTime < 2000)) return;
-
-      // Jeda 3.5 saat untuk item sama yang diimbas berulang kali
       if (decodedText === lastScanCode && (now - lastScanTime < 3500)) return;
 
       isProcessingScan = true;
