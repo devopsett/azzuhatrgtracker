@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>e-ASTRA</title>
   
-  <!-- PWA Manifest Statik (Wajib untuk kestabilan icon semua telefon) -->
+  <!-- PWA Manifest Statik -->
   <link rel="manifest" href="manifest.json">
 
   <!-- PWA Meta Tags iOS & Android -->
@@ -80,7 +80,6 @@
       touch-action: none !important;
     }
 
-    /* Banner Notifikasi Auto-Update Moden */
     .update-banner {
       position: fixed;
       top: 16px;
@@ -190,7 +189,6 @@
       transform: scale(0.96);
     }
 
-    /* Loading Overlay & Animasi Logo Mengemaskini */
     .loading-overlay {
       position: fixed;
       inset: 0;
@@ -255,7 +253,6 @@
       overflow-x: hidden;
     }
 
-    /* Sidebar Desktop */
     .sidebar {
       background: linear-gradient(180deg, #0b3818, #051a0b);
       color: white;
@@ -328,7 +325,6 @@
       padding-top: 16px;
     }
 
-    /* Bahagian Utama */
     main { padding: 26px 32px; overflow-y: auto; width: 100%; min-width: 0; }
     
     .topbar {
@@ -970,7 +966,7 @@
 </head>
 <body>
 
-  <!-- BANNER NOTIFIKASI KEMAS KINI VERSI (DILENGKAPI BUTIRAN WHAT'S NEW) -->
+  <!-- BANNER NOTIFIKASI KEMAS KINI VERSI -->
   <div id="updateBanner" class="update-banner hidden">
     <div class="update-content">
       <div class="update-header-row">
@@ -993,7 +989,7 @@
     </div>
   </div>
 
-  <!-- LOADING OVERLAY (DILENGKAPI ANIMASI LOGO MENGEMASKINI) -->
+  <!-- LOADING OVERLAY -->
   <div id="loading" class="loading-overlay hidden">
     <div style="text-align: center; padding: 24px;">
       <div id="loadingStandardSpinner">
@@ -1306,7 +1302,7 @@
         </div>
       </section>
 
-      <!-- TAB 2: TRANSAKSI (LOG 10 TRANSAKSI TERKINI) -->
+      <!-- TAB 2: TRANSAKSI -->
       <section id="tab-transactions" class="hidden">
         <div class="panel">
           <div class="panel-header">
@@ -1338,7 +1334,7 @@
         </div>
       </section>
 
-      <!-- TAB 3: DATA INDUK (KATALOG ITEM) -->
+      <!-- TAB 3: DATA INDUK -->
       <section id="tab-items" class="hidden">
         <div class="panel">
           <div class="panel-header">
@@ -1390,8 +1386,6 @@
 
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
-    
-    // REPO GITHUB DISAHKAN TEPAT
     const GITHUB_REPO = 'devopsett/e-astratrg'; 
 
     let appState = {
@@ -1407,8 +1401,6 @@
     let lastScanTime = 0;
     let isProcessingScan = false;
     let toastTimer = null;
-
-    // Singleton AudioContext
     let globalAudioCtx = null;
 
     function getAudioContext() {
@@ -1428,7 +1420,6 @@
       document.getElementById('txDate').valueAsDate = new Date();
       addBatchRow();
       loadData();
-      initServiceWorker();
       setTimeout(checkAutoSystemUpdate, 2000);
     });
 
@@ -1436,17 +1427,6 @@
       checkAutoSystemUpdate();
     });
 
-    function initServiceWorker() {
-      if ('serviceWorker' in navigator) {
-        const swCode = `self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));`;
-        const swBlob = new Blob([swCode], { type: 'application/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
-      }
-    }
-
-    /* ========================================================
-       100% AUTOMATIK: SEMAKAN GITHUB COMMIT & WHAT'S NEW
-       ======================================================== */
     async function checkAutoSystemUpdate() {
       try {
         const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/commits?per_page=1&_nocache=${Date.now()}`);
@@ -1491,7 +1471,6 @@
 
     async function applySystemUpdate() {
       dismissUpdateBanner();
-      
       showLoading(true, 'Mengemaskini aplikasi e-ASTRA...', true, 'Memuat turun fail sistem terkini...');
 
       if (window.pendingCommitSha) {
@@ -1508,9 +1487,6 @@
       }, 1200);
     }
 
-    /* ========================================================
-       KUNCI & BUKA KUNCI SCROLL BADAN
-       ======================================================== */
     function lockBodyScroll() {
       document.body.classList.add('modal-open');
     }
@@ -1994,7 +1970,6 @@
       });
     }
 
-    /* PENGIMBAS DENGAN KADAR BINGKAI TENANG (FPS: 3 & QRBOX: 160) */
     function openScannerModal() {
       getAudioContext();
 
@@ -2032,7 +2007,6 @@
       }
     }
 
-    /* AUDIO FEEDBACK KONSISTEN MENGGUNAKAN SINGLETON AUDIOCONTEXT */
     function playFeedback() {
       try {
         const ctx = getAudioContext();
@@ -2061,7 +2035,6 @@
       }
     }
 
-    /* PENGENDALI IMBASAN BERSERTA JEDA BERTENANG (COOLDOWN) */
     function onScanSuccess(decodedText) {
       const now = Date.now();
       
