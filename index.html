@@ -75,64 +75,171 @@
       touch-action: none !important;
     }
 
-    /* Banner Notifikasi Auto-Update */
+    /* Banner Notifikasi Auto-Update Moden */
     .update-banner {
       position: fixed;
       top: 16px;
       left: 50%;
       transform: translateX(-50%);
       width: calc(100% - 32px);
-      max-width: 440px;
+      max-width: 460px;
       background: #0b3818;
       color: #ffffff;
-      padding: 12px 16px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      padding: 14px 18px;
+      border-radius: 14px;
+      box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.45);
       z-index: 99999;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      animation: slideDown 0.3s ease-out;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes slideDown {
-      from { transform: translate(-50%, -60px); opacity: 0; }
+      from { transform: translate(-50%, -70px); opacity: 0; }
       to { transform: translate(-50%, 0); opacity: 1; }
     }
 
     .update-content {
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .update-header-row {
+      display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
     }
 
-    .update-text {
-      display: flex;
-      flex-direction: column;
-      font-size: 12px;
-    }
-
-    .update-text strong {
-      font-size: 13px;
+    .update-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 800;
       color: #a7f3d0;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
     }
 
-    .btn-update {
+    .update-badge-dot {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    .update-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 2px;
+    }
+
+    .update-details-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #ecfdf5;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      max-height: 75px;
+      overflow-y: auto;
+    }
+
+    .update-action-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .btn-update-later {
+      background: transparent;
+      color: #a7f3d0;
+      border: none;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 12px;
+      cursor: pointer;
+    }
+
+    .btn-update-confirm {
       background: #ffffff;
       color: #0b3818;
       border: none;
       font-family: inherit;
       font-size: 12px;
       font-weight: 800;
-      padding: 8px 14px;
+      padding: 8px 16px;
       border-radius: 8px;
       cursor: pointer;
-      white-space: nowrap;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.15s ease;
     }
 
-    .btn-update:active {
-      transform: scale(0.95);
+    .btn-update-confirm:active {
+      transform: scale(0.96);
     }
+
+    /* Loading Overlay & Animasi Logo Mengemaskini */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      display: grid;
+      place-items: center;
+      z-index: 999999 !important;
+    }
+
+    .update-anim-container {
+      position: relative;
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 18px;
+      display: grid;
+      place-items: center;
+    }
+
+    .update-anim-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      object-fit: cover;
+      box-shadow: 0 8px 20px rgba(11, 56, 24, 0.25);
+      animation: pulseLogo 1.6s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    .update-spinner-ring {
+      position: absolute;
+      inset: 0;
+      border: 3px solid rgba(11, 56, 24, 0.15);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.9s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+      z-index: 1;
+    }
+
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 4px 6px rgba(11, 56, 24, 0.2)); }
+      50% { transform: scale(1.08); filter: drop-shadow(0 10px 15px rgba(11, 56, 24, 0.35)); }
+    }
+
+    .spinner {
+      width: 38px;
+      height: 38px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .app-layout {
       display: grid;
@@ -660,27 +767,6 @@
       white-space: pre-wrap;
     }
 
-    .loading-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(4px);
-      display: grid;
-      place-items: center;
-      z-index: 9999 !important;
-    }
-
-    .spinner {
-      width: 38px;
-      height: 38px;
-      border: 3px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -879,22 +965,43 @@
 </head>
 <body>
 
-  <!-- BANNER NOTIFIKASI KEMAS KINI VERSI (IN-APP PROMPT) -->
+  <!-- BANNER NOTIFIKASI KEMAS KINI VERSI (DILENGKAPI BUTIRAN WHAT'S NEW) -->
   <div id="updateBanner" class="update-banner hidden">
     <div class="update-content">
-      <div class="update-text">
-        <strong>Versi Baharu Tersedia!</strong>
-        <span>Kemas kini terkini untuk e-ASTRA sedia dipasang.</span>
+      <div class="update-header-row">
+        <div class="update-badge">
+          <span class="update-badge-dot"></span>
+          <span>Kemas Kini Tersedia</span>
+        </div>
       </div>
-      <button type="button" class="btn-update" onclick="applySystemUpdate()">Kemas Kini</button>
+      <div>
+        <div class="update-title">Versi Baharu e-ASTRA Sedia Dipasang</div>
+      </div>
+      <div class="update-details-box">
+        <strong style="color: #6ee7b7; display: block; margin-bottom: 2px;">Apa yang baharu:</strong>
+        <span id="updateChangelogText">Penambahbaikan sistem dan kestabilan aplikasi.</span>
+      </div>
+      <div class="update-action-row">
+        <button type="button" class="btn-update-later" onclick="dismissUpdateBanner()">Nanti</button>
+        <button type="button" class="btn-update-confirm" onclick="applySystemUpdate()">Kemas Kini Sekarang</button>
+      </div>
     </div>
   </div>
 
-  <!-- Loading Overlay -->
+  <!-- LOADING OVERLAY (DILENGKAPI ANIMASI LOGO MENGEMASKINI) -->
   <div id="loading" class="loading-overlay hidden">
-    <div style="text-align: center;">
-      <div class="spinner" style="margin: 0 auto 10px;"></div>
-      <p id="loadingMsg" style="font-size: 12px; font-weight: 600; color: var(--primary-dark);">Memuatkan data...</p>
+    <div style="text-align: center; padding: 24px;">
+      <div id="loadingStandardSpinner">
+        <div class="spinner" style="margin: 0 auto 12px;"></div>
+      </div>
+      <div id="loadingUpdateAnim" class="hidden">
+        <div class="update-anim-container">
+          <div class="update-spinner-ring"></div>
+          <img class="update-anim-logo" src="Logo%20Azzuha.png" alt="e-ASTRA">
+        </div>
+      </div>
+      <p id="loadingMsg" style="font-size: 13.5px; font-weight: 700; color: var(--primary-dark); letter-spacing: -0.2px;">Memuatkan data...</p>
+      <p id="loadingSubMsg" style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;" class="hidden"></p>
     </div>
   </div>
 
@@ -1325,7 +1432,7 @@
     });
 
     /* ========================================================
-       SEMAKAN VERSI AUTOMATIK MELALUI GITHUB COMMIT
+       SEMAKAN VERSI AUTOMATIK MELALUI GITHUB COMMIT + CHANGELOG
        ======================================================== */
     async function checkAutoSystemUpdate() {
       try {
@@ -1335,32 +1442,64 @@
         const commits = await res.json();
         if (!commits || !commits.length) return;
 
-        const latestCommitSha = commits[0].sha;
+        const latestCommit = commits[0];
+        const latestCommitSha = latestCommit.sha;
         const currentSavedSha = localStorage.getItem('eastra_current_commit_sha');
 
+        // Jika kali pertama pengguna buka sistem, simpan SHA terkini
         if (!currentSavedSha) {
           localStorage.setItem('eastra_current_commit_sha', latestCommitSha);
           return;
         }
 
+        // Jika terdapat commit baharu di GitHub
         if (currentSavedSha !== latestCommitSha) {
           window.pendingCommitSha = latestCommitSha;
+          
+          // Dapatkan mesej kemas kini (commit message) baris pertama
+          let commitMsg = (latestCommit.commit && latestCommit.commit.message) ? latestCommit.commit.message.trim() : '';
+          commitMsg = commitMsg.split('\n')[0]; // Ambil baris pertama sahaja
+          
+          // Tukar mesej teknikal ringkas kepada ayat mesra pengguna
+          let friendlyMsg = commitMsg;
+          if (!friendlyMsg || friendlyMsg.toLowerCase().startsWith('update index.html')) {
+            friendlyMsg = 'Penambahbaikan ciri imbasan kod dan kestabilan sistem.';
+          }
+
+          document.getElementById('updateChangelogText').textContent = friendlyMsg;
+          
           const banner = document.getElementById('updateBanner');
           if (banner) banner.classList.remove('hidden');
         }
       } catch (e) {}
     }
 
+    function dismissUpdateBanner() {
+      const banner = document.getElementById('updateBanner');
+      if (banner) banner.classList.add('hidden');
+    }
+
+    /* Melakukan kemas kini dengan paparan logo beranimasi */
     async function applySystemUpdate() {
-      showLoading(true, 'Mengemas kini ke versi terkini...');
+      dismissUpdateBanner();
+      
+      // Paparkan skrin memuatkan khas beranimasi logo
+      showLoading(true, 'Mengemaskini aplikasi e-ASTRA...', true, 'Memuat turun fail sistem terkini...');
+
       if (window.pendingCommitSha) {
         localStorage.setItem('eastra_current_commit_sha', window.pendingCommitSha);
       }
+
+      // Kosongkan simpanan cache lama
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
       }
-      window.location.reload(true);
+
+      // Berikan jeda 1.2 saat supaya animasi logo kemas kini sempat dilihat dengan selesa
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 1200);
     }
 
     /* ========================================================
@@ -1632,9 +1771,35 @@
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
-    function showLoading(show, msg = 'Memuatkan data...') {
+    function showLoading(show, msg = 'Memuatkan data...', isUpdateMode = false, subMsg = '') {
+      const overlay = document.getElementById('loading');
+      if (!show) {
+        overlay.classList.add('hidden');
+        return;
+      }
+
       document.getElementById('loadingMsg').textContent = msg;
-      document.getElementById('loading').classList.toggle('hidden', !show);
+      
+      const standardSpinner = document.getElementById('loadingStandardSpinner');
+      const updateAnim = document.getElementById('loadingUpdateAnim');
+      const subMsgEl = document.getElementById('loadingSubMsg');
+
+      if (isUpdateMode) {
+        standardSpinner.classList.add('hidden');
+        updateAnim.classList.remove('hidden');
+        if (subMsg) {
+          subMsgEl.textContent = subMsg;
+          subMsgEl.classList.remove('hidden');
+        } else {
+          subMsgEl.classList.add('hidden');
+        }
+      } else {
+        standardSpinner.classList.remove('hidden');
+        updateAnim.classList.add('hidden');
+        subMsgEl.classList.add('hidden');
+      }
+
+      overlay.classList.remove('hidden');
     }
 
     function showToast(msg, isError = false) {
@@ -1855,7 +2020,6 @@
 
     /* PENGIMBAS DENGAN KADAR BINGKAI TENANG (FPS: 3 & QRBOX: 160) */
     function openScannerModal() {
-      // Aktifkan audio terlebih dahulu atas interaksi klik pengguna
       getAudioContext();
 
       document.getElementById('scannerModal').classList.remove('hidden');
