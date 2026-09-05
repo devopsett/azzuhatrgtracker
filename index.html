@@ -1403,7 +1403,7 @@
     let isProcessingScan = false;
     let toastTimer = null;
 
-    // Singleton AudioContext untuk menjamin kestabilan bunyi imbasan
+    // Singleton AudioContext
     let globalAudioCtx = null;
 
     function getAudioContext() {
@@ -1424,7 +1424,7 @@
       addBatchRow();
       loadData();
       initPWA();
-      setTimeout(checkAutoSystemUpdate, 2500);
+      setTimeout(checkAutoSystemUpdate, 2000);
     });
 
     window.addEventListener('focus', () => {
@@ -1432,41 +1432,43 @@
     });
 
     /* ========================================================
-       SEMAKAN VERSI AUTOMATIK MELALUI GITHUB COMMIT + CHANGELOG
+       100% AUTOMATIK: SEMAKAN GITHUB COMMIT & AUTOPARSE WHAT'S NEW
        ======================================================== */
     async function checkAutoSystemUpdate() {
       try {
-        const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/commits?per_page=1&t=${Date.now()}`);
+        // Panggil GitHub API terus dengan no-cache
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/commits?per_page=1&_nocache=${Date.now()}`);
+        
         if (!res.ok) return;
 
         const commits = await res.json();
-        if (!commits || !commits.length) return;
+        if (!Array.isArray(commits) || !commits.length) return;
 
         const latestCommit = commits[0];
         const latestCommitSha = latestCommit.sha;
         const currentSavedSha = localStorage.getItem('eastra_current_commit_sha');
 
-        // Jika kali pertama pengguna buka sistem, simpan SHA terkini
+        // Jika baru pertama kali sistem dipasang pada peranti ini
         if (!currentSavedSha) {
           localStorage.setItem('eastra_current_commit_sha', latestCommitSha);
           return;
         }
 
-        // Jika terdapat commit baharu di GitHub
+        // Jika terdapat komit baharu dikesan di GitHub
         if (currentSavedSha !== latestCommitSha) {
           window.pendingCommitSha = latestCommitSha;
           
-          // Dapatkan mesej kemas kini (commit message) baris pertama
+          // Ambil mesej commit sebenar yang ditaip di GitHub
           let commitMsg = (latestCommit.commit && latestCommit.commit.message) ? latestCommit.commit.message.trim() : '';
-          commitMsg = commitMsg.split('\n')[0]; // Ambil baris pertama sahaja
-          
-          // Tukar mesej teknikal ringkas kepada ayat mesra pengguna
+          commitMsg = commitMsg.split('\n')[0]; // Ambil baris pertama
+
           let friendlyMsg = commitMsg;
           if (!friendlyMsg || friendlyMsg.toLowerCase().startsWith('update index.html')) {
-            friendlyMsg = 'Penambahbaikan ciri imbasan kod dan kestabilan sistem.';
+            friendlyMsg = 'Penambahbaikan ciri perisian dan kestabilan sistem inventori.';
           }
 
-          document.getElementById('updateChangelogText').textContent = friendlyMsg;
+          const changelogEl = document.getElementById('updateChangelogText');
+          if (changelogEl) changelogEl.textContent = friendlyMsg;
           
           const banner = document.getElementById('updateBanner');
           if (banner) banner.classList.remove('hidden');
@@ -1483,20 +1485,19 @@
     async function applySystemUpdate() {
       dismissUpdateBanner();
       
-      // Paparkan skrin memuatkan khas beranimasi logo
       showLoading(true, 'Mengemaskini aplikasi e-ASTRA...', true, 'Memuat turun fail sistem terkini...');
 
       if (window.pendingCommitSha) {
         localStorage.setItem('eastra_current_commit_sha', window.pendingCommitSha);
       }
 
-      // Kosongkan simpanan cache lama
+      // Kosongkan simpanan cache pelayar lama
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
       }
 
-      // Berikan jeda 1.2 saat supaya animasi logo kemas kini sempat dilihat dengan selesa
+      // Beri jeda 1.2 saat supaya animasi logo kemas kini sempat dilihat
       setTimeout(() => {
         window.location.reload(true);
       }, 1200);
