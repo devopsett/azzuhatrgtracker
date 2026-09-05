@@ -1839,7 +1839,7 @@
       });
     }
 
-    /* PENGIMBAS DENGAN KADAR BINGKAI (FPS: 5) */
+    /* 1. TETAPAN KAMERA LEBIH TENANG (FPS: 3 & QRBOX: 160) */
     function openScannerModal() {
       document.getElementById('scannerModal').classList.remove('hidden');
       lockBodyScroll();
@@ -1849,14 +1849,73 @@
       html5QrCodeScanner.start(
         { facingMode: "environment" },
         { 
-          fps: 5,
-          qrbox: 200 
+          fps: 3,         // Hanya 3 analisis sesaat supaya tidak terlalu pantas
+          qrbox: { width: 160, height: 160 } // Sasaran lebih tepat, elak terbaca kod lain
         },
         onScanSuccess
       ).catch(err => {
         showToast('Kamera gagal dimulakan: ' + (err.message || err), true);
         closeScannerModal();
       });
+    }
+
+    /* 2. KAWALAN JEDA IMBASAN (COOLDOWN LEBIH STABIL) */
+    function onScanSuccess(decodedText) {
+      const now = Date.now();
+      
+      // Sekat jika sedang proses atau belum cukup 2.0 saat dari imbasan terakhir
+      if (isProcessingScan || (now - lastScanTime < 2000)) return;
+
+      // Sekat jika kod item yang sama diimbas dalam tempoh 3.5 saat
+      if (decodedText === lastScanCode && (now - lastScanTime < 3500)) return;
+
+      isProcessingScan = true;
+      lastScanCode = decodedText;
+      lastScanTime = now;
+
+      const items = appState.data?.items || [];
+      const clean = decodedText.trim().toLowerCase();
+      const matched = items.find(i => 
+        (i.sku && i.sku.toLowerCase() === clean) ||
+        (i.itemId && i.itemId.toLowerCase() === clean)
+      );
+
+      if (!matched) {
+        playFeedback();
+        showScannerOverlay('Item tidak dijumpai: ' + decodedText, true);
+        setTimeout(() => { isProcessingScan = false; }, 1500);
+        return;
+      }
+
+      playFeedback();
+      const targetCode = matched.sku || matched.itemId;
+
+      let existing = null;
+      document.querySelectorAll('.batch-item-row').forEach(row => {
+        if (row.querySelector('.batch-item').value === targetCode) existing = row;
+      });
+
+      if (existing) {
+        const q = existing.querySelector('.batch-qty');
+        q.value = (Number(q.value) || 0) + 1;
+        updateRowHint(q);
+        showScannerOverlay(`${matched.item} (+1) -> ${q.value} unit`);
+      } else {
+        const emptyRow = Array.from(document.querySelectorAll('.batch-item-row')).find(r => !r.querySelector('.batch-item').value);
+        if (emptyRow) {
+          emptyRow.querySelector('.batch-item').value = targetCode;
+          emptyRow.querySelector('.batch-qty').value = 1;
+          updateRowHint(emptyRow.querySelector('.batch-item'));
+        } else {
+          addBatchRow(targetCode, 1);
+        }
+        showScannerOverlay(`Ditambah: ${matched.item}`);
+      }
+
+      // Lepaskan kunci imbasan selepas 2.0 saat
+      setTimeout(() => {
+        isProcessingScan = false;
+      }, 2000);
     }
 
     function closeScannerModal() {
