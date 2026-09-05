@@ -4,13 +4,13 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>e-AzzuhaTRG Tracker</title>
+  <title>e-ASTRA — Sistem Stok Azzuha TRG</title>
   
   <!-- PWA Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="e-Azzuha">
+  <meta name="apple-mobile-web-app-title" content="e-ASTRA">
   <meta name="theme-color" content="#0b3818">
 
   <!-- Ikon Rasmi Format PNG -->
@@ -69,7 +69,6 @@
       overflow-x: hidden;
     }
 
-    /* Kunci scroll body bila modal aktif */
     body.modal-open {
       overflow: hidden !important;
       height: 100vh !important;
@@ -118,7 +117,7 @@
       flex-shrink: 0;
     }
 
-    .brand-title { font-size: 15px; font-weight: 800; line-height: 1.2; letter-spacing: -0.2px; }
+    .brand-title { font-size: 16px; font-weight: 800; line-height: 1.2; letter-spacing: -0.2px; }
     .brand-sub { font-size: 11px; color: #a7f3d0; font-weight: 500; }
 
     .nav-list { display: grid; gap: 6px; list-style: none; }
@@ -158,7 +157,7 @@
       padding-top: 16px;
     }
 
-    /* Main Area */
+    /* Bahagian Utama */
     main { padding: 26px 32px; overflow-y: auto; width: 100%; min-width: 0; }
     
     .topbar {
@@ -366,7 +365,6 @@
 
     textarea { resize: vertical; min-height: 70px; }
 
-    /* Switcher Jenis Transaksi */
     .type-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr 1.3fr;
@@ -578,13 +576,7 @@
     .badge-low { background: var(--status-low-bg); color: var(--status-low-text); }
     .badge-empty { background: var(--status-empty-bg); color: var(--status-empty-text); }
 
-    /* Modal Perincian Transaksi */
-    .detail-item-group {
-      display: grid;
-      gap: 12px;
-      padding: 4px 0;
-    }
-
+    .detail-item-group { display: grid; gap: 12px; padding: 4px 0; }
     .detail-item {
       display: flex;
       justify-content: space-between;
@@ -594,27 +586,9 @@
       border-radius: 8px;
       border: 1px solid var(--border);
     }
-
-    .detail-item.column {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-    }
-
-    .detail-label {
-      font-size: 11.5px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .detail-value {
-      font-size: 13.5px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
+    .detail-item.column { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .detail-label { font-size: 11.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    .detail-value { font-size: 13.5px; font-weight: 700; color: var(--text); }
     .detail-note-box {
       width: 100%;
       padding: 10px 12px;
@@ -856,7 +830,7 @@
 
   <div id="toast" class="toast">Notifikasi</div>
 
-  <!-- BUTANG BULAT TERAPUNG (FAB) - REKOD TRANSAKSI -->
+  <!-- BUTANG BULAT TERAPUNG (FAB) -->
   <button type="button" class="fab-btn" onclick="openTxModal()" title="Rekod Transaksi">
     <svg viewBox="0 0 24 24">
       <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -881,7 +855,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: POPUP BORANG TRANSAKSI STOK (TERMASUK MOD PELARASAN) -->
+  <!-- MODAL 2: POPUP BORANG TRANSAKSI STOK -->
   <div id="txModal" class="modal-overlay hidden" onclick="closeModalOnBackdrop(event, 'txModal')">
     <div class="modal-dialog">
       <div class="modal-header">
@@ -1056,10 +1030,10 @@
   <div class="app-layout">
     <aside class="sidebar">
       <div class="brand-box">
-        <img class="brand-logo-img" src="Logo%20Azzuha.png" alt="Logo Az Zuha">
+        <img class="brand-logo-img" src="Logo%20Azzuha.png" alt="Logo e-ASTRA">
         <div>
-          <div class="brand-title">e-AzzuhaTRG</div>
-          <div class="brand-sub">Sistem Pengurusan Stok</div>
+          <div class="brand-title">e-ASTRA</div>
+          <div class="brand-sub">Sistem Stok TRG</div>
         </div>
       </div>
       
@@ -1085,17 +1059,17 @@
       </ul>
 
       <div class="sidebar-footer">
-        © 2026 Azzuha Group TRG
+        © 2026 e-ASTRA TRG
       </div>
     </aside>
 
     <main>
       <div class="topbar">
         <div class="topbar-left">
-          <img class="topbar-mobile-logo" src="Logo%20Azzuha.png" alt="Logo Az Zuha">
+          <img class="topbar-mobile-logo" src="Logo%20Azzuha.png" alt="Logo e-ASTRA">
           <div class="topbar-title">
-            <h2 id="viewTitle">Dashboard Stok</h2>
-            <p id="viewSubtitle">Ringkasan pergerakan inventori.</p>
+            <h2 id="viewTitle">Dashboard e-ASTRA</h2>
+            <p id="viewSubtitle">Sistem Pengurusan Stok Cawangan Terengganu.</p>
           </div>
         </div>
         <div class="topbar-actions">
@@ -1246,6 +1220,7 @@
     let html5QrCodeScanner = null;
     let lastScanCode = '';
     let lastScanTime = 0;
+    let isProcessingScan = false;
     let toastTimer = null;
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -1255,7 +1230,6 @@
       initPWA();
     });
 
-    /* FUNGSI KUNCI & BUKA KUNCI SCROLL BODY */
     function lockBodyScroll() {
       document.body.classList.add('modal-open');
     }
@@ -1269,8 +1243,8 @@
 
     function initPWA() {
       const manifest = {
-        name: "e-AzzuhaTRG Tracker",
-        short_name: "e-Azzuha",
+        name: "e-ASTRA — Azzuha Stock Tracking",
+        short_name: "e-ASTRA",
         start_url: window.location.href,
         display: "standalone",
         background_color: "#0b3818",
@@ -1316,7 +1290,7 @@
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(14);
         doc.setTextColor(11, 56, 24);
-        doc.text('LABEL KOD QR PRODUK - AZ ZUHA TRAVEL & TOURS TRG', pageWidth / 2, 14, { align: 'center' });
+        doc.text('LABEL KOD QR PRODUK - e-ASTRA AZ ZUHA TRG', pageWidth / 2, 14, { align: 'center' });
         
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(9);
@@ -1379,7 +1353,7 @@
           doc.text(itm.category || 'Item', textX, y + cardHeight - 3);
         }
 
-        doc.save(`Azzuha_QR_Labels_${new Date().toISOString().slice(0,10)}.pdf`);
+        doc.save(`eASTRA_QR_Labels_${new Date().toISOString().slice(0,10)}.pdf`);
         showLoading(false);
         showToast('PDF Kod QR 1 muka surat berjaya dimuat turun!');
       } catch (err) {
@@ -1405,7 +1379,6 @@
       });
     }
 
-    /* PENGENDALI MODAL BERSERTA KUNCI SCROLL */
     function openTxModal() {
       document.getElementById('txModal').classList.remove('hidden');
       lockBodyScroll();
@@ -1513,8 +1486,8 @@
       document.getElementById('tab-items').classList.toggle('hidden', tab !== 'items');
 
       const titles = {
-        dashboard: ['Dashboard Stok', 'Ringkasan pergerakan inventori.'],
-        transactions: ['Transaksi Stok', 'Rekod log keluar dan masuk.'],
+        dashboard: ['Dashboard e-ASTRA', 'Sistem Pengurusan Stok Cawangan Terengganu.'],
+        transactions: ['Transaksi Stok', 'Rekod log keluar, masuk dan pelarasan.'],
         items: ['Data Induk Item', 'Katalog pengurusan item stok.']
       };
       document.getElementById('viewTitle').textContent = titles[tab][0];
@@ -1749,7 +1722,10 @@
       }
       html5QrCodeScanner.start(
         { facingMode: "environment" },
-        { fps: 12, qrbox: 200 },
+        { 
+          fps: 5,
+          qrbox: 200 
+        },
         onScanSuccess
       ).catch(err => {
         showToast('Kamera gagal dimulakan: ' + (err.message || err), true);
@@ -1790,7 +1766,11 @@
 
     function onScanSuccess(decodedText) {
       const now = Date.now();
-      if (decodedText === lastScanCode && now - lastScanTime < 1800) return;
+      
+      if (isProcessingScan || (now - lastScanTime < 1200)) return;
+      if (decodedText === lastScanCode && (now - lastScanTime < 2500)) return;
+
+      isProcessingScan = true;
       lastScanCode = decodedText;
       lastScanTime = now;
 
@@ -1804,6 +1784,7 @@
       if (!matched) {
         playFeedback();
         showScannerOverlay('Item tidak dijumpai: ' + decodedText, true);
+        setTimeout(() => { isProcessingScan = false; }, 1000);
         return;
       }
 
@@ -1831,6 +1812,10 @@
         }
         showScannerOverlay(`Ditambah: ${matched.item}`);
       }
+
+      setTimeout(() => {
+        isProcessingScan = false;
+      }, 1200);
     }
 
     function renderLogs() {
