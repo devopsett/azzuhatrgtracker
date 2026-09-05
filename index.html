@@ -1296,6 +1296,22 @@
     let isProcessingScan = false;
     let toastTimer = null;
 
+    // Singleton AudioContext untuk menjamin kestabilan bunyi imbasan
+    let globalAudioCtx = null;
+
+    function getAudioContext() {
+      if (!globalAudioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          globalAudioCtx = new AudioContextClass();
+        }
+      }
+      if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+        globalAudioCtx.resume();
+      }
+      return globalAudioCtx;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('txDate').valueAsDate = new Date();
       addBatchRow();
@@ -1332,9 +1348,7 @@
           const banner = document.getElementById('updateBanner');
           if (banner) banner.classList.remove('hidden');
         }
-      } catch (e) {
-        // Gagal semak secara senyap jika tiada talian
-      }
+      } catch (e) {}
     }
 
     async function applySystemUpdate() {
@@ -1644,7 +1658,7 @@
       showLoading(true);
       fetch(`${SCRIPT_URL}?action=getAppData`, { method: 'GET', redirect: 'follow' })
       .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}: Akses Apps Script ditolak`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}: Gagal menyambung ke pelayan`);
         return res.json();
       })
       .then(res => {
@@ -1658,7 +1672,7 @@
       })
       .catch(err => {
         showLoading(false);
-        showToast(err.message || 'Ralat memuatkan data. Sila semak sambungan atau izin Apps Script.', true);
+        showToast(err.message || 'Ralat memuatkan data. Sila semak sambungan.', true);
       });
     }
 
@@ -1839,8 +1853,11 @@
       });
     }
 
-    /* 1. TETAPAN KAMERA LEBIH TENANG (FPS: 3 & QRBOX: 160) */
+    /* PENGIMBAS DENGAN KADAR BINGKAI TENANG (FPS: 3 & QRBOX: 160) */
     function openScannerModal() {
+      // Aktifkan audio terlebih dahulu atas interaksi klik pengguna
+      getAudioContext();
+
       document.getElementById('scannerModal').classList.remove('hidden');
       lockBodyScroll();
       if (!html5QrCodeScanner) {
@@ -1849,8 +1866,8 @@
       html5QrCodeScanner.start(
         { facingMode: "environment" },
         { 
-          fps: 3,         // Hanya 3 analisis sesaat supaya tidak terlalu pantas
-          qrbox: { width: 160, height: 160 } // Sasaran lebih tepat, elak terbaca kod lain
+          fps: 3,
+          qrbox: { width: 160, height: 160 }
         },
         onScanSuccess
       ).catch(err => {
@@ -1859,14 +1876,59 @@
       });
     }
 
-    /* 2. KAWALAN JEDA IMBASAN (COOLDOWN LEBIH STABIL) */
+    function closeScannerModal() {
+      const modal = document.getElementById('scannerModal');
+      if (html5QrCodeScanner && html5QrCodeScanner.isScanning) {
+        html5QrCodeScanner.stop().then(() => {
+          modal.classList.add('hidden');
+          unlockBodyScroll();
+        }).catch(() => {
+          modal.classList.add('hidden');
+          unlockBodyScroll();
+        });
+      } else {
+        modal.classList.add('hidden');
+        unlockBodyScroll();
+      }
+    }
+
+    /* AUDIO FEEDBACK KONSISTEN MENGGUNAKAN SINGLETON AUDIOCONTEXT */
+    function playFeedback() {
+      try {
+        const ctx = getAudioContext();
+        if (ctx) {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(950, ctx.currentTime);
+
+          gain.gain.setValueAtTime(0.2, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.12);
+        }
+      } catch (e) {}
+
+      if (navigator.vibrate) {
+        try {
+          navigator.vibrate(60);
+        } catch (e) {}
+      }
+    }
+
+    /* PENGENDALI IMBASAN BERSERTA JEDA BERTENANG (COOLDOWN) */
     function onScanSuccess(decodedText) {
       const now = Date.now();
       
-      // Sekat jika sedang proses atau belum cukup 2.0 saat dari imbasan terakhir
+      // Jeda bertenang 2.0 saat untuk sebarang imbasan
       if (isProcessingScan || (now - lastScanTime < 2000)) return;
 
-      // Sekat jika kod item yang sama diimbas dalam tempoh 3.5 saat
+      // Jeda 3.5 saat untuk item sama yang diimbas berulang kali
       if (decodedText === lastScanCode && (now - lastScanTime < 3500)) return;
 
       isProcessingScan = true;
@@ -1912,96 +1974,9 @@
         showScannerOverlay(`Ditambah: ${matched.item}`);
       }
 
-      // Lepaskan kunci imbasan selepas 2.0 saat
       setTimeout(() => {
         isProcessingScan = false;
       }, 2000);
-    }
-
-    function closeScannerModal() {
-      const modal = document.getElementById('scannerModal');
-      if (html5QrCodeScanner && html5QrCodeScanner.isScanning) {
-        html5QrCodeScanner.stop().then(() => {
-          modal.classList.add('hidden');
-          unlockBodyScroll();
-        }).catch(() => {
-          modal.classList.add('hidden');
-          unlockBodyScroll();
-        });
-      } else {
-        modal.classList.add('hidden');
-        unlockBodyScroll();
-      }
-    }
-
-    function playFeedback() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.frequency.value = 880;
-        gain.gain.value = 0.12;
-        osc.start();
-        setTimeout(() => { osc.stop(); ctx.close(); }, 140);
-      } catch (e) {}
-      if (navigator.vibrate) navigator.vibrate(80);
-    }
-
-    /* PENGENDALI IMBASAN BERSERTA JEDA BERTENANG (COOLDOWN) */
-    function onScanSuccess(decodedText) {
-      const now = Date.now();
-      
-      if (isProcessingScan || (now - lastScanTime < 1200)) return;
-      if (decodedText === lastScanCode && (now - lastScanTime < 2500)) return;
-
-      isProcessingScan = true;
-      lastScanCode = decodedText;
-      lastScanTime = now;
-
-      const items = appState.data?.items || [];
-      const clean = decodedText.trim().toLowerCase();
-      const matched = items.find(i => 
-        (i.sku && i.sku.toLowerCase() === clean) ||
-        (i.itemId && i.itemId.toLowerCase() === clean)
-      );
-
-      if (!matched) {
-        playFeedback();
-        showScannerOverlay('Item tidak dijumpai: ' + decodedText, true);
-        setTimeout(() => { isProcessingScan = false; }, 1000);
-        return;
-      }
-
-      playFeedback();
-      const targetCode = matched.sku || matched.itemId;
-
-      let existing = null;
-      document.querySelectorAll('.batch-item-row').forEach(row => {
-        if (row.querySelector('.batch-item').value === targetCode) existing = row;
-      });
-
-      if (existing) {
-        const q = existing.querySelector('.batch-qty');
-        q.value = (Number(q.value) || 0) + 1;
-        updateRowHint(q);
-        showScannerOverlay(`${matched.item} (+1) -> ${q.value} unit`);
-      } else {
-        const emptyRow = Array.from(document.querySelectorAll('.batch-item-row')).find(r => !r.querySelector('.batch-item').value);
-        if (emptyRow) {
-          emptyRow.querySelector('.batch-item').value = targetCode;
-          emptyRow.querySelector('.batch-qty').value = 1;
-          updateRowHint(emptyRow.querySelector('.batch-item'));
-        } else {
-          addBatchRow(targetCode, 1);
-        }
-        showScannerOverlay(`Ditambah: ${matched.item}`);
-      }
-
-      setTimeout(() => {
-        isProcessingScan = false;
-      }, 1200);
     }
 
     function renderLogs() {
