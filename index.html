@@ -69,7 +69,6 @@
       overflow-x: hidden;
     }
 
-    /* Kunci tatalan latar belakang semasa modal aktif */
     body.modal-open {
       overflow: hidden !important;
       height: 100vh !important;
@@ -1280,7 +1279,7 @@
   <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHtqRN_4axCBvxe_2juwBxoIrLZVRz5nWPp8eq1E81SxdnPOFsnUYAInXhKlZW-fkfqA/exec';
     
-    // GANTIKAN DENGAN 'USERNAME/REPO' GITHUB ANDA SEBENAR
+    // REPO GITHUB DISAHKAN TEPAT
     const GITHUB_REPO = 'devopsett/e-astratrg'; 
 
     let appState = {
@@ -1644,7 +1643,10 @@
     function loadData() {
       showLoading(true);
       fetch(`${SCRIPT_URL}?action=getAppData`, { method: 'GET', redirect: 'follow' })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}: Akses Apps Script ditolak`);
+        return res.json();
+      })
       .then(res => {
         if (!res.ok) throw new Error(res.message);
         appState.data = res.data;
@@ -1656,7 +1658,7 @@
       })
       .catch(err => {
         showLoading(false);
-        showToast(err.message || 'Ralat memuatkan data.', true);
+        showToast(err.message || 'Ralat memuatkan data. Sila semak sambungan atau izin Apps Script.', true);
       });
     }
 
@@ -2077,7 +2079,10 @@
           data: payload
         })
       })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}: Gagal menyambung ke Apps Script`);
+        return res.json();
+      })
       .then(res => {
         showLoading(false);
         if (!res.ok) throw new Error(res.message);
@@ -2146,7 +2151,10 @@
           }
         })
       })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}: Gagal menyambung ke Apps Script`);
+        return res.json();
+      })
       .then(res => {
         showLoading(false);
         if (!res.ok) throw new Error(res.message);
@@ -2177,7 +2185,10 @@
           data: { itemId: appState.selectedItem }
         })
       })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}: Gagal menyambung ke Apps Script`);
+        return res.json();
+      })
       .then(res => {
         showLoading(false);
         if (!res.ok) throw new Error(res.message);
