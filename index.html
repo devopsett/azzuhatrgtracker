@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>e-ASTRA — Sistem Stok Azzuha TRG</title>
+  <title>e-ASTRA</title>
   
   <!-- PWA Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -69,6 +69,7 @@
       overflow-x: hidden;
     }
 
+    /* Kunci tatalan skrin latar belakang semasa sebarang modal dibuka */
     body.modal-open {
       overflow: hidden !important;
       height: 100vh !important;
@@ -1243,7 +1244,7 @@
 
     function initPWA() {
       const manifest = {
-        name: "e-ASTRA — Azzuha Stock Tracking",
+        name: "e-ASTRA",
         short_name: "e-ASTRA",
         start_url: window.location.href,
         display: "standalone",
@@ -1714,6 +1715,7 @@
       });
     }
 
+    /* PENGIMBAS DENGAN KADAR BINGKAI (FPS: 5) */
     function openScannerModal() {
       document.getElementById('scannerModal').classList.remove('hidden');
       lockBodyScroll();
@@ -1764,6 +1766,7 @@
       if (navigator.vibrate) navigator.vibrate(80);
     }
 
+    /* PENGENDALI IMBASAN BERSERTA JEDA BERTENANG (COOLDOWN) */
     function onScanSuccess(decodedText) {
       const now = Date.now();
       
